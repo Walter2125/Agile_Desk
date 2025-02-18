@@ -22,3 +22,9 @@ Nada de alerts
 Route::get('/', function () {
     return view('welcome');
 });
+
+//plantilla
+Route::get('/home', function () {
+    return view('homeadmin');
+});
+
