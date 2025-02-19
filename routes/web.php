@@ -12,11 +12,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 
-Los modales solo son para hacer avisos no para hacer formularios
-No usar en exceso los modales
-prohiido los alerts de javascript , se pueden usar los de bostrap pero no utilizar los alerts de javascript
-Ya que los botones estan programados por si solos
-Nada de alerts
+
 */
 
 Route::get('/', function () {
@@ -26,5 +22,9 @@ Route::get('/', function () {
 //plantilla
 Route::get('/home', function () {
     return view('homeadmin');
+});
+
+Route::get('/', function () {
+    return view('tablero');
 });
 
