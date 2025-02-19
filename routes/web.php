@@ -3,6 +3,16 @@
 use Illuminate\Support\Facades\Route;
 
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
+/*Route::get('/',function(){
+        return view('formato.index');
+});*/
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,12 +30,8 @@ Ya que los botones estan programados por si solos
 Nada de alerts
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 // Ruta para la vista principal
-Route::get('/', function () {
+Route::get('/Homeuser', function () {
     return view('HomeUser'); // Asegúrate de que la vista se llame 'HomeUser.blade.php'
 })->name('home');
 
@@ -42,4 +48,3 @@ Route::get('/login', function () {
 Route::get('/home', function () {
     return view('homeadmin');
 });
-
