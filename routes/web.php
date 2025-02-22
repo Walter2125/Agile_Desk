@@ -32,3 +32,8 @@ Route::get('/login', function () {
 Route::get('/home', function () {
     return view('homeadmin');
 });
+//ruta tablero
+Route::get('/tab', function () {
+    return view('tablero');
+});
+
