@@ -9,7 +9,7 @@
 @section('content')
 
 <div class="container-fluid text-center mt-5">
-    <h1 class="mb-4">Bienvenido a AgilDesk</h1><div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <h1 class="mb-4">Agile Desk</h1><div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
     <div class="carousel-inner">
         <div class="carousel-item active">
             <img src="{{ asset('img/imagen1.jpg') }}" class="d-block mx-auto w-100 rounded shadow" style="height: 630px; object-fit: cover;" alt="Imagen 1">
