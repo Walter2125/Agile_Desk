@@ -311,7 +311,7 @@ return [
        // Elementos de la barra lateral:
         [
             'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'buscar',
         ],
         [
             'text' => 'blog',
@@ -339,22 +339,7 @@ return [
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-table',
         ],
-        ['header' => 'labels'],
-        [
-            'text' => 'important',
-            'icon_color' => 'red',
-            'url' => '#',
-        ],
-        [
-            'text' => 'warning',
-            'icon_color' => 'yellow',
-            'url' => '#',
-        ],
-        [
-            'text' => 'information',
-            'icon_color' => 'cyan',
-            'url' => '#',
-        ],
+        
     ],
 
     /*
