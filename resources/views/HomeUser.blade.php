@@ -11,21 +11,21 @@
 @section('content')
 
 <section>
-        <img src="{{ asset('img/fondo2.jpg') }}" alt="Fondo decorativo" id="fondo2">
-        <img src="{{ asset('img/notas.jpg') }}" alt="Imagen" id="notas">
+        <img src="{{ asset('img/notas.jpg') }}" alt="Fondo decorativo" id="notas">
+        <img src="{{ asset('img/home/software.png') }}" alt="Imagen de software" id="sobre">
         <h1 id="text">Agile Desk</h1>
     </section>
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
-            var fondo2 = document.getElementById('fondo2');
             var notas = document.getElementById('notas');
+            var sobre = document.getElementById('sobre');
             var text = document.getElementById('text');
 
             window.addEventListener('scroll', function () {
                 var value = window.scrollY;
-                nota.style.transform = `translateY(${value}px)`;
-                fondo2.style.transform = `translateX(${-value * 0.5}px)`;
+                notas.style.transform = `translateY(${value}px)`;
+                software.style.transform = `translateX(${-value * 0.5}px)`;
                 text.style.transform = `translateY(${value * 0.5}px)`;
             });
         });
