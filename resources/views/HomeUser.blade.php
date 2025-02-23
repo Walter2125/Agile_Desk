@@ -4,12 +4,35 @@
 
 @section('adminlte_css')
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
+
 @stop
 
 @section('content')
 
+<section>
+        <img src="{{ asset('img/fondo2.jpg') }}" alt="Fondo decorativo" id="fondo2">
+        <img src="{{ asset('img/notas.jpg') }}" alt="Imagen" id="notas">
+        <h1 id="text">Agile Desk</h1>
+    </section>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var fondo2 = document.getElementById('fondo2');
+            var notas = document.getElementById('notas');
+            var text = document.getElementById('text');
+
+            window.addEventListener('scroll', function () {
+                var value = window.scrollY;
+                nota.style.transform = `translateY(${value}px)`;
+                fondo2.style.transform = `translateX(${-value * 0.5}px)`;
+                text.style.transform = `translateY(${value * 0.5}px)`;
+            });
+        });
+    </script>
+
 <div class="container-fluid text-center mt-5">
-    <h1 class="mb-4">Agile Desk</h1><div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <h1 class="mb-4">Agile Desk Para Usuarios</h1><div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
     <div class="carousel-inner">
         <div class="carousel-item active">
             <img src="{{ asset('img/imagen1.jpg') }}" class="d-block mx-auto w-100 rounded shadow" style="height: 630px; object-fit: cover;" alt="Imagen 1">
