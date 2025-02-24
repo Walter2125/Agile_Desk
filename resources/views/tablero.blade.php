@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tablero Scrum</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
 <body class="bg-gray-100 p-10">
@@ -14,7 +14,6 @@
         <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded">Agregar Columna</button>
     </div>
     <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
-
         <div class="columna bg-pink-100 p-4 rounded w-60 flex-shrink-0">
             <div class="flex justify-between items-center">
                 <span class="titulo-columna text-lg font-bold text-pink-800">Historia</span>
@@ -27,6 +26,7 @@
                     </div>
                 </div>
             </div>
+            <button id="agregarHistoria" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 mb-4">Agregar Historia</button>
             <div class="min-h-[150px] space-y-2 sortable">
                 <div class="card bg-white p-3 rounded shadow cursor-pointer">Modo de reunión</div>
                 <div class="card bg-white p-3 rounded shadow cursor-pointer">Reflejo de imágenes</div>
@@ -35,7 +35,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal para editar nombre de columna -->
 <div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg">
         <h3 class="text-xl font-bold mb-4">Editar Nombre de Columna</h3>
@@ -55,6 +55,9 @@
         let columnaActual;
 
         document.getElementById('agregarColumna').addEventListener('click', agregarColumna);
+        document.getElementById('agregarHistoria').addEventListener('click', () => {
+            window.location.href = '/form';
+        });
 
         function agregarColumna() {
             if (document.querySelectorAll('.columna').length >= 9) return;
@@ -78,6 +81,8 @@
             inicializarArrastrables();
             agregarEventosOpciones();
         }
+
+
 
         function agregarEventosOpciones() {
             document.querySelectorAll('.opciones-columna').forEach(btn => {
@@ -118,7 +123,6 @@
                         const nuevaTarea = document.createElement('div');
                         nuevaTarea.classList.add('card', 'bg-white', 'p-3', 'rounded', 'shadow', 'cursor-pointer');
                         nuevaTarea.textContent = tareaTexto;
-                        columna.querySelector('.sortable').appendChild(nuevaTarea);
 
                         // Agregar evento de doble clic al agregar una nueva tarea
                         nuevaTarea.addEventListener('dblclick', () => {
@@ -126,10 +130,11 @@
                                 nuevaTarea.remove();
                             }
                         });
+
+                        columna.querySelector('.sortable').appendChild(nuevaTarea);
                     }
                 });
             });
-
 
             document.querySelectorAll('.card').forEach(card => {
                 card.addEventListener('dblclick', () => {
