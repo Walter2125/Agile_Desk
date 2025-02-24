@@ -7,10 +7,7 @@
     "require": {
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
-<<<<<<< HEAD
-=======
         "jeroennoten/laravel-adminlte": "^3.14",
->>>>>>> 01a962319bada6b71908afbc50a2cbfc0d4f860a
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8"
