@@ -1,66 +1,76 @@
-*{
+:root {
+    --background-color: #0a2a43;
+    --text-color: white;
+    --gradient-color: transparent;
+}
+
+[data-theme="dark"] {
+    --background-color: #121212;
+    --text-color: #ffffff;
+    --gradient-color: #121212;
+}
+
+[data-theme="light"] {    
+    --background-color: #ffffff;
+    --text-color:   #121212;
+    --gradient-color: #121212;
+}
+
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    }
-    
-    body {
-        background-color: #0a2a43;
-        min-height: 1500px;
-    }
-    
-    section {
-        position: relative;
-        width: 100%;
-        height: 100vh;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    section::before {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 100px;
-        background-image: linear-gradient(to top, #0a2a43, transparent);
-        z-index: 1000;
-    }
-    section::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #0a2a43; /* Comentario */
-        mix-blend-mode: color;
-        z-index: 1000;
-    }
+}
 
-    
-    section img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-        pointer-events: none;
-    }
-    
-    #text {
-        position: relative;
-        color: white;
-        font-size: 10em;
-        z-index: 1;
-    }
-    
-    #road {
-        z-index: 2;
-    }
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
 
+section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
 
-    
+section img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+#text {
+    position: relative;
+    color: var(--text-color);
+    font-size: 10em;
+    z-index: 1;
+    transition: color 0.3s;
+}
+
+#road {
+    z-index: 2;
+}
+
+.card {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+button {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}

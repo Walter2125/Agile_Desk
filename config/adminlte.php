@@ -299,8 +299,10 @@ return [
     'menu' => [
         // Navbar items:
         [
-            'type' => 'navbar-search',
-            'text' => 'search',
+            'text'  => 'Modo oscuro',
+            'url'   => '#', // Evita la redirección
+            'icon'  => 'fas fa-moon',
+            'id'    => 'theme-toggle',
             'topnav_right' => true,
         ],
         [
