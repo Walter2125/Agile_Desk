@@ -23,9 +23,9 @@
 
         window.addEventListener('scroll', function () {
             var value = window.scrollY;
-            notas.style.transform = translateY(${value}px);
-            sobre.style.transform = translateX(${-value * 0.5}px);
-            text.style.transform = translateY(${value * 0.5}px);
+            notas.style.transform = `translateY(${value}px)`;
+            sobre.style.transform = `translateX(${-value * 0.5}px)`;
+            text.style.transform = `translateY(${value * 0.5}px)`;
         });
     });
 </script>
@@ -58,27 +58,23 @@
         <div class="col-12 col-md-4">
             <h3 class="mt-3">Tablero Visual</h3>
             <p>Organiza tareas con un tablero intuitivo basado en metodologías ágiles.</p>
-            <img src="{{ asset('imgUser/imagen2.jpg') }}" alt="Imagen 2" class="rounded shadow img-fluid w-100">
+            <img src="{{ asset('img/imagen2.jpg') }}" alt="Imagen 2" class="rounded shadow img-fluid w-100">
         </div>
 
         <div class="col-12 col-md-4">
             <h3 class="mt-3">Colaboración en Tiempo Real</h3>
             <p>Comparte avances con tu equipo y gestiona tareas de forma efectiva.</p>
-            <img src="{{ asset('imgUser/imagen4.jpg') }}" alt="Imagen 4" class="rounded shadow img-fluid w-100">
+            <img src="{{ asset('img/imagen4.jpg') }}" alt="Imagen 4" class="rounded shadow img-fluid w-100">
         </div>
 
         <div class="col-12 col-md-4">
             <h3 class="mt-3">Seguimiento de Sprints</h3>
             <p>Monitorea el progreso de cada Sprint y ajusta tareas según sea necesario.</p>
-            <img src="{{ asset('imgUser/imagen5.jpg') }}" alt="Imagen 5" class="rounded shadow img-fluid w-100">
+            <img src="{{ asset('img/imagen5.jpg') }}" alt="Imagen 5" class="rounded shadow img-fluid w-100">
         </div>
     </div>
 
-    <div class="mt-5">
-        <a href="{{ route('sprints.create') }}" class="btn btn-primary btn-lg">Crear un Sprint</a>
-        <a href="{{ route('login') }}" class="btn btn-secondary btn-lg">Iniciar Sesión</a>
-    </div>
-</div>
+</div> 
 
 @stop
 
