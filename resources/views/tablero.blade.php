@@ -26,6 +26,24 @@
                     </div>
                 </div>
             </div>
+
+            ////////////////////
+            <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
+                <div class="columna bg-ping-100 p-4 rounded w-60 flex-shrink-0">
+                    <div class="flex justify-beetwen items-center">
+                        <span class="titulo-columna text-lg font-bold text-ping-800">Historia</span>
+                        <div class="relative">
+                            <button class="opciones-columna text-gray-700">:</button>
+                            <div> class="menu-opciones hidden absolute right-0 top-6 bg-white rounded shadow-lg z-10">
+                                <button class="editar-columna px-4 py-2 hpver:gb-gray-100 w-full text left">Editar Nombre</button>
+                                <button class="editar-columna px-4 py-2 hpver:gb-gray-100 w-full text left">Eliminar Columna</button>
+                                <button class="editar-columna px-4 py-2 hpver:gb-gray-100 w-full text left">Agregar Tarea</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            ////////////////////////////
             <button id="agregarHistoria" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 mb-4">Agregar Historia</button>
             <div class="min-h-[150px] space-y-2 sortable">
                 <div class="card bg-white p-3 rounded shadow cursor-pointer">Modo de reunión</div>
@@ -46,6 +64,23 @@
         </div>
     </div>
 </div>
+no separar componentes
+// cambiar variable del env que se ponga en false la depuracion y ponerle release
+<div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl font-bold mb-4">Borrar nombre de la Columna</h3>
+        <input type="text" id="nombreanterior" class="border p-2 w-full mb-4">
+        <div class="flex justify-end space-x-2">
+            <button id="cancelar" class="bg-red-500 text-white px-4 py-2 rounded">Cancelar</button>
+            <button id="guardar" class="bg-green-500 text white px-4 py-2 rounded">Guardar</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
