@@ -115,9 +115,9 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-
 @stop
 
 @section('adminlte_js')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('color.js') }}"></script>
 @stop
