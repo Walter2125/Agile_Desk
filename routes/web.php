@@ -1,16 +1,19 @@
 <?php
-
+use App\Http\Controllers\FormatohistoriaControler;
+use App\Http\Controllers\FullCalendarController;
 use Illuminate\Support\Facades\Route;
-/*
-Route::get('/',function(){
-    return view('welcome');
-}); */
 
+use App\Http\Controllers\SprintController;
+
+Route::get('/',function(){
+    return view('homeadmin');
+}); 
 
 Route::get('/form',function(){
         return view('formato.index');
 });
-
+Route::get('/form/create',[FormatohistoriaControler::class,'create'])->name('formulario.create');//creasion de nuevahistoria
+Route::post('form/store',[FormatohistoriaControler::class,'store'])->name('formulario.store');
 
 // Ruta para la vista principal usuario
 Route::get('/Homeuser', function () {
@@ -36,5 +39,16 @@ Route::get('/home', function () {
 //ruta tablero
 Route::get('/tab', function () {
     return view('tablero');
+});
+
+//Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index');
+Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index');
+Route::get('/sprints/detalle', [SprintController::class, 'detalleSprint'])->name('sprints.detalle');
+
+//ruta para calendario
+Route::controller(FullCalendarController::class)->group(function () {
+    Route::get('fullcalendar', 'index');
+    Route::get('fullcalendar/ajax', 'ajax');     
+    Route::post('fullcalendar/store', 'store');   
 });
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Formatohistoria;
 use Illuminate\Http\Request;
 
 class FormatohistoriaControler extends Controller
@@ -20,7 +21,7 @@ class FormatohistoriaControler extends Controller
      */
     public function create()
     {
-        //
+        return view('formato.create');
     }
 
     /**
@@ -28,7 +29,27 @@ class FormatohistoriaControler extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => 'required|unique:formatohistorias,nombre|max:255',
+            'sprint' => 'required|integer|min:1',
+            'trabajo_estimado' => 'nullable|integer|min:1',
+            'responsable' => 'nullable|string|max:255',
+            'prioridad' => 'required|in:Alta,Media,Baja',
+            'descripcion' => 'nullable|string',
+        ]);
+       
+        $historia = new Formatohistoria();
+        $historia->nombre = $request->nombre;//aqui aun falta mas revisar
+        $historia->sprint = $request->sprint;
+        $historia->trabajo_estimado = $request->trabajo_estimado;
+        $historia->responsable = $request->responsable;
+        $historia->prioridad = $request->prioridad;
+        $historia->descripcion = $request->descripcion;
+        $historia->save();
+
+
+
+        return redirect('formato.index')->back()->with('success', 'Historia creada con éxito');
     }
 
     /**
