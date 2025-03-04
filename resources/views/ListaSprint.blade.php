@@ -27,7 +27,7 @@
         }
 
         h2 {
-            color: #1E88E5;
+            color:rgb(147, 182, 212);
             margin-bottom: 20px;
             font-size: 28px;
             font-weight: 600;
@@ -42,7 +42,7 @@
             padding: 10px;
             border-radius: 8px;
             border: none;
-            background: #1E88E5;
+            background:rgb(38, 135, 225);
             color: white;
             font-size: 16px;
             cursor: pointer;
@@ -51,7 +51,7 @@
         }
 
         select:hover {
-            background: #1565C0;
+            background:rgb(153, 193, 239);
         }
 
         ul {

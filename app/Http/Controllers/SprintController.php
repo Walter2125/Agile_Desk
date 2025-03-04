@@ -13,7 +13,19 @@ class SprintController extends Controller
     public function index()
     {
         $sprints = SprintModel::all();
-        return view('ListaSprint', compact('sprints'));    }
+        return view('ListaSprint', compact('sprints'));
+    }
+
+    /**
+     * Muestra los detalles de todos los sprints con sus historias y tareas.
+     */
+    public function detalleSprint()
+    {
+        // Obtener todos los sprints con sus historias y tareas asociadas.
+        $sprints = SprintModel::with('historias.tareas')->get();
+
+        return view('DetallesSprint', compact('sprints'));
+    }
 
     /**
      * Almacena un nuevo sprint en la base de datos.
@@ -35,7 +47,7 @@ class SprintController extends Controller
     }
 
     /**
-     * Muestra un sprint específico.
+     * Muestra un sprint en formato JSON.
      */
     public function show($id)
     {
@@ -83,4 +95,5 @@ class SprintController extends Controller
         $sprint->delete();
         return response()->json(['message' => 'Sprint eliminado correctamente'], 200);
     }
+
 }

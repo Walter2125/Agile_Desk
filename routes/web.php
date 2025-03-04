@@ -41,5 +41,8 @@ Route::get('/tab', function () {
     return view('tablero');
 });
 
+//Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index');
+
 Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index');
 
+Route::get('/sprints/detalle', [SprintController::class, 'detalleSprint'])->name('sprints.detalle');
