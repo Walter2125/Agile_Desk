@@ -54,6 +54,11 @@
 
     <p class="lead mt-3">Tu tablero digital para organizar Sprints de manera eficiente y colaborativa.</p>
 
+    <!-- Agregamos el nuevo botón aquí -->
+    <div class="mt-4" >
+        <a href="{{route('sprints.detalle')}}" class="btn btn-primary mt-3">Ver Detalles de Sprint</a>
+    </div>
+
     <div class="row mt-5">
         <div class="col-12 col-md-4">
             <h3 class="mt-3">Tablero Visual</h3>

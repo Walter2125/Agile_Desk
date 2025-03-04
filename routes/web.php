@@ -1,7 +1,14 @@
 <?php
 
+<<<<<<< HEAD
 use App\Http\Controllers\FormatohistoriaControler;
+=======
+use App\Http\Controllers\FullCalendarController;
+>>>>>>> 7db92e9f34bc1ae316023e8cfaddc213734878cd
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\SprintController;
+
 /*
 Route::get('/',function(){
     return view('welcome');
@@ -38,5 +45,16 @@ Route::get('/home', function () {
 //ruta tablero
 Route::get('/tab', function () {
     return view('tablero');
+});
+
+//Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index');
+Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index');
+Route::get('/sprints/detalle', [SprintController::class, 'detalleSprint'])->name('sprints.detalle');
+
+//ruta para calendario
+Route::controller(FullCalendarController::class)->group(function () {
+    Route::get('fullcalendar', 'index');
+    Route::get('fullcalendar/ajax', 'ajax');     
+    Route::post('fullcalendar/store', 'store');   
 });
 
