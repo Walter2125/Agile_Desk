@@ -79,6 +79,11 @@
         </div>
     </div>
 
+     <!-- Agregamos el nuevo botón aquí -->
+     <div class="mt-4" >
+        <a href="{{route('sprints.index')}}" class="btn btn-primary mt-3">Lista de Sprint</a>
+    </div>
+
     <div id="carouselExampleFade" class="carousel slide carousel-fade mt-5">
         <div class="carousel-inner">
             <div class="carousel-item active">
