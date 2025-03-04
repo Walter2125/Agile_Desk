@@ -3,11 +3,11 @@
 @section('title', 'Agile Desk')
 
 @section('adminlte_css')
-    <!-- Bootstrap CSS -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Tu CSS personalizado -->
+
     <link rel="stylesheet" href="{{ asset('style.css') }}">
-    <!-- Tailwind CSS (se incluye aquí para que se cargue en el head) -->
+
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
