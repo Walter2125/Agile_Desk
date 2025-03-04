@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\SprintController;
+
 /*
 Route::get('/',function(){
     return view('welcome');
@@ -37,4 +40,6 @@ Route::get('/home', function () {
 Route::get('/tab', function () {
     return view('tablero');
 });
+
+Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index');
 
