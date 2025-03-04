@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FormatohistoriaControler;
 use Illuminate\Support\Facades\Route;
 /*
 Route::get('/',function(){
@@ -10,7 +11,8 @@ Route::get('/',function(){
 Route::get('/form',function(){
         return view('formato.index');
 });
-
+Route::get('/form/create',[FormatohistoriaControler::class,'create'])->name('formulario.create');//creasion de nuevahistoria
+Route::post('form/store',[FormatohistoriaControler::class,'store'])->name('formulario.store');
 
 // Ruta para la vista principal usuario
 Route::get('/Homeuser', function () {
