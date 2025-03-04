@@ -128,7 +128,7 @@
 
                 document.querySelectorAll('.agregar-tarea').forEach(btn => {
                     btn.addEventListener('click', () => {
-                        // Redirigir a la ruta '/form' para abrir la vista 'prueba.blade.php'
+
                         window.location.href = '/form';
                     });
                 });
@@ -148,18 +148,15 @@
                         group: 'scrum',
                         animation: 150,
                         onEnd(evt) {
-                            // Se obtiene el nuevo estado de la tarjeta
                             const tarjeta = evt.item;
                             const columnaDestino = evt.from.closest('.columna');
                             const estado = columnaDestino.querySelector('.titulo-columna').textContent;
 
-                            // Obtenemos el nombre de la historia de la tarjeta (si existe)
                             const nombreHistoria = tarjeta.textContent.trim();
 
-                            // Mostramos la notificación de Toastr
+
                             toastr.success(`La historia ${nombreHistoria} ha cambiado a ${estado}.`);
 
-                            // También puedes cambiar el color de la tarjeta dependiendo del estado
                             tarjeta.classList.add('bg-yellow-100'); // Puedes personalizar el color
                         }
                     });
