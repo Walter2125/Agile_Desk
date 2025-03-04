@@ -9,47 +9,49 @@
     <link rel="stylesheet" href="{{ asset('style.css') }}">
     <!-- Tailwind CSS (se incluye aquí para que se cargue en el head) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @stop
 
 @section('content')
-<div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.5);">
-    <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen">
-        <h2 class="text-2xl font-bold text-center mb-6">Tablero Scrum</h2>
-        <div class="flex justify-between mb-4">
-            <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded">Agregar Columna</button>
-        </div>
-        <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
-            <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
-                <div class="flex justify-between items-center">
-                    <span class="titulo-columna text-lg font-bold text-pink-800">Historia</span>
-                    <div class="relative">
-                        <button class="opciones-columna text-gray-700">⋮</button>
-                        <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
-                            <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
-                            <button class="agregar-tarea px-4 py-2 hover:bg-gray-100 w-full text-left">Agregar Historia</button>
+    <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.5);">
+        <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen">
+            <h2 class="text-2xl font-bold text-center mb-6">Tablero Scrum</h2>
+            <div class="flex justify-between mb-4">
+                <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded">Agregar Columna</button>
+            </div>
+            <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
+                <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
+                    <div class="flex justify-between items-center">
+                        <span class="titulo-columna text-lg font-bold text-pink-800">Historia</span>
+                        <div class="relative">
+                            <button class="opciones-columna text-gray-700">⋮</button>
+                            <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
+                                <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
+                                <button class="agregar-tarea px-4 py-2 hover:bg-gray-100 w-full text-left">Agregar Historia</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="min-h-[150px] space-y-2 sortable">
-                    <div class="card bg-white p-3 rounded shadow cursor-pointer">Modo de reunión</div>
-                    <div class="card bg-white p-3 rounded shadow cursor-pointer">Reflejo de imágenes</div>
+                    <div class="min-h-[150px] space-y-2 sortable">
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer">Modo de reunión</div>
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer">Reflejo de imágenes</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal -->
-<div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded-lg shadow-lg">
-        <h3 class="text-xl font-bold mb-4">Editar Nombre de Columna</h3>
-        <input type="text" id="nuevoNombre" class="border p-2 w-full mb-4">
-        <div class="flex justify-end space-x-2">
-            <button id="cancelar" class="bg-red-500 text-white px-4 py-2 rounded">Cancelar</button>
-            <button id="guardar" class="bg-green-500 text-white px-4 py-2 rounded">Guardar</button>
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h3 class="text-xl font-bold mb-4">Editar Nombre de Columna</h3>
+            <input type="text" id="nuevoNombre" class="border p-2 w-full mb-4">
+            <div class="flex justify-end space-x-2">
+                <button id="cancelar" class="bg-red-500 text-white px-4 py-2 rounded">Cancelar</button>
+                <button id="guardar" class="bg-green-500 text-white px-4 py-2 rounded">Guardar</button>
+            </div>
         </div>
     </div>
-</div>
 @stop
 
 @section('adminlte_js')
@@ -57,6 +59,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Sortable JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <!--Script personalizado para manejo del tema -->
     <script src="{{ asset('color.js') }}"></script>
     <!-- Código del Tablero Scrum -->
@@ -81,7 +85,6 @@
                             <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
                                 <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
                                 <button class="eliminar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Eliminar Columna</button>
-
                             </div>
                         </div>
                     </div>
@@ -143,7 +146,22 @@
                 document.querySelectorAll('.sortable').forEach(el => {
                     new Sortable(el, {
                         group: 'scrum',
-                        animation: 150
+                        animation: 150,
+                        onEnd(evt) {
+                            // Se obtiene el nuevo estado de la tarjeta
+                            const tarjeta = evt.item;
+                            const columnaDestino = evt.from.closest('.columna');
+                            const estado = columnaDestino.querySelector('.titulo-columna').textContent;
+
+                            // Obtenemos el nombre de la historia de la tarjeta (si existe)
+                            const nombreHistoria = tarjeta.textContent.trim();
+
+                            // Mostramos la notificación de Toastr
+                            toastr.success(`La historia ${nombreHistoria} ha cambiado a ${estado}.`);
+
+                            // También puedes cambiar el color de la tarjeta dependiendo del estado
+                            tarjeta.classList.add('bg-yellow-100'); // Puedes personalizar el color
+                        }
                     });
                 });
             }
