@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\FullCalendarController;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\SprintController;
+
 /*
 Route::get('/',function(){
     return view('welcome');
@@ -39,9 +42,14 @@ Route::get('/tab', function () {
     return view('tablero');
 });
 
+//Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index');
+Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index');
+Route::get('/sprints/detalle', [SprintController::class, 'detalleSprint'])->name('sprints.detalle');
+
 //ruta para calendario
 Route::controller(FullCalendarController::class)->group(function () {
     Route::get('fullcalendar', 'index');
     Route::get('fullcalendar/ajax', 'ajax');     
     Route::post('fullcalendar/store', 'store');   
 });
+
