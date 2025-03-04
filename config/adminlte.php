@@ -333,7 +333,7 @@ return [
         ],
         [
             'text' => 'Calendario',
-            'url' => 'admin/settings',
+            'url' => 'fullcalendar',
             'icon' => 'fas fa-fw fa-calendar',
         ],
         [
