@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FullCalendarController;
 use Illuminate\Support\Facades\Route;
 /*
 Route::get('/',function(){
@@ -38,3 +39,9 @@ Route::get('/tab', function () {
     return view('tablero');
 });
 
+//ruta para calendario
+Route::controller(FullCalendarController::class)->group(function () {
+    Route::get('fullcalendar', 'index');
+    Route::get('fullcalendar/ajax', 'ajax');     
+    Route::post('fullcalendar/store', 'store');   
+});
