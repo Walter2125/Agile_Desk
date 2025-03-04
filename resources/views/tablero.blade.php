@@ -26,8 +26,7 @@
                         <button class="opciones-columna text-gray-700">⋮</button>
                         <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
                             <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
-                            <button class="eliminar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Eliminar Columna</button>
-                            <button class="agregar-tarea px-4 py-2 hover:bg-gray-100 w-full text-left">Agregar Tarea</button>
+                            <button class="agregar-tarea px-4 py-2 hover:bg-gray-100 w-full text-left">Agregar Historia</button>
                         </div>
                     </div>
                 </div>
@@ -58,7 +57,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Sortable JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-    <!-- Tu script personalizado para manejo del tema -->
+    <!--Script personalizado para manejo del tema -->
     <script src="{{ asset('color.js') }}"></script>
     <!-- Código del Tablero Scrum -->
     <script>
@@ -82,7 +81,7 @@
                             <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
                                 <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
                                 <button class="eliminar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Eliminar Columna</button>
-                                <button class="agregar-tarea px-4 py-2 hover:bg-gray-100 w-full text-left">Agregar Tarea</button>
+
                             </div>
                         </div>
                     </div>
@@ -126,21 +125,8 @@
 
                 document.querySelectorAll('.agregar-tarea').forEach(btn => {
                     btn.addEventListener('click', () => {
-                        const columna = btn.closest('.columna');
-                        const tareaTexto = prompt('Texto de la nueva tarea:');
-                        if (tareaTexto) {
-                            const nuevaTarea = document.createElement('div');
-                            nuevaTarea.classList.add('card', 'bg-white', 'p-3', 'rounded', 'shadow', 'cursor-pointer');
-                            nuevaTarea.textContent = tareaTexto;
-                            columna.querySelector('.sortable').appendChild(nuevaTarea);
-
-                            // Agregar evento de doble clic al agregar una nueva tarea
-                            nuevaTarea.addEventListener('dblclick', () => {
-                                if (confirm('¿Eliminar esta tarea?')) {
-                                    nuevaTarea.remove();
-                                }
-                            });
-                        }
+                        // Redirigir a la ruta '/form' para abrir la vista 'prueba.blade.php'
+                        window.location.href = '/form';
                     });
                 });
 
