@@ -1,18 +1,13 @@
 <?php
-
-<<<<<<< HEAD
 use App\Http\Controllers\FormatohistoriaControler;
-=======
 use App\Http\Controllers\FullCalendarController;
->>>>>>> 7db92e9f34bc1ae316023e8cfaddc213734878cd
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\SprintController;
 
-/*
 Route::get('/',function(){
-    return view('welcome');
-}); */
+    return view('homeadmin');
+}); 
 
 Route::get('/form',function(){
         return view('formato.index');
