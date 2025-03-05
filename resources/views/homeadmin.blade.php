@@ -79,6 +79,11 @@
         </div>
     </div>
 
+     <!-- Agregamos el nuevo botón aquí -->
+     <div class="mt-4" >
+        <a href="{{route('sprints.index')}}" class="btn btn-primary mt-3">Lista de Sprint</a>
+    </div>
+
     <div id="carouselExampleFade" class="carousel slide carousel-fade mt-5">
         <div class="carousel-inner">
             <div class="carousel-item active">
@@ -115,9 +120,9 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-
 @stop
 
 @section('adminlte_js')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('color.js') }}"></script>
 @stop

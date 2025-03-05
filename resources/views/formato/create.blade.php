@@ -1,39 +1,45 @@
 @extends('layout.plantilla')
-
-@section('title','formato historia')
+@section('title','creacion')
 
 @section('content')
 
-<div class="container">
-        <div><h2>Historia de Usuario </h2></div>
-        <div><a href="{{ route('formulario.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i>Crear</a></div>
-        
-        <div class="row">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error )
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+    <form action="{{route('formulario.store')}}" method="post">
+        @csrf 
+
+       <div class="mb-3">
             <div class="col field">
                 <label>Nombre de la historia:</label>
-                <input type="text" id="nombreHistoria" placeholder="Ingrese el nombre">
+                <input type="text" class="form-control" id="nombreHistoria" name="nombre" placeholder="Ingrese el nombre" value="{{ old('nombreHistoria') }}">
             </div>
             <div class="col field" style="max-width: 120px;">
                 <label># Historia:</label>
                 <input type="text" id="numeroHistoria" readonly>
             </div>
-        </div>
-        
-        <div class="row">
+       </div>
+       <div class="row">
             <div class="col field">
                 <label>Estado:</label>
                 <input type="text" id="estadoHistoria" readonly>
             </div>
             <div class="col field">
                 <label>Sprint:</label>
-                <input type="number" id="sprintHistoria" placeholder="Número del sprint">
+                <input type="number" id="sprintHistoria" name="sprint" placeholder="Número del sprint" value="{{ old('sprintHistoria') }}">
             </div>
             <div class="col field">
                 <label>Trabajo estimado (horas):</label>
                 <input type="number" id="trabajoEstimado" placeholder="Horas estimadas">
             </div>
         </div>
-        
         <div class="row">
             <div class="col field">
                 <label>Responsable:</label>
@@ -41,37 +47,26 @@
             </div>
             <div class="col field">
                 <label>Prioridad:</label>
-                <select id="prioridadHistoria">
+                <select id="prioridadHistoria" >
                     <option value="Alta">Alta</option>
                     <option value="Media">Media</option>
                     <option value="Baja">Baja</option>
                 </select>
             </div>
         </div>
-        
         <div class="row">
             <div class="col field" style="flex: 2;">
                 <label>Descripción:</label>
                 <textarea id="descripcionHistoria" placeholder="Ingrese la descripción"></textarea>
             </div class="col field" style="flex: 1;">
             <label>Tareas:</label>
-                <button onclick="agregarTarea()">Agregar Tarea</button>
+                <!-- <button onclick="agregarTarea()">Agregar Tarea</button>  Este botton creara la tarea al crud tarea-->
                 <div id="listaTareas" class="tareas"></div>
                 
             </div>
         </div>
-    </div>
+
+        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i>Guardar</button>
     
-    <script>
-        function agregarTarea() {
-            let lista = document.getElementById("listaTareas");
-            let nuevaTarea = document.createElement("div");
-            nuevaTarea.className = "tarea-item";
-            nuevaTarea.innerHTML = `<input type="text" placeholder="Descripción de la tarea">`;
-            lista.appendChild(nuevaTarea);
-        }
-    </script>
-
-        </div>
-
+    </form>
 @endsection
