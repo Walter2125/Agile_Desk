@@ -6,10 +6,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\SprintController;
 
-/*
 Route::get('/',function(){
-    return view('welcome');
-}); */
+    return view('homeadmin');
+}); 
 
 Route::get('/form',function(){
         return view('formato.index');
