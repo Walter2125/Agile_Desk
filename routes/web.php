@@ -7,7 +7,7 @@ use App\Http\Controllers\Auth\CustomLoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SprintController;
-use App\Http\Controllers\FormatoHistoriaController;
+use App\Http\Controllers\FormatohistoriaControler;
 use App\Http\Controllers\FullCalendarController;
 
 // Redirección a login por defecto
@@ -19,8 +19,8 @@ Route::get('/', function () {
 Route::get('/form', function () {
     return view('formato.index');
 })->name('form.index');
-Route::get('/form/create', [FormatoHistoriaController::class, 'create'])->name('formulario.create');
-Route::post('/form/store', [FormatoHistoriaController::class, 'store'])->name('formulario.store');
+Route::get('/form/create', [FormatohistoriaControler::class, 'create'])->name('formulario.create');
+Route::post('/form/store', [FormatohistoriaControler::class, 'store'])->name('formulario.store');
 
 // Rutas de autenticación personalizadas
 Route::get('/login', [CustomLoginController::class, 'showLoginForm'])->name('custom.login.form');

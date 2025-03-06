@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home User</title>
+@extends('adminlte::page')
+
+@section('title', 'Agile Desk')
+
+@section('adminlte_css')
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('style.css') }}">
 @stop
@@ -24,9 +23,9 @@
 
         window.addEventListener('scroll', function () {
             var value = window.scrollY;
-            notas.style.transform = `translateY(${value}px)`;
-            sobre.style.transform = `translateX(${-value * 0.5}px)`;
-            text.style.transform = `translateY(${value * 0.5}px)`;
+            notas.style.transform = translateY(${value}px);
+            sobre.style.transform = translateX(${-value * 0.5}px);
+            text.style.transform = translateY(${value * 0.5}px);
         });
     });
 </script>
@@ -88,4 +87,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('color.js') }}"></script>
 @stop
-
