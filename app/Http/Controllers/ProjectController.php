@@ -18,14 +18,14 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:projects,name',
+            'nombre' => 'required|unique:projects,name',
             'sprint_number' => 'required|integer',
             'users' => 'required|string',
         ]);
 
         // Crear el proyecto
         $project = Project::create([
-            'name' => $request->name,
+            'nombre' => $request->name,
             'sprint_number' => $request->sprint_number,
         ]);
 
