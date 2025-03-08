@@ -4,10 +4,16 @@
 
 @section('content')
 
-<div class="container">
-        <div><h2>Historia de Usuario </h2></div>
-        <div><a href="{{ route('formulario.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i>Crear</a></div>
-        
+    <div class="container">
+        <div>
+            <h2>Historia de Usuario</h2>
+        </div>
+        <div>
+            <a href="{{ route('formulario.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus"></i> Crear
+            </a>
+        </div>
+
         <div class="row">
             <div class="col field">
                 <label>Nombre de la historia:</label>
@@ -18,7 +24,7 @@
                 <input type="text" id="numeroHistoria" readonly>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col field">
                 <label>Estado:</label>
@@ -33,7 +39,7 @@
                 <input type="number" id="trabajoEstimado" placeholder="Horas estimadas">
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col field">
                 <label>Responsable:</label>
@@ -48,30 +54,28 @@
                 </select>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col field" style="flex: 2;">
                 <label>Descripción:</label>
                 <textarea id="descripcionHistoria" placeholder="Ingrese la descripción"></textarea>
-            </div class="col field" style="flex: 1;">
-            <label>Tareas:</label>
-                <button onclick="agregarTarea()">Agregar Tarea</button>
+            </div>
+            <div class="col field" style="flex: 1;">
+                <label>Tareas:</label>
+                <button class="btn btn-success" onclick="agregarTarea()">Agregar Tarea</button>
                 <div id="listaTareas" class="tareas"></div>
-                
             </div>
         </div>
     </div>
-    
+
     <script>
         function agregarTarea() {
             let lista = document.getElementById("listaTareas");
             let nuevaTarea = document.createElement("div");
-            nuevaTarea.className = "tarea-item";
-            nuevaTarea.innerHTML = `<input type="text" placeholder="Descripción de la tarea">`;
+            nuevaTarea.className = "tarea-item mt-2";
+            nuevaTarea.innerHTML = `<input type="text" class="form-control" placeholder="Descripción de la tarea">`;
             lista.appendChild(nuevaTarea);
         }
     </script>
-
-        </div>
 
 @endsection
