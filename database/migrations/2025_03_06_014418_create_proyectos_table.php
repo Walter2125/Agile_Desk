@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sprints', function (Blueprint $table) {
+        Schema::create('proyectos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 255);
+            $table->string('nombre');
+            $table->string('descripcion');
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
-            $table->string('estado', 50)->check("estado IN ('PLANEADO', 'EN CURSO', 'FINALIZADO')");
-            $table->foreignId('proyecto_id')->constrained();
-            $table->string('responsable');
+            $table->string('estado');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sprints');
+        Schema::dropIfExists('proyectos');
     }
 };

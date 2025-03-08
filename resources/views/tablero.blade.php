@@ -18,6 +18,11 @@
         <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen">
             <h2 class="text-2xl font-bold text-center mb-6">Tablero Scrum</h2>
             <div class="flex justify-between mb-4">
+                <select id="tipoColumna" class="bg-white border border-blue-500 text-gray-700 px-4 py-2 rounded w-auto focus:outline-none focus:bg-blue-100 shadow-md">
+                    <option value="historia">Historia</option>
+                    <option value="tarea">Tarea</option>
+                    <option value="bug">Bug</option>
+                </select>
                 <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded">Agregar Columna</button>
             </div>
             <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
@@ -52,6 +57,7 @@
             </div>
         </div>
     </div>
+
 @stop
 
 @section('adminlte_js')
