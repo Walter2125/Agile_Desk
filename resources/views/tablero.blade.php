@@ -19,9 +19,9 @@
             <h2 class="text-2xl font-bold text-center mb-6">Tablero Scrum</h2>
             <div class="flex justify-between mb-4">
                 <select id="tipoColumna" class="bg-white border border-blue-500 text-gray-700 px-4 py-2 rounded w-auto focus:outline-none focus:bg-blue-100 shadow-md">
-                    <option value="historia">Historia</option>
-                    <option value="tarea">Tarea</option>
-                    <option value="bug">Bug</option>
+                    <option value="sprint1">Sprint 1</option>
+                    <option value="sprint2">Sprint 2</option>
+                    <option value="sprint3">Sprint 3</option>
                 </select>
                 <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded">Agregar Columna</button>
             </div>
