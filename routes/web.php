@@ -48,7 +48,7 @@ Route::get('/sprints/detalle', [SprintController::class, 'detalleSprint'])->name
 //ruta para calendario
 Route::controller(FullCalendarController::class)->group(function () {
     Route::get('fullcalendar', 'index');
-    Route::get('fullcalendar/ajax', 'ajax');     
-    Route::post('fullcalendar/store', 'store');   
+    Route::get('fullcalendar/ajax', 'ajax');
+    Route::post('fullcalendar/store', 'store');
 });
 
