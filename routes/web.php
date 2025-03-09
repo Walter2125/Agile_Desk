@@ -64,5 +64,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware(
 Route::controller(FullCalendarController::class)->group(function () {
     Route::get('fullcalendar', 'index');
     Route::get('fullcalendar/ajax', 'ajax');     
-    Route::post('fullcalendar/store', 'store');   
+    Route::post('fullcalendar/store', 'store'); 
+    Route::delete('fullcalendar/destroy/{id}', 'destroy');
+    Route::put('fullcalendar/update/{id}', 'update');   
 });
