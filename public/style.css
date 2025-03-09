@@ -7,13 +7,6 @@
 [data-theme="dark"] {
     --background-color: #0a2a43; /* Fondo para modo oscuro */
     --text-color: #ffffff;
-    --gradient-color: #121212;
-}
-
-[data-theme="light"] {    
-    --background-color: #ffffff; /* Fondo para modo claro */
-    --text-color: #121212;
-    --gradient-color: #121212;
 }
 
 * {
@@ -21,7 +14,6 @@
     padding: 0;
     box-sizing: border-box;
 }
-
 
 body {
     color: var(--text-color);
