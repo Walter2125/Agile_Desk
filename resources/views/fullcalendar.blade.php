@@ -169,7 +169,8 @@
         
         const icon = theme === "dark" ? "fa-sun" : "fa-moon";
         const text = theme === "dark" ? "Modo claro" : "Modo oscuro";
-        themeToggle.innerHTML = `<i class="fas ${icon}"></i> ${text}`;
+        themeToggle.querySelector('i').className = `fas ${icon}`;
+        themeToggle.querySelector('a').innerHTML = `<i class="fas ${icon}"></i> ${text}`;
     }
 
     document.getElementById('createEventBtn').addEventListener('click', () => showModal());
