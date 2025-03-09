@@ -75,10 +75,6 @@ button {
 }
 
 /* modo oscuro para el calendario*/
-[data-theme="dark"] #calendar {
-    background-color: #1a1a1a;
-    color: #fff;
-}
 
 [data-theme="dark"] .fc-theme-standard .fc-scrollgrid,
 [data-theme="dark"] .fc-theme-standard td,
