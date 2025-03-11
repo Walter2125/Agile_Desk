@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'AgileDesk',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -322,7 +322,7 @@ return [
         ],
         ['header' => 'Configuración'],
         [
-            'text' => 'Tableros',
+            'text' => 'TablerosS',
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-folder',
         ],
