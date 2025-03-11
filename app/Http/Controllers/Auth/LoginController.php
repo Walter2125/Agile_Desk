@@ -14,10 +14,10 @@ class LoginController extends Controller
     protected function redirectTo()
     {
         if (Auth::user()->role === 'admin') {
-            return '/HomeAdmin';
+            return '/homeadmin';
         }
 
-        return '/Homeuser';
+        return '/home';
     }
 
     public function __construct()
