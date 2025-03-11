@@ -322,7 +322,7 @@ return [
         ],
         ['header' => 'Configuración'],
         [
-            'text' => 'Tableros',
+            'text' => 'TablerosS',
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-folder',
         ],

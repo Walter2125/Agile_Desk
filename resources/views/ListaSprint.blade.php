@@ -27,7 +27,7 @@
         }
 
         h2 {
-            color:rgb(147, 182, 212);
+            color: rgb(147, 182, 212);
             margin-bottom: 20px;
             font-size: 28px;
             font-weight: 600;
@@ -42,7 +42,7 @@
             padding: 10px;
             border-radius: 8px;
             border: none;
-            background:rgb(38, 135, 225);
+            background: rgb(38, 135, 225);
             color: white;
             font-size: 16px;
             cursor: pointer;
@@ -51,7 +51,7 @@
         }
 
         select:hover {
-            background:rgb(153, 193, 239);
+            background: rgb(153, 193, 239);
         }
 
         ul {
@@ -76,6 +76,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .sprint:hover {
@@ -118,7 +119,10 @@
         </div>
         <ul id="sprint-list">
             @foreach ($sprints as $sprint)
-                <li class="sprint" data-start="{{ $sprint->fecha_inicio }}" data-end="{{ $sprint->fecha_fin }}">
+                <li class="sprint" 
+                    data-start="{{ $sprint->fecha_inicio }}" 
+                    data-end="{{ $sprint->fecha_fin }}"
+                    data-id="{{ $sprint->id }}">  <!-- Agregamos un ID para la URL -->
                     <h3>🚀 {{ $sprint->nombre }}</h3>
                     <p>📅 Inicio: <span>{{ $sprint->fecha_inicio }}</span></p>
                     <p>⏳ Fin: <span>{{ $sprint->fecha_fin }}</span></p>
@@ -127,20 +131,33 @@
             @endforeach
         </ul>
     </div>
+
     <script>
-        document.getElementById('sort').addEventListener('change', function() {
-            let list = document.getElementById('sprint-list');
-            let sprints = Array.from(list.children);
-            let sortBy = this.value;
-    
-            sprints.sort((a, b) => {
-                let dateA = new Date(a.dataset[sortBy]);
-                let dateB = new Date(b.dataset[sortBy]);
-                return dateA - dateB;
+        document.addEventListener("DOMContentLoaded", function() {
+            // Ordenar la lista de sprints cuando el usuario cambia el filtro
+            document.getElementById('sort').addEventListener('change', function() {
+                let list = document.getElementById('sprint-list');
+                let sprints = Array.from(list.children);
+                let sortBy = this.value;
+        
+                sprints.sort((a, b) => {
+                    let dateA = new Date(a.dataset[sortBy]);
+                    let dateB = new Date(b.dataset[sortBy]);
+                    return dateA - dateB;
+                });
+        
+                list.innerHTML = "";
+                sprints.forEach(sprint => list.appendChild(sprint));
             });
-    
-            list.innerHTML = "";
-            sprints.forEach(sprint => list.appendChild(sprint));
+
+            // Redirigir al tablero al hacer clic en un sprint
+            document.querySelectorAll(".sprint").forEach(sprint => {
+                sprint.addEventListener("click", function() {
+                    let sprintId = this.dataset.id; 
+                    let url = /tablero/${sprintId};  // Redirige a la URL del tablero del sprint
+                    window.location.href = url;
+                });
+            });
         });
     </script>
 </body>

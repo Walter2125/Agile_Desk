@@ -1,55 +1,74 @@
 <?php
 
-use App\Http\Controllers\FullCalendarController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Auth\CustomLoginController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SprintController;
+use App\Http\Controllers\FormatohistoriaControler;
+use App\Http\Controllers\FullCalendarController;
 
-/*
-Route::get('/',function(){
-    return view('welcome');
-}); */
-
-
-Route::get('/form',function(){
-        return view('formato.index');
+// Redirección a login por defecto
+Route::get('/', function () {
+    return redirect('/login');
 });
 
+// Rutas para formulario de historias
+Route::get('/form', function () {
+    return view('formato.index');
+})->name('form.index');
+Route::get('/form/create', [FormatohistoriaControler::class, 'create'])->name('formulario.create');
+Route::post('/form/store', [FormatohistoriaControler::class, 'store'])->name('formulario.store');
 
-// Ruta para la vista principal usuario
+// Rutas de autenticación personalizadas
+Route::get('/login', [CustomLoginController::class, 'showLoginForm'])->name('custom.login.form');
+Route::post('/login', [CustomLoginController::class, 'login'])->name('custom.login');
+Route::post('/logout', [CustomLoginController::class, 'logout'])->name('custom.logout');
+
+// Ruta principal para usuario normal
 Route::get('/Homeuser', function () {
-    return view('HomeUser'); // Asegúrate de que la vista se llame 'HomeUser.blade.php'
-})->name('home');
+    return view('HomeUser');
+})->name('homeuser')->middleware('auth');
 
-// Ruta para la creación de un Sprint
-Route::get('/sprints/create', function () {
-    return view('sprints.create'); // Crea la vista 'sprints/create.blade.php'
-})->name('sprints.create');
-
-// Ruta para el inicio de sesión
-Route::get('/login', function () {
-    return view('auth.login'); // Laravel usa 'auth/login.blade.php' para login
-})->name('login');
-
-
-//ruta para vista de administrador
-Route::get('/home', function () {
+// Ruta para la vista de administrador
+Route::get('/homeadmin', function () {
     return view('homeadmin');
-});
+})->name('homeadmin')->middleware('auth');
 
-//ruta tablero
+// Rutas protegidas para Sprints
+Route::get('/sprints/create', function () {
+    return view('sprints.create');
+})->name('sprints.create')->middleware('auth');
+Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index')->middleware('auth');
+Route::get('/sprints/detalle', [SprintController::class, 'detalleSprint'])->name('sprints.detalle')->middleware('auth');
+
+// Ruta para el tablero
 Route::get('/tab', function () {
     return view('tablero');
-});
+})->name('tablero')->middleware('auth');
+
 
 //listas de sprint
 Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index');
 Route::get('/sprints/detalle', [SprintController::class, 'detalleSprint'])->name('sprints.detalle');
 
 //ruta para calendario
+// Buscar usuarios (protegido por autenticación)
+Route::get('/users/search', [UserController::class, 'search'])->name('users.search')->middleware('auth');
+
+// Rutas para proyectos
+Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create')->middleware('auth');
+Route::post('/projects/store', [ProjectController::class, 'store'])->name('projects.store')->middleware('auth');
+
+// Ruta principal después del login
+Auth::routes();
+Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
+
+// Rutas para calendario
 Route::controller(FullCalendarController::class)->group(function () {
     Route::get('fullcalendar', 'index');
     Route::get('fullcalendar/ajax', 'ajax');     
     Route::post('fullcalendar/store', 'store');   
 });
-

@@ -23,9 +23,9 @@
 
         window.addEventListener('scroll', function () {
             var value = window.scrollY;
-            notas.style.transform = `translateY(${value}px)`;
-            sobre.style.transform = `translateX(${-value * 0.5}px)`;
-            text.style.transform = `translateY(${value * 0.5}px)`;
+            notas.style.transform = translateY(${value}px);
+            sobre.style.transform = translateX(${-value * 0.5}px);
+            text.style.transform = translateY(${value * 0.5}px);
         });
     });
 </script>
