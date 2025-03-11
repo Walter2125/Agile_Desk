@@ -11,17 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sprints', function (Blueprint $table) {
+        Schema::create('etiquetas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->dateTime('fecha_inicio');
-            $table->dateTime('fecha_fin');
-            $table->string('estado')->default('nuevo');
             $table->string('color')->default('#0d6efd');
             $table->string('tipo')->default('meeting');
             $table->text('descripcion')->nullable();
-            $table->boolean('todo_el_dia')->default(false);
-            $table->foreignId('proyecto_id')->nullable()->constrained('proyectos')->onDelete('cascade');
+            $table->foreignId('sprint_id')->nullable()->constrained('sprints')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sprints');
+        Schema::dropIfExists('etiquetas');
     }
 };

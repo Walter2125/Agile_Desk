@@ -9,13 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up(): void 
     {
         Schema::create('proyectos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre')->unique();
-            $table->integer('sprint_number'); // Número de sprint
-            $table->string('descripcion');
+            $table->string('nombre')->unique(); // Mantiene el campo único
+            $table->integer('sprint_number'); // Conserva la nueva columna de gisel
+            $table->string('descripcion'); // Usa string en lugar de text
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
             $table->string('estado');
