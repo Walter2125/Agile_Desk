@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
+
 {
     /**
      * Run the migrations.
@@ -13,9 +14,9 @@ return new class extends Migration
     {
         Schema::create('proyectos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre')->unique(); // Mantiene el campo único
-            $table->integer('sprint_number'); // Conserva la nueva columna de gisel
-            $table->string('descripcion'); // Usa string en lugar de text
+            $table->string('nombre')->unique(); 
+            $table->integer('sprint_number'); 
+            $table->string('descripcion'); 
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
             $table->string('estado');
