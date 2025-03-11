@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ asset('style.css') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Toastr CSS -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @stop
 
