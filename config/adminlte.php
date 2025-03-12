@@ -64,7 +64,7 @@ return [
     */
 
     'logo' => '<b>Agile</b>Desk',
-    'logo_img' => 'img/home/logo-AgileDesk.png',
+    'logo_img' => 'img/newlog.ico',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
