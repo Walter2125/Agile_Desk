@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow-lg p-4 rounded" style="width: 400px;">
+    <div class="card shadow-lg p-4 rounded" style="width: 200px;">
         <div class="text-center">
             <h2 class="mb-4">{{ __('Iniciar Sesión') }}</h2>
         </div>

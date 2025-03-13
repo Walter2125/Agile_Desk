@@ -37,17 +37,17 @@
             </div>
             <div class="col field">
                 <label>Trabajo estimado (horas):</label>
-                <input type="number" id="trabajoEstimado" placeholder="Horas estimadas">
+                <input type="number" id="trabajoEstimado" name="trabajo_estimado" placeholder="Horas estimadas">
             </div>
         </div>
         <div class="row">
             <div class="col field">
                 <label>Responsable:</label>
-                <input type="text" id="responsableHistoria" placeholder="Nombre del responsable">
+                <input type="text" id="responsableHistoria" name="responsable" placeholder="Nombre del responsable">
             </div>
             <div class="col field">
                 <label>Prioridad:</label>
-                <select id="prioridadHistoria" >
+                <select id="prioridadHistoria" name="prioridad" class="form-control" >
                     <option value="Alta">Alta</option>
                     <option value="Media">Media</option>
                     <option value="Baja">Baja</option>
@@ -57,7 +57,7 @@
         <div class="row">
             <div class="col field" style="flex: 2;">
                 <label>Descripción:</label>
-                <textarea id="descripcionHistoria" placeholder="Ingrese la descripción"></textarea>
+                <textarea id="descripcionHistoria" name="descripcion" placeholder="Ingrese la descripción"></textarea>
             </div class="col field" style="flex: 1;">
             <label>Tareas:</label>
                 <!-- <button onclick="agregarTarea()">Agregar Tarea</button>  Este botton creara la tarea al crud tarea-->
