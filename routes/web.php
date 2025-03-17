@@ -45,6 +45,12 @@ Route::get('/tab', function () {
     return view('tablero');
 })->name('tablero')->middleware('auth');
 
+
+//listas de sprint
+Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index');
+Route::get('/sprints/detalle', [SprintController::class, 'detalleSprint'])->name('sprints.detalle');
+
+//ruta para calendario
 // Buscar usuarios (protegido por autenticación)
 Route::get('/users/search', [UserController::class, 'search'])->name('users.search')->middleware('auth');
 
