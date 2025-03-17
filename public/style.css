@@ -52,7 +52,7 @@ section {
     background-color: var(--background-color) !important;
     color: var(--text-color);
 }
-#fondo, #sobre, #persona {
+#fondo, #sobre, #persona, #notas {
     position: absolute;
     width: 100%;
     height: auto;
