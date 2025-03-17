@@ -14,6 +14,19 @@
 @stop
 
 @section('content')
+
+        <!--El mensage de guradado con exito -->
+
+        
+        @if (session('success'))
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <strong>Historia creada con éxito!</strong>
+                {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+            
+        @endif
+        <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.5);">
         <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen">
             <h2 class="text-2xl font-bold text-center mb-6">Tablero Scrum</h2>
@@ -28,13 +41,22 @@
                             <button class="opciones-columna text-gray-700">⋮</button>
                             <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
                                 <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
-                                <button class="agregar-tarea px-4 py-2 hover:bg-gray-100 w-full text-left">Agregar Historia</button>
+                                <a href="{{ route('formulario.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i>Agregar Historia</a>
+                                </button>
                             </div>
                         </div>
                     </div>
                     <div class="min-h-[150px] space-y-2 sortable">
-                        <div class="card bg-white p-3 rounded shadow cursor-pointer">Modo de reunión</div>
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer" >Modo de reunión</div>
                         <div class="card bg-white p-3 rounded shadow cursor-pointer">Reflejo de imágenes</div>
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer">para prueba 
+                            <br> Nombre:<div>
+                                        
+                                        </div> 
+                            <br> id:<div>
+
+                                   </div> <br>
+                        </div>
                     </div>
                 </div>
             </div>
