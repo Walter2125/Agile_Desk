@@ -1,46 +1,36 @@
-@extends('layouts.app')
-
-@section('content')
-<div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow-lg p-4 rounded" style="width: 200px;">
-        <div class="text-center">
-            <h2 class="mb-4">{{ __('Iniciar Sesión') }}</h2>
-        </div>
-
-                        <form method="POST" action="{{ route('login') }}">
-                            @csrf
-
-                            <div class="mb-3">
-                <label for="email" class="form-label">{{ __('Correo Electrónico') }}</label>
-                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autofocus>
-                @error('email')
-                    <span class="text-danger small">{{ $message }}</span>
-                @enderror
-                            </div>
-
-                            <div class="mb-3">
-                <label for="password" class="form-label">{{ __('Contraseña') }}</label>
-                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required>
-                @error('password')
-                    <span class="text-danger small">{{ $message }}</span>
-                @enderror
-                    </div>
-
-            <div class="mb-3 form-check">
-                <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                <label class="form-check-label" for="remember">{{ __('Recordarme') }}</label>
-                </div>
-
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary">{{ __('Ingresar') }}</button>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <title>Iniciar Sesión</title>
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card shadow-lg p-4 rounded" style="width: 400px;">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold text-primary">Iniciar Sesión</h2>
             </div>
-
-            <div class="text-center mt-3">
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="text-decoration-none">{{ __('¿Olvidaste tu contraseña?') }}</a>
-                @endif
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-bold">Correo Electrónico</label>
+                    <input id="email" type="email" class="form-control" name="email" required autofocus>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label fw-bold">Contraseña</label>
+                    <input id="password" type="password" class="form-control" name="password" required>
+                </div>
+                <div class="mb-3 text-center">
+                    <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                </div>
+            </form>
+            <div class="text-center">
+                ¿No tienes cuenta? <a href="{{ route('register') }}">Regístrate aquí</a>
+            </div>
         </div>
-        </form>
     </div>
-</div>
-@endsection
+</body>
+</html>

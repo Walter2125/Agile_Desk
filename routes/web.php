@@ -9,6 +9,9 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SprintController;
 use App\Http\Controllers\FormatohistoriaControler;
 use App\Http\Controllers\FullCalendarController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Auth\LoginController;
 
 // Redirección a login por defecto
 Route::get('/', function () {
@@ -28,15 +31,7 @@ Route::get('/login', [CustomLoginController::class, 'showLoginForm'])->name('cus
 Route::post('/login', [CustomLoginController::class, 'login'])->name('custom.login');
 Route::post('/logout', [CustomLoginController::class, 'logout'])->name('custom.logout');
 
-// Ruta principal para usuario normal
-Route::get('/Homeuser', function () {
-    return view('HomeUser');
-})->name('homeuser')->middleware('auth');
 
-// Ruta para la vista de administrador
-Route::get('/homeadmin', function () {
-    return view('homeadmin');
-})->name('homeadmin')->middleware('auth');
 
 // Rutas protegidas para Sprints
 Route::get('/sprints/create', function () {
@@ -57,10 +52,6 @@ Route::get('/users/search', [UserController::class, 'search'])->name('users.sear
 Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create')->middleware('auth');
 Route::post('/projects/store', [ProjectController::class, 'store'])->name('projects.store')->middleware('auth');
 
-// Ruta principal después del login
-Auth::routes();
-Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
-
 // Rutas para calendario
 Route::controller(FullCalendarController::class)->group(function () {
     Route::get('fullcalendar', 'index');
@@ -69,3 +60,18 @@ Route::controller(FullCalendarController::class)->group(function () {
     Route::delete('fullcalendar/destroy/{id}', 'destroy');
     Route::put('fullcalendar/update/{id}', 'update');   
 });
+
+Route::prefix('admin')->group(function () {
+    // Ruta para mostrar los usuarios
+    Route::get('/members', [AdminUserController::class, 'index'])->name('admin.users.index');
+});
+
+Route::get('/homeadmin', [AdminController::class, 'index'])->name('homeadmin')->middleware('auth');
+Route::get('/HomeUser', [HomeController::class, 'index'])->name('HomeUser')->middleware('auth');
+
+
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/register', [LoginController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [LoginController::class, 'register']);
