@@ -1,5 +1,5 @@
 :root {
-    --background-color: #0a2a43; /* Valor por defecto */
+    --background-color: #0a2a43; 
     --text-color: #ffffff;
     --gradient-color: transparent;
 }
@@ -10,7 +10,7 @@
 }
 
 [data-theme="light"] {    
-    --background-color: #ffffff; /* Fondo para modo claro */
+    --background-color: #ffffff; 
     --text-color: #121212;
     --gradient-color: #121212;
 }
@@ -44,40 +44,50 @@ body {
 section {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: auto;
     overflow: hidden;
+    min-height: 450px;
+    justify-content: center;
+    align-items: center;
     background-color: var(--background-color) !important;
     color: var(--text-color);
 }
-
-section img {
+#fondo, #sobre, #persona {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none;
-    transition: opacity 0.3s;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
 }
 
 #text {
-    position: relative;
-    font-size: 10em;
-    z-index: 1;
-    color: var(--text-color);
-    transition: color 0.3s;
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10vw;
+    font-weight: bold;
+    color: #333557;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    z-index: 3;
+    text-align: center;
 }
 
+#contenido {
+    margin-top: 20px; 
+    padding: 0 15px;
+    text-align: center;
+    margin-top: 0; 
+    padding-top: 0; 
+}
+
+@media (max-width: 768px) {
+    section {
+        min-height: 200px; 
+    }
+}
 #road {
     z-index: 2;
-}
-
-.card,
-button {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    transition: background-color 0.3s, color 0.3s;
 }
 
 /* modo oscuro para el calendario*/
