@@ -32,53 +32,6 @@
         });
     </script>
 
-    <div class="card-group mt-4">
-        <div class="card">
-            <img 
-                src="{{ asset('img/home/crear.png') }}" 
-                class="d-block mx-auto"
-                style="max-width: 80%; height: auto;"
-                alt="Función de crear proyectos en Agile Desk"
-            >
-            <div class="card-body">
-                <h4 class="card-title" style="font-size: 28px; font-family: 'Arial', sans-serif;">
-                    Crea Proyectos
-                </h4>
-                <p class="card-text">Define Sprints automáticamente. Organiza historias y tareas. Crea columnas con estados personalizados.</p>
-            </div>
-        </div>
-        <div class="card">
-            <img 
-                src="{{ asset('img/home/añadir.png') }}" 
-                class="d-block mx-auto"
-                style="max-width: 80%; height: auto;"
-                alt="Función de editar en Agile Desk"
-            >
-            <div class="card-body">
-                <h4 class="card-title" style="font-size: 28px; font-family: 'Arial', sans-serif;">
-                    Edita con Seguridad
-                </h4>
-                <p class="card-text">
-                    Modifica proyectos, fechas o flujos en segundos. Confirmación antes de borrar ¡Cero errores accidentales! Historial de cambios para rastrear cada ajuste.
-                </p>
-            </div>
-        </div>
-        <div class="card">
-            <img 
-                src="{{ asset('img/home/editar.png') }}" 
-                class="d-block mx-auto"
-                style="max-width: 80%; height: auto;"
-                alt="Función de colaboración en Agile Desk"
-            >
-            <div class="card-body">
-                <h4 class="card-title" style="font-size: 28px; font-family: 'Arial', sans-serif;">
-                    Suma Colaboradores
-                </h4>
-                <p class="card-text">Invita miembros por correo y asigna roles (admin o invitado). Notificaciones en tiempo real al asignar tareas. Mención de usuarios (@nombre) en comentarios.</p>
-            </div>
-        </div>
-    </div>
-
      <!-- Agregamos el nuevo botón aquí -->
      <div class="mt-4" >
         <a href="{{route('sprints.index')}}" class="btn btn-primary mt-3">Lista de Sprint</a>

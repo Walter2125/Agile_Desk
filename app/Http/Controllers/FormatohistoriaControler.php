@@ -35,12 +35,15 @@ class FormatohistoriaControler extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|unique:formatohistorias,nombre|max:255',
+            'nombre' => 'required|unique:formatohistorias,nombre|max:255', 
             'sprint' => 'required|integer|min:1',
             'trabajo_estimado' => 'nullable|integer|min:1',
             'responsable' => 'nullable|string|max:255',
             'prioridad' => 'required|in:Alta,Media,Baja',
-            'descripcion' => 'nullable|string',
+            'descripcion' => 'nullable|string',],
+            ['nombre.unique' =>'EL nombre ya existe intente con otro',//personalizacion de alertas.
+            'sprint.required'=>'El Sprint el requerido',
+            'prioridad.required'=> 'La prioridad es requerida'
         ]);
        
         $historia = new Formatohistoria();
@@ -54,7 +57,7 @@ class FormatohistoriaControler extends Controller
 
 
 
-        return redirect('formato.index')->back()->with('success', 'Historia creada con éxito');
+        return back()->with('success', 'Historia creada con éxito');//aqui devera devolver al tablero donde se haga la conexion 
     }
 
     /**

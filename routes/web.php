@@ -13,6 +13,7 @@ use App\Http\Controllers\FullCalendarController;
 // Redirección a login por defecto
 Route::get('/', function () {
     return redirect('/login');
+
 });
 
 // Rutas para formulario de historias
