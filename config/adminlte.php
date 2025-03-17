@@ -86,7 +86,7 @@ return [
    'auth_logo' => [
     'enabled' => true,
     'img' => [
-        'path' => 'img/home/logo-AgileDesk.png',
+        'path' => 'img/newlog.ico',
         'alt' => 'Auth Logo',
         'class' => '',
         'width' => 50,
@@ -112,7 +112,7 @@ return [
     'enabled' => true,
     'mode' => 'fullscreen',
     'img' => [
-        'path' => 'img/home/logo-AgileDesk.png', // Ruta de la nueva imagen
+        'path' => 'img/newlogo.png', // Ruta de la nueva imagen
         'alt' => 'AgileDesk Preloader Image', // Texto alternativo
         'effect' => 'animation__shake',
         'width' => 400,
