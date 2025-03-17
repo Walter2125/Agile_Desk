@@ -3,8 +3,11 @@
 @section('title', 'Agile Desk')
 
 @section('adminlte_css')
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ asset('style.css') }}">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
@@ -54,8 +57,8 @@
                         </div>
                     </div>
                     <div class="min-h-[150px] space-y-2 sortable">
-                        <div class="card bg-white p-3 rounded shadow cursor-pointer" data-estado="Historia" data-responsable="Juan" data-fecha="2025-03-15">Modo de reunión</div>
-                        <div class="card bg-white p-3 rounded shadow cursor-pointer" data-estado="Tarea" data-responsable="María" data-fecha="2025-03-14">Reflejo de imágenes</div>
+                    <div class="card bg-white p-3 rounded shadow cursor-pointer" data-estado="Historia" data-responsable="Juan" data-fecha="2025-03-15">Modo de reunión</div>
+                    <div class="card bg-white p-3 rounded shadow cursor-pointer" data-estado="Tarea" data-responsable="María" data-fecha="2025-03-14">Reflejo de imágenes</div>
                     </div>
                 </div>
             </div>
@@ -76,12 +79,132 @@
 @stop
 
 @section('adminlte_js')
+    <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Sortable JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <!--Script personalizado para manejo del tema -->
     <script src="{{ asset('color.js') }}"></script>
-
+    <!-- Código del Tablero Scrum -->
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tablero = document.getElementById('tablero');
+            const modal = document.getElementById('modal');
+            const nuevoNombreInput = document.getElementById('nuevoNombre');
+            let columnaActual;
+
+            document.getElementById('agregarColumna').addEventListener('click', agregarColumna);
+
+            function agregarColumna() {
+                if (document.querySelectorAll('.columna').length >= 9) return;
+                const nuevaColumna = document.createElement('div');
+                nuevaColumna.classList.add('columna', 'bg-gray-200', 'p-4', 'rounded', 'w-60', 'flex-shrink-0');
+                nuevaColumna.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="titulo-columna text-lg font-bold">Nueva columna</span>
+                        <div class="relative">
+                            <button class="opciones-columna text-gray-700">⋮</button>
+                            <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
+                                <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
+                                <button class="eliminar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Eliminar Columna</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="min-h-[150px] space-y-2 sortable"></div>
+                `;
+                tablero.appendChild(nuevaColumna);
+                inicializarArrastrables();
+                agregarEventosOpciones();
+            }
+
+            function agregarEventosOpciones() {
+                document.querySelectorAll('.opciones-columna').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const menu = btn.nextElementSibling;
+                        document.querySelectorAll('.menu-opciones').forEach(m => m.classList.add('hidden'));
+                        menu.classList.toggle('hidden');
+                    });
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('opciones-columna')) {
+                        document.querySelectorAll('.menu-opciones').forEach(m => m.classList.add('hidden'));
+                    }
+                });
+
+                document.querySelectorAll('.editar-columna').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        columnaActual = btn.closest('.columna');
+                        const titulo = columnaActual.querySelector('.titulo-columna').textContent;
+                        nuevoNombreInput.value = titulo;
+                        modal.classList.remove('hidden');
+                    });
+                });
+
+                document.querySelectorAll('.eliminar-columna').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const columna = btn.closest('.columna');
+                        columna.remove();
+                    });
+                });
+
+                document.querySelectorAll('.agregar-tarea').forEach(btn => {
+                    btn.addEventListener('click', () => {
+
+                        window.location.href = '/form';
+                    });
+                });
+
+                document.querySelectorAll('.card').forEach(card => {
+                    card.addEventListener('dblclick', () => {
+                        if (confirm('¿Eliminar esta tarea?')) {
+                            card.remove();
+                        }
+                    });
+                });
+            }
+
+            function inicializarArrastrables() {
+                document.querySelectorAll('.sortable').forEach(el => {
+                    new Sortable(el, {
+                        group: 'scrum',
+                        animation: 150,
+                        onEnd(evt) {
+                            const tarjeta = evt.item;
+                            const columnaDestino = evt.from.closest('.columna');
+                            const estado = columnaDestino.querySelector('.titulo-columna').textContent;
+
+                            const nombreHistoria = tarjeta.textContent.trim();
+
+
+                            toastr.success(`La historia ${nombreHistoria} ha cambiado a ${estado}.`);
+
+                            tarjeta.classList.add('bg-yellow-100'); // Puedes personalizar el color
+                        }
+                    });
+                });
+            }
+
+            document.getElementById('cancelar').addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            document.getElementById('guardar').addEventListener('click', () => {
+                const nuevoNombre = nuevoNombreInput.value;
+                if (nuevoNombre) {
+                    columnaActual.querySelector('.titulo-columna').textContent = nuevoNombre;
+                    modal.classList.add('hidden');
+                }
+            });
+
+            inicializarArrastrables();
+            agregarEventosOpciones();
+        });
+    </script>
+
+<script>
         document.addEventListener('DOMContentLoaded', () => {
             const buscarInput = document.getElementById('buscar');
             const filtrarEstado = document.getElementById('filtrarEstado');
