@@ -31,11 +31,14 @@
                 <input type="date" id="filtrarFecha" class="border p-2 rounded">
 
                 <select id="filtrarResponsable" class="border p-2 rounded">
-                    <option value="">Todos los responsables</option>
-                    <option value="Juan">Juan</option>
-                    <option value="María">María</option>
-                    <option value="Carlos">Carlos</option>
-                </select>
+                <option value="">Todos los responsables</option>
+    
+                @if (!empty($responsables))
+                @foreach ($responsables as $responsable)
+            <option value="{{ $responsable }}">{{ $responsable }}</option>
+            @endforeach
+            @endif
+           </select>
 
                 <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded">Limpiar</button>
             </div>
@@ -57,8 +60,8 @@
                         </div>
                     </div>
                     <div class="min-h-[150px] space-y-2 sortable">
-                    <div class="card bg-white p-3 rounded shadow cursor-pointer" data-estado="Historia" data-responsable="Juan" data-fecha="2025-03-15">Modo de reunión</div>
-                    <div class="card bg-white p-3 rounded shadow cursor-pointer" data-estado="Tarea" data-responsable="María" data-fecha="2025-03-14">Reflejo de imágenes</div>
+                    <div class="card bg-white p-3 rounded shadow cursor-pointer">Modo de reunión</div>
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer">Reflejo de imágenes</div>
                     </div>
                 </div>
             </div>

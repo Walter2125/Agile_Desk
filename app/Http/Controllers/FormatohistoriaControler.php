@@ -12,8 +12,13 @@ class FormatohistoriaControler extends Controller
      */
     public function index()
     {
-        
-        return view('formato.index');
+    // Obtener una lista única de responsables desde la base de datos
+    $responsables = Formatohistoria::whereNotNull('responsable')
+                    ->pluck('responsable')
+                    ->unique()
+                    ->toArray(); 
+
+    return view('formato.index', compact('responsables'));
     }
 
     /**
