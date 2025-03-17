@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('style.css') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
+
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @stop
@@ -39,6 +40,10 @@
             @endforeach
             @endif
            </select>
+
+           <select id="filtrarEtiqueta" class="border p-2 rounded">
+                    <option value="">Todas las etiquetas</option>
+                </select>
 
                 <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded">Limpiar</button>
             </div>
@@ -76,6 +81,19 @@
             <div class="flex justify-end space-x-2">
                 <button id="cancelar" class="bg-red-500 text-white px-4 py-2 rounded">Cancelar</button>
                 <button id="guardar" class="bg-green-500 text-white px-4 py-2 rounded">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Modal para etiquetas -->
+<div id="modalEtiquetas" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h3 class="text-xl font-bold mb-4">Asignar Etiquetas</h3>
+            <div id="listaEtiquetas" class="mb-4 space-y-2"></div>
+            <div class="flex justify-end space-x-2">
+                <button id="cerrarEtiquetas" class="bg-red-500 text-white px-4 py-2 rounded">Cancelar</button>
+                <button id="guardarEtiquetas" class="bg-green-500 text-white px-4 py-2 rounded">Guardar</button>
             </div>
         </div>
     </div>
@@ -256,6 +274,91 @@
                 console.log("Columna agregada");
             });
 
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalEtiquetas = document.getElementById('modalEtiquetas');
+            const cerrarEtiquetas = document.getElementById('cerrarEtiquetas');
+            const guardarEtiquetas = document.getElementById('guardarEtiquetas');
+            const listaEtiquetas = document.getElementById('listaEtiquetas');
+            const filtrarEtiqueta = document.getElementById('filtrarEtiqueta');
+
+            const etiquetasDisponibles = [
+                { nombre: "Urgente", color: "bg-red-500" },
+                { nombre: "Bug", color: "bg-yellow-500" },
+                { nombre: "Mejora", color: "bg-green-500" },
+                { nombre: "Investigación", color: "bg-blue-500" }
+            ];
+
+            etiquetasDisponibles.forEach(etiqueta => {
+                const option = document.createElement('option');
+                option.value = etiqueta.nombre;
+                option.textContent = etiqueta.nombre;
+                filtrarEtiqueta.appendChild(option);
+            });
+
+            document.querySelectorAll('.card').forEach(card => {
+                card.addEventListener('dblclick', () => {
+                    modalEtiquetas.classList.remove('hidden');
+                    modalEtiquetas.dataset.target = card;
+                    generarOpcionesEtiquetas(card);
+                });
+            });
+
+            function generarOpcionesEtiquetas(card) {
+                listaEtiquetas.innerHTML = "";
+                etiquetasDisponibles.forEach(etiqueta => {
+                    const div = document.createElement('div');
+                    div.classList.add('flex', 'items-center', 'space-x-2');
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.value = etiqueta.nombre;
+                    checkbox.checked = card.dataset.etiquetas?.includes(etiqueta.nombre) || false;
+                    
+                    const label = document.createElement('span');
+                    label.textContent = etiqueta.nombre;
+                    label.classList.add('px-2', 'py-1', 'rounded', etiqueta.color, 'text-white');
+
+                    div.appendChild(checkbox);
+                    div.appendChild(label);
+                    listaEtiquetas.appendChild(div);
+                });
+            }
+
+            guardarEtiquetas.addEventListener('click', () => {
+                const targetCard = modalEtiquetas.dataset.target;
+                const etiquetasSeleccionadas = Array.from(listaEtiquetas.querySelectorAll('input:checked'))
+                                                    .map(input => input.value);
+                targetCard.dataset.etiquetas = etiquetasSeleccionadas.join(',');
+                mostrarEtiquetasEnTarea(targetCard, etiquetasSeleccionadas);
+                
+                if (etiquetasSeleccionadas.includes("Urgente")) {
+                    toastr.warning("Tarea marcada como Urgente. Notificando al líder técnico...");
+                }
+
+                modalEtiquetas.classList.add('hidden');
+            });
+
+            function mostrarEtiquetasEnTarea(card, etiquetas) {
+                let etiquetaContainer = card.querySelector('.etiquetas');
+                if (!etiquetaContainer) {
+                    etiquetaContainer = document.createElement('div');
+                    etiquetaContainer.classList.add('flex', 'space-x-1', 'mt-2', 'etiquetas');
+                    card.appendChild(etiquetaContainer);
+                }
+                etiquetaContainer.innerHTML = "";
+
+                etiquetas.forEach(nombreEtiqueta => {
+                    const etiquetaData = etiquetasDisponibles.find(e => e.nombre === nombreEtiqueta);
+                    const etiquetaSpan = document.createElement('span');
+                    etiquetaSpan.textContent = nombreEtiqueta;
+                    etiquetaSpan.classList.add('px-2', 'py-1', 'text-white', 'rounded', etiquetaData.color);
+                    etiquetaContainer.appendChild(etiquetaSpan);
+                });
+            }
         });
     </script>
 @stop
