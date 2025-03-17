@@ -29,5 +29,8 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC"
-}
+    "license": "ISC",
+        "@fullcalendar/daygrid": "^6.1.15"
+    }
+
+

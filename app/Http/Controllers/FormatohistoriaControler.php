@@ -12,8 +12,8 @@ class FormatohistoriaControler extends Controller
      */
     public function index()
     {
-        $historias = Formatohistoria::all();
-        return view('formato.index',compact('historias'));
+        
+        return view('formato.index');
     }
 
     /**
