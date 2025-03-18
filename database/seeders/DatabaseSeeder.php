@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,5 +19,16 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+    }
+    public function createAdmin(){
+        $user = new User;
+        $user->name = 'Administrador';
+        $user->email = 'admin@example.com';
+        $user->password = bcrypt('contra1234');
+        $user->role = 'admin';
+
+        $user->save();
+
     }
 }

@@ -5,16 +5,18 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
+
 {
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up(): void 
     {
         Schema::create('proyectos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->text('descripcion')->nullable();
+            $table->string('nombre')->unique(); 
+            $table->integer('sprint_number'); 
+            $table->string('descripcion'); 
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
             $table->string('estado');
