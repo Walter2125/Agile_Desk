@@ -67,16 +67,18 @@
             </div>
 
             <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
-                <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
-                    <div class="flex justify-between items-center">
-                        <span class="titulo-columna text-lg font-bold text-pink-800">Historia</span>
-                        <div class="relative">
-                            <button class="opciones-columna text-gray-700">⋮</button>
-                            <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
-                                <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
-                                <div class="container my-4"><div class="col-md-2"><a href="{{ route('formulario.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i> Crear</a></div></div>
-                                </button>
-                            </div>
+    <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
+        <div class="flex justify-between items-center">
+            <span class="titulo-columna text-lg font-bold text-pink-800">Historia</span>
+            <div class="relative">
+                <button class="opciones-columna text-gray-700">⋮</button>
+                <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
+                    <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
+                    <div class="container my-4">
+                        <div class="col-md-2">
+                            <a href="{{ route('formulario.create') }}" class="btn btn-primary">
+                                <i class="bi bi-plus"></i> Crear
+                            </a>
                         </div>
                     </div>
                     <div class="min-h-[150px] space-y-2 sortable">
@@ -124,11 +126,75 @@
                     @endforeach
 
                 </div>
-
                 </div>
             </div>
         </div>
+
+        <div class="min-h-[150px] space-y-2 sortable">
+            @foreach ($historias as $historia)
+                <div class="card bg-white p-3 rounded shadow cursor-pointer">
+                    <div class="font-semibold text-gray-800">Id: {{ $historia->id }}</div>
+                    <div>Nombre: <span class="font-semibold text-gray-800">{{ $historia->nombre }}</span></div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                </th>
+                                <th scope="col">
+                                    <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </th>
+                                <th scope="col">
+                                    <!-- Botón "Agregar Tarea" dentro de la tabla -->
+                                    <button class="btn btn-secondary btn-sm" onclick="abrirModal()">
+                                        <i class="bi bi-plus"></i> Tarea
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            @endforeach
+        </div>
     </div>
+</div>
+
+<!-- Modal (Fuera del foreach para no duplicarlo) -->
+<div id="miModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-5 rounded shadow-lg w-1/3">
+        <h2 class="text-xl font-bold mb-4">Agregar Tarea</h2>
+        <div id="listaTareas"></div>
+        <button class="btn btn-success mt-2" onclick="agregarTarea()">Agregar Tarea</button>
+        <button class="btn btn-danger mt-2" onclick="cerrarModal()">Cerrar</button>
+    </div>
+</div>
+
+<script>
+    function abrirModal(id) {
+        document.getElementById("miModal").style.display = "flex";
+    }
+
+    function cerrarModal() {
+        document.getElementById("miModal").style.display = "none";
+    }
+
+    function agregarTarea() {
+        let lista = document.getElementById("listaTareas");
+        let nuevaTarea = document.createElement("div");
+        nuevaTarea.className = "tarea-item";
+        nuevaTarea.innerHTML = `<input type="text" placeholder="Descripción de la tarea">`;
+        lista.appendChild(nuevaTarea);
+    }
+</script>
 
     <!-- Modal -->
     <div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
