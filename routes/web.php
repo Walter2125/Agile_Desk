@@ -9,6 +9,8 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SprintController;
 use App\Http\Controllers\FormatohistoriaControler;
 use App\Http\Controllers\FullCalendarController;
+use App\Http\Controllers\HistorialCambiosController;
+
 
 // Redirección a login por defecto
 Route::get('/', function () {
@@ -17,11 +19,12 @@ Route::get('/', function () {
 });
 
 // Rutas para formulario de historias
-Route::get('/form', function () {
-    return view('formato.index');
-})->name('form.index');
+Route::get('/form',[FormatohistoriaControler::class,'index'])->name('form.index');
 Route::get('/form/create', [FormatohistoriaControler::class, 'create'])->name('formulario.create');
 Route::post('/form/store', [FormatohistoriaControler::class, 'store'])->name('formulario.store');
+Route::get('/form/{formulario}/edit',[FormatohistoriaControler::class,'edit'])->name('formulario.edit');
+Route::patch('/form/{formulario}/update',[FormatohistoriaControler::class,'update'])->name('formulario.update');
+Route::delete('/form/{formulario}/destroy',[FormatohistoriaControler::class,'destroy'])->name('formulario.destroy');
 
 // Rutas de autenticación personalizadas
 Route::get('/login', [CustomLoginController::class, 'showLoginForm'])->name('custom.login.form');
@@ -75,3 +78,7 @@ Route::controller(FullCalendarController::class)->group(function () {
     Route::delete('fullcalendar/destroy/{id}', 'destroy');
     Route::put('fullcalendar/update/{id}', 'update');   
 });
+
+//Ruta para el historial de cambios
+Route::get('/historialcambios', [HistorialCambiosController::class, 'index'])->name('historial.cambios');
+Route::post('/historialcambios/revertir/{id}', [HistorialCambiosController::class, 'revertir']);
