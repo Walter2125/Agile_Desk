@@ -253,7 +253,7 @@
                         animation: 150,
                         onEnd(evt) {
                             const tarjeta = evt.item;
-                            const columnaDestino = evt.from.closest('.columna');
+                            const columnaDestino = evt.to.closest('.columna');
                             const estado = columnaDestino.querySelector('.titulo-columna').textContent;
 
                             const nombreHistoria = tarjeta.textContent.trim();
@@ -358,13 +358,13 @@
                 filtrarEtiqueta.appendChild(option);
             });
 
-            document.querySelectorAll('.card').forEach(card => {
-                card.addEventListener('dblclick', () => {
-                    modalEtiquetas.classList.remove('hidden');
-                    modalEtiquetas.dataset.target = card;
-                    generarOpcionesEtiquetas(card);
-                });
-            });
+         //   document.querySelectorAll('.card').forEach(card => {
+          //      card.addEventListener('dblclick', () => {
+         //           modalEtiquetas.classList.remove('hidden');
+         //           modalEtiquetas.dataset.target = card;
+          //          generarOpcionesEtiquetas(card);
+          //      });
+          //  });
 
             function generarOpcionesEtiquetas(card) {
                 listaEtiquetas.innerHTML = "";
