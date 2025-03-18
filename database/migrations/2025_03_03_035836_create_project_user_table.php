@@ -10,7 +10,7 @@ return new class extends Migration
 {
     Schema::create('project_user', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('proyecto_id')->constrained('proyectos')->onDelete('cascade');
+        $table->foreignId('nuevo_proyecto_id')->constrained('nuevo_proyecto')->onDelete('cascade');
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
         $table->timestamps();
     });
