@@ -8,13 +8,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, $role)
     {
-        return $next($request);
+        // Verificar si el usuario tiene el rol adecuado
+        if (auth()->check() && auth()->user()->role === $role) {
+            return $next($request);
+        }
+
+        // Redirigir si no tiene el rol
+        return redirect('/HomeUser');
     }
 }

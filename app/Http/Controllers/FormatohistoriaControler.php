@@ -55,8 +55,8 @@ class FormatohistoriaControler extends Controller
         $historia->save();
 
 
-
-        return redirect()->route('tablero')->with('success', ' ');//aqui devera devolver al tablero donde se haga la conexion 
+        session()->flash('success','Historia Creada correctamente');
+        return redirect()->route('tablero');//aqui devera devolver al tablero donde se haga la conexion 
     }
 
     /**
@@ -104,8 +104,8 @@ class FormatohistoriaControler extends Controller
         'prioridad' => $request->prioridad,
         'descripcion' => $request->descripcion,
     ]);
-
-    return redirect()->route('form.index')->with('success', 'Historia actualizada correctamente');
+    session()->flash('success','Historia Actualizada correctamente');
+    return redirect()->route('tablero');
 
     }
 
@@ -118,7 +118,8 @@ class FormatohistoriaControler extends Controller
          
     $historia = Formatohistoria::findOrFail($id);
     $historia->delete();
-    return redirect()->route('form.index')->with('success', 'Historia eliminada correctamente');
+    session()->flash('success','Historia eliminada correctamente');
+    return redirect()->route('tablero');
 
     }
 }

@@ -16,7 +16,28 @@
 @stop
 
 @section('content')
+<<<<<<< HEAD
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.5);">
+=======
+
+    <div class="bg-gray-100 p-4 sm:p-6 md:p-10" style="background-color: rgba(243, 244, 246, 0.5);">
+
+
+        <!--El mensage de guradado con exito -->
+
+        
+        @if (session('success'))
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <strong></strong>
+                {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+            
+        @endif
+        <!-- -->
+    <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.5);">
+
+>>>>>>> main
         <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen">
             <h2 class="text-2xl font-bold text-center mb-6">Tablero Scrum</h2>
 
@@ -66,17 +87,46 @@
                         </div>
                     </div>
                     <div class="min-h-[150px] space-y-2 sortable">
+<<<<<<< HEAD
                     <div class="card bg-white p-3 rounded shadow cursor-pointer">Modo de reunión</div>
-                        <div class="card bg-white p-3 rounded shadow cursor-pointer">Reflejo de imágenes</div>
-                        <div class="card bg-white p-3 rounded shadow cursor-pointer">para prueba 
-                            <br> Nombre:<div>
-                                        
-                                        </div> 
-                            <br> id:<div>
+=======
 
-                                   </div> <br>
-                        </div>
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer">Modo de reunión</div>
+>>>>>>> main
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer">Reflejo de imágenes</div>
                     </div>
+
+
+                    @foreach ($historias as $historia )
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer" >
+
+                        
+                            <div class="font-semibold text-gray-800">Id: {{ $historia->id }}</div>
+                            Nombre: 
+                            <div class="font-semibold text-gray-800">{{ $historia->nombre }}</div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                         <th scope="col"><a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary">
+                                         <i class="bi bi-pencil"></i>
+                                         </a></th>
+                                         <th scope="col"><form action="{{ route('formulario.destroy',$historia->id) }}" method="post">
+                                @csrf
+                                @method('DELETE')<button type="submit" class="btn btn-danger btn-sm">
+                                         <i class="bi bi-trash"></i></button>
+                                        </form></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+
+                            </table>
+
+                            
+                        </div>
+                    @endforeach
+                </div>
+
                 </div>
             </div>
         </div>
