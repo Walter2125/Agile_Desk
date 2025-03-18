@@ -19,14 +19,14 @@
 
         <!--El mensage de guradado con exito -->
 
-        
+
         @if (session('success'))
         <div class="alert alert-primary alert-dismissible fade show" role="alert">
         <strong></strong>
                 {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-            
+
         @endif
         <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.5);">
@@ -36,7 +36,7 @@
             <!-- Barra de búsqueda y filtros -->
             <div class="flex flex-wrap items-center justify-between mb-4 space-y-2">
                 <input type="text" id="buscar" class="border p-2 rounded w-1/3" placeholder="Buscar historias o tareas...">
-                
+
                 <select id="filtrarEstado" class="border p-2 rounded">
                     <option value="">Todos los estados</option>
                     <option value="Historia">Historia</option>
@@ -47,7 +47,7 @@
 
                 <select id="filtrarResponsable" class="border p-2 rounded">
                 <option value="">Todos los responsables</option>
-    
+
                 @if (!empty($responsables))
                 @foreach ($responsables as $responsable)
             <option value="{{ $responsable }}">{{ $responsable }}</option>
@@ -69,7 +69,7 @@
             <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
                 <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
                     <div class="flex justify-between items-center">
-                        <span class="titulo-columna text-lg font-bold text-pink-800">Historia</span>
+                        <span class="titulo-columna text-lg font-bold text-pink-800">Backlog</span>
                         <div class="relative">
                             <button class="opciones-columna text-gray-700">⋮</button>
                             <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
@@ -84,21 +84,26 @@
                     @foreach ($historias as $historia )
                         <div class="card bg-white p-3 rounded shadow cursor-pointer" >
 
-                        
-                            <div class="font-semibold text-gray-800">Id: {{ $historia->id }}</div>
-                            Nombre: 
+                            Nombre:
                             <div class="font-semibold text-gray-800">{{ $historia->nombre }}</div>
                             <table class="table">
                                 <thead>
                                     <tr>
-                                         <th scope="col"><a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary">
-                                         <i class="bi bi-pencil"></i>
-                                         </a></th>
-                                         <th scope="col"><form action="{{ route('formulario.destroy',$historia->id) }}" method="post">
-                                @csrf
-                                @method('DELETE')<button type="submit" class="btn btn-danger btn-sm">
-                                         <i class="bi bi-trash"></i></button>
-                                        </form></th>
+                                        <th scope="col">
+                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary boton-uniforme">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        </th>
+                                        <th scope="col">
+                                            <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger boton-uniforme">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -106,7 +111,7 @@
 
                             </table>
 
-                            
+
                         </div>
                     @endforeach
                 </div>
@@ -359,7 +364,7 @@
                     checkbox.type = 'checkbox';
                     checkbox.value = etiqueta.nombre;
                     checkbox.checked = card.dataset.etiquetas?.includes(etiqueta.nombre) || false;
-                    
+
                     const label = document.createElement('span');
                     label.textContent = etiqueta.nombre;
                     label.classList.add('px-2', 'py-1', 'rounded', etiqueta.color, 'text-white');
@@ -376,7 +381,7 @@
                                                     .map(input => input.value);
                 targetCard.dataset.etiquetas = etiquetasSeleccionadas.join(',');
                 mostrarEtiquetasEnTarea(targetCard, etiquetasSeleccionadas);
-                
+
                 if (etiquetasSeleccionadas.includes("Urgente")) {
                     toastr.warning("Tarea marcada como Urgente. Notificando al líder técnico...");
                 }
