@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Formatohistoria;
+use App\Models\HistoriaModel;
 use Illuminate\Http\Request;
 
 class FormatohistoriaControler extends Controller
@@ -12,13 +13,8 @@ class FormatohistoriaControler extends Controller
      */
     public function index()
     {
-    // Obtener una lista única de responsables desde la base de datos
-    $responsables = Formatohistoria::whereNotNull('responsable')
-                    ->pluck('responsable')
-                    ->unique()
-                    ->toArray(); 
-
-    return view('formato.index', compact('responsables'));
+        $historias = Formatohistoria::all();
+        return view('formato.index', compact('historias'));
     }
 
     /**
@@ -37,13 +33,16 @@ class FormatohistoriaControler extends Controller
         $request->validate([
             'nombre' => 'required|unique:formatohistorias,nombre|max:255', 
             'sprint' => 'required|integer|min:1',
-            'trabajo_estimado' => 'nullable|integer|min:1',
+            'trabajo_estimado' => 'nullable|integer|min:0',
             'responsable' => 'nullable|string|max:255',
             'prioridad' => 'required|in:Alta,Media,Baja',
             'descripcion' => 'nullable|string',],
-            ['nombre.unique' =>'EL nombre ya existe intente con otro',//personalizacion de alertas.
-            'sprint.required'=>'El Sprint el requerido',
-            'prioridad.required'=> 'La prioridad es requerida'
+            [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.unique' =>'El nombre ya existe, intente con otro.',//personalizacion de alertas.
+            'trabajo_estimado.min' =>'El Trabajo Estimado debe ser mayor a cero.',
+            'sprint.required'=>'El Sprint es requerido.',
+            'prioridad.required'=> 'La prioridad es requerida.'
         ]);
        
         $historia = new Formatohistoria();
@@ -56,8 +55,8 @@ class FormatohistoriaControler extends Controller
         $historia->save();
 
 
-
-        return back()->with('success', 'Historia creada con éxito');//aqui devera devolver al tablero donde se haga la conexion 
+        session()->flash('success','Historia Creada correctamente');
+        return redirect()->route('tablero');//aqui devera devolver al tablero donde se haga la conexion 
     }
 
     /**
@@ -71,9 +70,11 @@ class FormatohistoriaControler extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
         //
+        $historia = Formatohistoria::findOrFail($id);
+        return view('formato.edit',compact('historia'));
     }
 
     /**
@@ -82,6 +83,30 @@ class FormatohistoriaControler extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $request->validate([
+            'nombre' => 'required|max:255|unique:formatohistorias,nombre,' . $id, 
+            'sprint' => 'required|integer|min:1',
+            'trabajo_estimado' => 'nullable|integer|min:1',
+            'responsable' => 'nullable|string|max:255',
+            'prioridad' => 'required|in:Alta,Media,Baja',
+            'descripcion' => 'nullable|string',
+        ], [
+            'nombre.unique' => 'El nombre ya existe, intente con otro.',
+            'sprint.required' => 'El Sprint es requerido.',
+            'prioridad.required' => 'La prioridad es requerida.'
+        ]);
+        $historia = Formatohistoria::findOrFail($id);
+    $historia->update([
+        'nombre' => $request->nombre,
+        'sprint' => $request->sprint,
+        'trabajo_estimado' => $request->trabajo_estimado,
+        'responsable' => $request->responsable,
+        'prioridad' => $request->prioridad,
+        'descripcion' => $request->descripcion,
+    ]);
+    session()->flash('success','Historia Actualizada correctamente');
+    return redirect()->route('tablero');
+
     }
 
     /**
@@ -90,5 +115,11 @@ class FormatohistoriaControler extends Controller
     public function destroy(string $id)
     {
         //
+         
+    $historia = Formatohistoria::findOrFail($id);
+    $historia->delete();
+    session()->flash('success','Historia eliminada correctamente');
+    return redirect()->route('tablero');
+
     }
 }

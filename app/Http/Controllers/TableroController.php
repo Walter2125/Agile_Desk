@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Formatohistoria;
 
 class TableroController extends Controller
 {
@@ -12,6 +13,8 @@ class TableroController extends Controller
     public function index()
     {
         //
+        $historias = Formatohistoria::all();
+        return view('tablero',compact('historias'));
     }
 
     /**
