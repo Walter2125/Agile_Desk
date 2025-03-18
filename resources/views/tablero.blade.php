@@ -12,6 +12,7 @@
 
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 @stop
 
 @section('content')
@@ -73,7 +74,7 @@
                             <button class="opciones-columna text-gray-700">⋮</button>
                             <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
                                 <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
-                                <a href="{{ route('formulario.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i>Agregar Historia</a>
+                                <div class="container my-4"><div class="col-md-2"><a href="{{ route('formulario.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i> Crear</a></div></div>
                                 </button>
                             </div>
                         </div>

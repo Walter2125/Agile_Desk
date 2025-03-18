@@ -37,10 +37,12 @@ class FormatohistoriaControler extends Controller
             'responsable' => 'nullable|string|max:255',
             'prioridad' => 'required|in:Alta,Media,Baja',
             'descripcion' => 'nullable|string',],
-            ['nombre.unique' =>'EL nombre ya existe intente con otro',//personalizacion de alertas.
+            [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.unique' =>'El nombre ya existe, intente con otro.',//personalizacion de alertas.
             'trabajo_estimado.min' =>'El Trabajo Estimado debe ser mayor a cero.',
-            'sprint.required'=>'El Sprint el requerido',
-            'prioridad.required'=> 'La prioridad es requerida'
+            'sprint.required'=>'El Sprint es requerido.',
+            'prioridad.required'=> 'La prioridad es requerida.'
         ]);
        
         $historia = new Formatohistoria();

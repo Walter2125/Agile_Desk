@@ -5,7 +5,7 @@
 
 @section('content')
 
-<h1>Hola editar </h1>
+
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>

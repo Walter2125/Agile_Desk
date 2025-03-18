@@ -5,7 +5,8 @@
 <link href="{{ asset('css/formato.css') }}" rel="stylesheet">
 
     @if ($errors->any())
-        <div class="alert alert-danger">
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -13,6 +14,7 @@
             </ul>
         </div>
     @endif
+    
 
     <form action="{{ route('formulario.store') }}" method="post">
         @csrf
@@ -21,7 +23,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <label for="nombreHistoria">Nombre de la historia:</label>
-                        <input type="text" class="form-control" id="nombreHistoria" name="nombre" placeholder="Ingrese el nombre" value="{{ old('nombreHistoria') }}">
+                        <input type="text" class="form-control" id="nombreHistoria" name="nombre" placeholder="Ingrese el nombre" value="{{ old('nombre') }}">
                     </div>
                     <div class="col-md-4">
                         <label for="numeroHistoria"># Historia:</label>
@@ -37,11 +39,11 @@
                 </div>
                 <div class="col-md-4">
                     <label for="sprintHistoria">Sprint:</label>
-                    <input type="number" class="form-control" id="sprintHistoria" name="sprint" placeholder="Número del sprint" value="{{ old('sprintHistoria') }}" min="0">
+                    <input type="number" class="form-control" id="sprintHistoria" name="sprint" placeholder="Número del sprint" value="{{ old('sprint') }}" min="0">
                 </div>
                 <div class="col-md-4">
                     <label for="trabajoEstimado">Trabajo estimado (horas):</label>
-                    <input type="number" name="trabajo_estimado" placeholder="Horas estimadas" min="0">
+                    <input type="number" name="trabajo_estimado" placeholder="Horas estimadas" value={{ old("trabajo_estimado")}} min="0" >
                 
                 </div>
             </div>
@@ -49,7 +51,7 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="responsableHistoria">Responsable:</label>
-                    <input type="text" class="form-control" id="responsableHistoria" name="responsable" placeholder="Nombre del responsable">
+                    <input type="text" class="form-control" id="responsableHistoria" name="responsable" placeholder="Nombre del responsable" value="{{ old('responsable') }}" >
                 </div>
                 <div class="col-md-6">
                     <label for="prioridadHistoria">Prioridad:</label>
@@ -64,7 +66,7 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <label for="descripcionHistoria">Descripción:</label>
-                    <textarea class="form-control" id="descripcionHistoria" name="descripcion" rows="3" placeholder="Ingrese la descripción"></textarea>
+                    <textarea class="form-control" id="descripcionHistoria" name="descripcion" rows="3" placeholder="Ingrese la descripción" ></textarea>
                 </div>
             </div>
 
