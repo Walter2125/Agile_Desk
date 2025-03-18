@@ -50,6 +50,13 @@
             <a href="{{route('sprints.index')}}" class="btn btn-primary mt-2" id="boton">Lista de Sprint</a>
         </div>
 
+        <div id="contenido">
+    <div class="mt-4 text-center">
+        <!-- Enlace que se ve como un botón -->
+        <a href="{{ route('historial.cambios') }}" class="btn btn-primary mt-2" id="boton">Historial de Cambios</a>
+    </div>
+</div>
+
         <div id="carouselExampleFade" class="carousel slide carousel-fade mt-3">
             <div class="carousel-inner">
                 <div class="carousel-item active">

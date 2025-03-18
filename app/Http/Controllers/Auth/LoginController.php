@@ -1,28 +1,62 @@
 <?php
 
-namespace App\Http\Controllers\Auth; // Asegúrate de definir el namespace
+namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller; // Agregar esta línea para importar la clase Controller
+use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    use AuthenticatesUsers;
-
-    protected function redirectTo()
+    public function showLoginForm()
     {
-        if (Auth::user()->role === 'admin') {
-            return '/HomeAdmin';
-        }
-
-        return '/Homeuser';
+        return view('auth.login');
     }
 
-    public function __construct()
+    public function login(Request $request)
     {
-        $this->middleware('guest')->except('logout');
-        $this->middleware('auth')->only('logout');
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            return redirect()->intended('/home');
         }
+
+        return back()->withErrors([
+            'email' => 'Las credenciales proporcionadas no son válidas.',
+        ]);
     }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/login');
+    }
+
+    public function showRegisterForm()
+    {
+        return view('auth.register');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'user', // Asignando valor por defecto  
+
+        ]);
+
+        Auth::login($user); 
+
+        return redirect('/HomeUser');
+    }
+}
