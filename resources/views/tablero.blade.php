@@ -62,9 +62,21 @@
                 <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded">Limpiar</button>
             </div>
 
-            <div class="flex justify-between mb-4">
-                <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded">Agregar Columna</button>
+
+            <div class="flex justify-between mb-4 items-center">
+
+                <select id="comboboxColumna" class="border p-2 rounded">
+                    <option value="">Seleccionar opción</option>
+                    <option value="opcion1">Opción 1</option>
+                    <option value="opcion2">Opción 2</option>
+                    <option value="opcion3">Opción 3</option>
+                </select>
+
+                <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded">
+                    Agregar Columna
+                </button>
             </div>
+
 
             <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
                 <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
