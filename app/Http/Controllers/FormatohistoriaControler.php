@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Formatohistoria;
+use App\Models\HistoriaModel;
 use Illuminate\Http\Request;
 
 class FormatohistoriaControler extends Controller
@@ -12,8 +13,8 @@ class FormatohistoriaControler extends Controller
      */
     public function index()
     {
-        
-        return view('formato.index');
+        $historias = Formatohistoria::all();
+        return view('formato.index', compact('historias'));
     }
 
     /**
