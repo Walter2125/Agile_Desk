@@ -67,10 +67,10 @@ Route::get('/projects/listaproyectos', [ProjectController::class, 'index'])->nam
 // Rutas para calendario
 Route::controller(FullCalendarController::class)->group(function () {
     Route::get('fullcalendar', 'index');
-    Route::get('fullcalendar/ajax', 'ajax');     
-    Route::post('fullcalendar/store', 'store'); 
+    Route::get('fullcalendar/ajax', 'ajax');
+    Route::post('fullcalendar/store', 'store');
     Route::delete('fullcalendar/destroy/{id}', 'destroy');
-    Route::put('fullcalendar/update/{id}', 'update');   
+    Route::put('fullcalendar/update/{id}', 'update');
 });
 
 //Ruta para el historial de cambios
@@ -91,3 +91,5 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [LoginController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [LoginController::class, 'register']);
+
+Route::post('/actualizar-estado', [HistoriaController::class, 'actualizarEstado'])->name('actualizar.estado');

@@ -8,6 +8,8 @@
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Toastr CSS -->
@@ -16,95 +18,94 @@
 @stop
 
 @section('content')
-    <div class="bg-gray-100 p-4 sm:p-6 md:p-10" style="background-color: rgba(243, 244, 246, 0.5);">
+
         <!--El mensage de guradado con exito -->
 
-        
+
         @if (session('success'))
         <div class="alert alert-primary alert-dismissible fade show" role="alert">
         <strong></strong>
                 {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-            
+
         @endif
         <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.5);">
-
         <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen">
             <h2 class="text-2xl font-bold text-center mb-6">Tablero Scrum</h2>
 
             <!-- Barra de búsqueda y filtros -->
-            <div class="flex flex-col sm:flex-row sm:space-x-4 items-center justify-between mb-4 space-y-4 sm:space-y-0">
-                <input type="text" id="buscar" class="border p-2 rounded w-full sm:w-1/3" placeholder="Buscar historias o tareas...">
-                
-                <select id="filtrarEstado" class="border p-2 rounded w-full sm:w-1/4">
+            <div class="flex flex-wrap items-center justify-between mb-4 space-y-2">
+                <input type="text" id="buscar" class="border p-2 rounded w-1/3" placeholder="Buscar historias o tareas...">
+
+                <select id="filtrarEstado" class="border p-2 rounded">
                     <option value="">Todos los estados</option>
                     <option value="Historia">Historia</option>
                     <option value="Tarea">Tarea</option>
                 </select>
 
-                <input type="date" id="filtrarFecha" class="border p-2 rounded w-full sm:w-1/4">
+                <input type="date" id="filtrarFecha" class="border p-2 rounded">
 
-                <select id="filtrarResponsable" class="border p-2 rounded w-full sm:w-1/4">
-                    <option value="">Todos los responsables</option>
-                    @if (!empty($responsables))
-                        @foreach ($responsables as $responsable)
-                            <option value="{{ $responsable }}">{{ $responsable }}</option>
-                        @endforeach
-                    @endif
-                </select>
+                <select id="filtrarResponsable" class="border p-2 rounded">
+                <option value="">Todos los responsables</option>
 
-                <select id="filtrarEtiqueta" class="border p-2 rounded w-full sm:w-1/4">
+                @if (!empty($responsables))
+                @foreach ($responsables as $responsable)
+            <option value="{{ $responsable }}">{{ $responsable }}</option>
+            @endforeach
+            @endif
+           </select>
+
+           <select id="filtrarEtiqueta" class="border p-2 rounded">
                     <option value="">Todas las etiquetas</option>
                 </select>
 
-                <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded w-full sm:w-auto">Limpiar</button>
+                <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded">Limpiar</button>
             </div>
 
-            <div class="flex justify-between mb-4">
-                <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto">Agregar Columna</button>
+
+            <div class="flex justify-between mb-4 items-center">
+
+                <select id="comboboxColumna" class="border p-2 rounded">
+                    <option value="">Seleccionar opción</option>
+                    <option value="opcion1">Opción 1</option>
+                    <option value="opcion2">Opción 2</option>
+                    <option value="opcion3">Opción 3</option>
+                </select>
+
+                <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded">
+                    Agregar Columna
+                </button>
             </div>
+
 
             <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
-    <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
-        <div class="flex justify-between items-center">
-            <span class="titulo-columna text-lg font-bold text-pink-800">Historia</span>
-            <div class="relative">
-                <button class="opciones-columna text-gray-700">⋮</button>
-                <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
-                    <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
-                    <div class="container my-4">
-                        <div class="col-md-2">
-                            <a href="{{ route('formulario.create') }}" class="btn btn-primary">
-                                <i class="bi bi-plus"></i> Crear
-                            </a>
+                <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
+                    <div class="flex justify-between items-center">
+                        <span class="titulo-columna text-lg font-bold text-pink-800">Backlog</span>
+                        <div class="relative">
+
+                            <button class="opciones-columna text-gray-700">⋮</button>
+                            <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
+                                <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
+                                <div class="container my-4"><div class="col-md-2"><a href="{{ route('formulario.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i> Crear</a></div></div>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="min-h-[150px] space-y-2 sortable">
-                        <div class="card bg-white p-3 rounded shadow cursor-pointer">Modo de reunión</div>
-                        <div class="card bg-white p-3 rounded shadow cursor-pointer">Reflejo de imágenes</div>
-                    </div>
 
+                    @foreach ($historias as $historia )
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer" >
 
-                    @php
-                        $ordenPrioridad = ['Alta' => 1, 'Media' => 2, 'Baja' => 3];
-                        $historiasOrdenadas = $historias->sortBy(function($historia) use ($ordenPrioridad) {
-                            return $ordenPrioridad[$historia->prioridad] ?? 4;
-                        });
-                    @endphp
-
-                    @foreach ($historiasOrdenadas as $historia)
-                        <div class="card bg-white p-3 rounded shadow cursor-pointer">
-                            <div class="font-semibold text-gray-800">Id: {{ $historia->id }}</div>
-                            <!-- Usa 'titulo' si ese es el campo correcto -->
-                            <div class="font-semibold text-gray-800">Nombre: {{ $historia->nombre }}</div>
-                            <div class="font-semibold text-gray-800">Prioridad: {{ $historia->prioridad }}</div>
+                            Nombre:
+                            <div class="font-semibold text-gray-800">{{ $historia->nombre }}</div>
                             <table class="table">
                                 <thead>
                                     <tr>
                                         <th scope="col">
-                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary">
+                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary boton-uniforme">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
                                         </th>
@@ -112,89 +113,27 @@
                                             <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                <button type="submit" class="btn btn-danger boton-uniforme">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </form>
                                         </th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
+
                             </table>
+
+
                         </div>
                     @endforeach
-
                 </div>
                 </div>
             </div>
         </div>
-
-        <div class="min-h-[150px] space-y-2 sortable">
-            @foreach ($historias as $historia)
-                <div class="card bg-white p-3 rounded shadow cursor-pointer">
-                    <div class="font-semibold text-gray-800">Id: {{ $historia->id }}</div>
-                    <div>Nombre: <span class="font-semibold text-gray-800">{{ $historia->nombre }}</span></div>
-
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">
-                                    <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                </th>
-                                <th scope="col">
-                                    <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </th>
-                                <th scope="col">
-                                    <!-- Botón "Agregar Tarea" dentro de la tabla -->
-                                    <button class="btn btn-secondary btn-sm" onclick="abrirModal()">
-                                        <i class="bi bi-plus"></i> Tarea
-                                    </button>
-                                </th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            @endforeach
-        </div>
     </div>
-</div>
-
-<!-- Modal (Fuera del foreach para no duplicarlo) -->
-<div id="miModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-5 rounded shadow-lg w-1/3">
-        <h2 class="text-xl font-bold mb-4">Agregar Tarea</h2>
-        <div id="listaTareas"></div>
-        <button class="btn btn-success mt-2" onclick="agregarTarea()">Agregar Tarea</button>
-        <button class="btn btn-danger mt-2" onclick="cerrarModal()">Cerrar</button>
-    </div>
-</div>
-
-<script>
-    function abrirModal(id) {
-        document.getElementById("miModal").style.display = "flex";
-    }
-
-    function cerrarModal() {
-        document.getElementById("miModal").style.display = "none";
-    }
-
-    function agregarTarea() {
-        let lista = document.getElementById("listaTareas");
-        let nuevaTarea = document.createElement("div");
-        nuevaTarea.className = "tarea-item";
-        nuevaTarea.innerHTML = `<input type="text" placeholder="Descripción de la tarea">`;
-        lista.appendChild(nuevaTarea);
-    }
-</script>
 
     <!-- Modal -->
     <div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
@@ -208,8 +147,9 @@
         </div>
     </div>
 
-    <!-- Modal para etiquetas -->
-    <div id="modalEtiquetas" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+
+<!-- Modal para etiquetas -->
+<div id="modalEtiquetas" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h3 class="text-xl font-bold mb-4">Asignar Etiquetas</h3>
             <div id="listaEtiquetas" class="mb-4 space-y-2"></div>
@@ -277,14 +217,6 @@
                     }
                 });
 
-                document.querySelectorAll('.editar-columna').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        columnaActual = btn.closest('.columna');
-                        const titulo = columnaActual.querySelector('.titulo-columna').textContent;
-                        nuevoNombreInput.value = titulo;
-                        modal.classList.remove('hidden');
-                    });
-                });
 
                 document.querySelectorAll('.eliminar-columna').forEach(btn => {
                     btn.addEventListener('click', () => {
@@ -314,33 +246,44 @@
                     new Sortable(el, {
                         group: 'scrum',
                         animation: 150,
+                        //nuevo codigo
                         onEnd(evt) {
-                            const tarjeta = evt.item;
-                            const columnaDestino = evt.from.closest('.columna');
-                            const estado = columnaDestino.querySelector('.titulo-columna').textContent;
+                            const tarjeta = evt.item; // Tarjeta movida
+                            const columnaDestino = evt.to.closest('.columna'); // Columna destino
+                            const nuevoEstado = columnaDestino.querySelector('.titulo-columna').textContent.trim(); // Nombre de la columna
+                            const historiaId = tarjeta.dataset.id; // ID de la historia
 
-                            const nombreHistoria = tarjeta.textContent.trim();
-
-
-                            toastr.success(`La historia ${nombreHistoria} ha cambiado a ${estado}.`);
-
-                            tarjeta.classList.add('bg-yellow-100'); // Puedes personalizar el color
+                            // Enviar la actualización al servidor
+                            fetch('/actualizar-estado', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                },
+                                body: JSON.stringify({ id: historiaId, estado: nuevoEstado })
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        toastr.success(`El estado de la historia ha cambiado a: ${nuevoEstado}.`);
+                                    } else {
+                                        toastr.error('Error al actualizar el estado.');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    toastr.error('No se pudo conectar con el servidor.');
+                                });
                         }
+
+
+
                     });
                 });
             }
 
-            document.getElementById('cancelar').addEventListener('click', () => {
-                modal.classList.add('hidden');
-            });
 
-            document.getElementById('guardar').addEventListener('click', () => {
-                const nuevoNombre = nuevoNombreInput.value;
-                if (nuevoNombre) {
-                    columnaActual.querySelector('.titulo-columna').textContent = nuevoNombre;
-                    modal.classList.add('hidden');
-                }
-            });
+
 
             inicializarArrastrables();
             agregarEventosOpciones();
@@ -399,119 +342,89 @@
         });
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-    const modalEtiquetas = document.getElementById('modalEtiquetas');
-    const cerrarEtiquetas = document.getElementById('cerrarEtiquetas');
-    const guardarEtiquetas = document.getElementById('guardarEtiquetas');
-    const listaEtiquetas = document.getElementById('listaEtiquetas');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalEtiquetas = document.getElementById('modalEtiquetas');
+            const cerrarEtiquetas = document.getElementById('cerrarEtiquetas');
+            const guardarEtiquetas = document.getElementById('guardarEtiquetas');
+            const listaEtiquetas = document.getElementById('listaEtiquetas');
+            const filtrarEtiqueta = document.getElementById('filtrarEtiqueta');
 
-    const etiquetasDisponibles = [
-        { nombre: "Urgente", color: "bg-red-500" },
-        { nombre: "Bug", color: "bg-yellow-500" },
-        { nombre: "Mejora", color: "bg-green-500" },
-        { nombre: "Investigación", color: "bg-blue-500" }
-    ];
+            const etiquetasDisponibles = [
+                { nombre: "Urgente", color: "bg-red-500" },
+                { nombre: "Bug", color: "bg-yellow-500" },
+                { nombre: "Mejora", color: "bg-green-500" },
+                { nombre: "Investigación", color: "bg-blue-500" }
+            ];
 
-    document.querySelectorAll('.card').forEach(card => {
-        let clickCount = 0; // Contador de clics
+            etiquetasDisponibles.forEach(etiqueta => {
+                const option = document.createElement('option');
+                option.value = etiqueta.nombre;
+                option.textContent = etiqueta.nombre;
+                filtrarEtiqueta.appendChild(option);
+            });
 
-        card.addEventListener('click', () => {
-            clickCount++; // Incrementar el contador por cada clic
+         //   document.querySelectorAll('.card').forEach(card => {
+          //      card.addEventListener('dblclick', () => {
+         //           modalEtiquetas.classList.remove('hidden');
+         //           modalEtiquetas.dataset.target = card;
+          //          generarOpcionesEtiquetas(card);
+          //      });
+          //  });
 
-            if (clickCount === 3) {
-                // Al llegar a 3 clics, mostrar el modal
-                modalEtiquetas.classList.remove('hidden');
-                modalEtiquetas.targetCard = card;
-                generarOpcionesEtiquetas(card);
-                clickCount = 0; // Resetear el contador después de abrir el modal
+            function generarOpcionesEtiquetas(card) {
+                listaEtiquetas.innerHTML = "";
+                etiquetasDisponibles.forEach(etiqueta => {
+                    const div = document.createElement('div');
+                    div.classList.add('flex', 'items-center', 'space-x-2');
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.value = etiqueta.nombre;
+                    checkbox.checked = card.dataset.etiquetas?.includes(etiqueta.nombre) || false;
+
+                    const label = document.createElement('span');
+                    label.textContent = etiqueta.nombre;
+                    label.classList.add('px-2', 'py-1', 'rounded', etiqueta.color, 'text-white');
+
+                    div.appendChild(checkbox);
+                    div.appendChild(label);
+                    listaEtiquetas.appendChild(div);
+                });
+            }
+
+            guardarEtiquetas.addEventListener('click', () => {
+                const targetCard = modalEtiquetas.dataset.target;
+                const etiquetasSeleccionadas = Array.from(listaEtiquetas.querySelectorAll('input:checked'))
+                                                    .map(input => input.value);
+                targetCard.dataset.etiquetas = etiquetasSeleccionadas.join(',');
+                mostrarEtiquetasEnTarea(targetCard, etiquetasSeleccionadas);
+
+                if (etiquetasSeleccionadas.includes("Urgente")) {
+                    toastr.warning("Tarea marcada como Urgente. Notificando al líder técnico...");
+                }
+
+                modalEtiquetas.classList.add('hidden');
+            });
+
+            function mostrarEtiquetasEnTarea(card, etiquetas) {
+                let etiquetaContainer = card.querySelector('.etiquetas');
+                if (!etiquetaContainer) {
+                    etiquetaContainer = document.createElement('div');
+                    etiquetaContainer.classList.add('flex', 'space-x-1', 'mt-2', 'etiquetas');
+                    card.appendChild(etiquetaContainer);
+                }
+                etiquetaContainer.innerHTML = "";
+
+                etiquetas.forEach(nombreEtiqueta => {
+                    const etiquetaData = etiquetasDisponibles.find(e => e.nombre === nombreEtiqueta);
+                    const etiquetaSpan = document.createElement('span');
+                    etiquetaSpan.textContent = nombreEtiqueta;
+                    etiquetaSpan.classList.add('px-2', 'py-1', 'text-white', 'rounded', etiquetaData.color);
+                    etiquetaContainer.appendChild(etiquetaSpan);
+                });
             }
         });
-    });
 
-    function generarOpcionesEtiquetas(card) {
-        listaEtiquetas.innerHTML = "";
-        const etiquetaActual = card.dataset.etiqueta || "";
-
-        // Opción para eliminar etiquetas
-        const divSinEtiqueta = document.createElement('div');
-        divSinEtiqueta.classList.add('flex', 'items-center', 'space-x-2');
-
-        const radioSinEtiqueta = document.createElement('input');
-        radioSinEtiqueta.type = 'radio';
-        radioSinEtiqueta.name = 'etiquetaSeleccionada';
-        radioSinEtiqueta.value = "";
-        radioSinEtiqueta.checked = etiquetaActual === "";
-
-        const labelSinEtiqueta = document.createElement('span');
-        labelSinEtiqueta.textContent = "Sin etiqueta";
-        labelSinEtiqueta.classList.add('px-2', 'py-1', 'rounded', 'bg-gray-300', 'text-black');
-
-        divSinEtiqueta.appendChild(radioSinEtiqueta);
-        divSinEtiqueta.appendChild(labelSinEtiqueta);
-        listaEtiquetas.appendChild(divSinEtiqueta);
-
-        // Opciones de etiquetas disponibles
-        etiquetasDisponibles.forEach(etiqueta => {
-            const div = document.createElement('div');
-            div.classList.add('flex', 'items-center', 'space-x-2');
-
-            const radio = document.createElement('input');
-            radio.type = 'radio';
-            radio.name = 'etiquetaSeleccionada';
-            radio.value = etiqueta.nombre;
-            radio.checked = etiqueta.nombre === etiquetaActual;
-
-            const label = document.createElement('span');
-            label.textContent = etiqueta.nombre;
-            label.classList.add('px-2', 'py-1', 'rounded', etiqueta.color, 'text-white');
-
-            div.appendChild(radio);
-            div.appendChild(label);
-            listaEtiquetas.appendChild(div);
-        });
-    }
-
-    guardarEtiquetas.addEventListener('click', () => {
-        const targetCard = modalEtiquetas.targetCard;
-        const etiquetaSeleccionada = listaEtiquetas.querySelector('input[name="etiquetaSeleccionada"]:checked');
-
-        if (etiquetaSeleccionada && etiquetaSeleccionada.value !== "") {
-            targetCard.dataset.etiqueta = etiquetaSeleccionada.value;
-            mostrarEtiquetaEnTarea(targetCard, etiquetaSeleccionada.value);
-
-            if (etiquetaSeleccionada.value === "Urgente") {
-                toastr.warning("Tarea marcada como Urgente. Notificando al líder técnico...");
-            }
-        } else {
-            targetCard.dataset.etiqueta = "";
-            mostrarEtiquetaEnTarea(targetCard, ""); // Eliminar etiqueta visualmente
-        }
-
-        modalEtiquetas.classList.add('hidden');
-    });
-
-    cerrarEtiquetas.addEventListener('click', () => {
-        modalEtiquetas.classList.add('hidden');
-    });
-
-    function mostrarEtiquetaEnTarea(card, nombreEtiqueta) {
-        let etiquetaContainer = card.querySelector('.etiquetas');
-        if (!etiquetaContainer) {
-            etiquetaContainer = document.createElement('div');
-            etiquetaContainer.classList.add('flex', 'space-x-1', 'mt-2', 'etiquetas');
-            card.appendChild(etiquetaContainer);
-        }
-        etiquetaContainer.innerHTML = "";
-
-        if (nombreEtiqueta) {
-            const etiquetaData = etiquetasDisponibles.find(e => e.nombre === nombreEtiqueta);
-            const etiquetaSpan = document.createElement('span');
-            etiquetaSpan.textContent = nombreEtiqueta;
-            etiquetaSpan.classList.add('px-2', 'py-1', 'text-white', 'rounded', etiquetaData.color);
-            etiquetaContainer.appendChild(etiquetaSpan);
-        }
-    }
-});
-</script>
+    </script>
 @stop
