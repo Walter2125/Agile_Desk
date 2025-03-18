@@ -9,6 +9,7 @@ class Project extends Model
 {
     use HasFactory;
 
+    protected $table = 'proyectos';
     protected $fillable = ['name', 'sprint_number'];
 
     // Relación muchos a muchos con User
