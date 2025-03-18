@@ -255,7 +255,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'HomeUser',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -322,13 +322,13 @@ return [
         ],
         ['header' => 'Configuración'],
         [
-            'text' => 'TablerosS',
-            'url' => 'admin/settings',
+            'text' => 'Tableros',
+            'url' => 'tab',
             'icon' => 'fas fa-fw fa-folder',
         ],
         [
             'text' => 'Miembros',
-            'url' => 'admin/settings',
+            'url' => 'members',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
@@ -337,8 +337,8 @@ return [
             'icon' => 'fas fa-fw fa-calendar',
         ],
         [
-            'text' => 'Tabla',
-            'url' => 'admin/settings',
+            'text' => 'Crear historias',
+            'url' => 'create',
             'icon' => 'fas fa-fw fa-table',
         ],
         
