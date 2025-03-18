@@ -89,34 +89,44 @@
                     </div>
 
 
-                    @foreach ($historias as $historia )
-                        <div class="card bg-white p-3 rounded shadow cursor-pointer" >
+                    @php
+                        $ordenPrioridad = ['Alta' => 1, 'Media' => 2, 'Baja' => 3];
+                        $historiasOrdenadas = $historias->sortBy(function($historia) use ($ordenPrioridad) {
+                            return $ordenPrioridad[$historia->prioridad] ?? 4;
+                        });
+                    @endphp
 
-                        
+                    @foreach ($historiasOrdenadas as $historia)
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer">
                             <div class="font-semibold text-gray-800">Id: {{ $historia->id }}</div>
-                            Nombre: 
-                            <div class="font-semibold text-gray-800">{{ $historia->nombre }}</div>
+                            <!-- Usa 'titulo' si ese es el campo correcto -->
+                            <div class="font-semibold text-gray-800">Nombre: {{ $historia->nombre }}</div>
+                            <div class="font-semibold text-gray-800">Prioridad: {{ $historia->prioridad }}</div>
                             <table class="table">
                                 <thead>
                                     <tr>
-                                         <th scope="col"><a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary">
-                                         <i class="bi bi-pencil"></i>
-                                         </a></th>
-                                         <th scope="col"><form action="{{ route('formulario.destroy',$historia->id) }}" method="post">
-                                @csrf
-                                @method('DELETE')<button type="submit" class="btn btn-danger btn-sm">
-                                         <i class="bi bi-trash"></i></button>
-                                        </form></th>
+                                        <th scope="col">
+                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        </th>
+                                        <th scope="col">
+                                            <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
-
                             </table>
-
-                            
                         </div>
                     @endforeach
+
                 </div>
 
                 </div>
