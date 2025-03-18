@@ -1,14 +1,17 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\CustomLoginController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SprintController;
 use App\Http\Controllers\FormatohistoriaControler;
 use App\Http\Controllers\FullCalendarController;
+use App\Http\Controllers\HistoriaController;
 use App\Http\Controllers\HistorialCambiosController;
 
 use App\Http\Controllers\TableroController;
@@ -77,11 +80,10 @@ Route::controller(FullCalendarController::class)->group(function () {
 Route::get('/historialcambios', [HistorialCambiosController::class, 'index'])->name('historial.cambios');
 Route::post('/historialcambios/revertir/{id}', [HistorialCambiosController::class, 'revertir']);
 
-Route::prefix('admin')->group(function () {
-    // Ruta para mostrar los usuarios
-    Route::get('/members', [AdminUserController::class, 'index'])->name('admin.users.index');
-});
+//ruta para miembros
+Route::get('/miembros', [UserController::class, 'index'])->name('admin.users.index');
 
+//ruta de las vistas
 Route::get('/homeadmin', [AdminController::class, 'index'])->name('homeadmin')->middleware('auth');
 Route::get('/HomeUser', [HomeController::class, 'index'])->name('HomeUser')->middleware('auth');
 

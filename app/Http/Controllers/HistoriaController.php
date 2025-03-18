@@ -87,8 +87,8 @@ class HistoriaController extends Controller
         ]);
 
         // Encuentra la historia y actualiza el estado
-        $historia = Historia::find($request->id);
-        $historia->estado = $request->estado; // Asegúrate de que la tabla 'historias' tenga una columna 'estado'
+        $historia = HistoriaModel::find($request->id);
+        $historia->estado = $request->estado; 
         $historia->save();
 
         return response()->json(['success' => true, 'message' => 'Estado actualizado correctamente.']);
