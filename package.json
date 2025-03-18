@@ -17,7 +17,20 @@
     "dependencies": {
         "@fullcalendar/core": "^6.1.15",
         "@fullcalendar/daygrid": "^6.1.15",
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0"
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "name": "agile_desk",
+    "version": "1.0.0",
+    "description": "<<<<<< HEAD <p align=\"center\"><a href=\"https://laravel.com\" target=\"_blank\"><img src=\"https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg\" width=\"400\" alt=\"Laravel Logo\"></a></p>",
+    "main": "vite.config.js",
+    "directories": {
+        "test": "tests"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+        "@fullcalendar/daygrid": "^6.1.15"
     }
-}
+
+
