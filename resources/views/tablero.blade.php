@@ -22,7 +22,7 @@
         
         @if (session('success'))
         <div class="alert alert-primary alert-dismissible fade show" role="alert">
-        <strong>Historia creada con éxito!</strong>
+        <strong></strong>
                 {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -80,19 +80,36 @@
                         </div>
                     </div>
                     <div class="min-h-[150px] space-y-2 sortable">
-                    <div class="card bg-white p-3 rounded shadow cursor-pointer" >Modo de reunión</div>
 
+                    @foreach ($historias as $historia )
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer" >
 
-                        <div class="card bg-white p-3 rounded shadow cursor-pointer">Reflejo de imágenes</div>
-                        <div class="card bg-white p-3 rounded shadow cursor-pointer">para prueba 
-                            <br> Nombre:<div>
-                                        
-                                        </div> 
-                            <br> id:<div>
+                        
+                            <div class="font-semibold text-gray-800">Id: {{ $historia->id }}</div>
+                            Nombre: 
+                            <div class="font-semibold text-gray-800">{{ $historia->nombre }}</div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                         <th scope="col"><a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary">
+                                         <i class="bi bi-pencil"></i>
+                                         </a></th>
+                                         <th scope="col"><form action="{{ route('formulario.destroy',$historia->id) }}" method="post">
+                                @csrf
+                                @method('DELETE')<button type="submit" class="btn btn-danger btn-sm">
+                                         <i class="bi bi-trash"></i></button>
+                                        </form></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
 
-                                   </div> <br>
+                            </table>
+
+                            
                         </div>
-                    </div>
+                    @endforeach
+                </div>
                 </div>
             </div>
         </div>
