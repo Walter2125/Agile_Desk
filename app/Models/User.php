@@ -16,4 +16,10 @@ class User extends Authenticatable
     {
         return $this->role == '1';
     }
+    
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
+
 }

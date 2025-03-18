@@ -9,7 +9,10 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SprintController;
 use App\Http\Controllers\FormatohistoriaControler;
 use App\Http\Controllers\FullCalendarController;
+use App\Http\Controllers\HistorialCambiosController;
+
 use App\Http\Controllers\TableroController;
+
 
 
 // Redirección a login por defecto
@@ -59,6 +62,8 @@ Route::get('/users/search', [UserController::class, 'search'])->name('users.sear
 Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create')->middleware('auth');
 Route::post('/projects/store', [ProjectController::class, 'store'])->name('projects.store')->middleware('auth');
 
+Route::get('/projects/listaproyectos', [ProjectController::class, 'index'])->name('projects.create')->middleware('auth');
+
 // Rutas para calendario
 Route::controller(FullCalendarController::class)->group(function () {
     Route::get('fullcalendar', 'index');
@@ -67,6 +72,10 @@ Route::controller(FullCalendarController::class)->group(function () {
     Route::delete('fullcalendar/destroy/{id}', 'destroy');
     Route::put('fullcalendar/update/{id}', 'update');   
 });
+
+//Ruta para el historial de cambios
+Route::get('/historialcambios', [HistorialCambiosController::class, 'index'])->name('historial.cambios');
+Route::post('/historialcambios/revertir/{id}', [HistorialCambiosController::class, 'revertir']);
 
 Route::prefix('admin')->group(function () {
     // Ruta para mostrar los usuarios
