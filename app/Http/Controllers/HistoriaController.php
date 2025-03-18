@@ -74,8 +74,24 @@ class HistoriaController extends Controller
         if (!$historia) {
             return response()->json(['message' => 'Historia de usuario no encontrada'], 404);
         }
-        
+
         $historia->delete();
         return response()->json(['message' => 'Historia de usuario eliminada correctamente'], 200);
     }
+    public function actualizarEstado(Request $request)
+    {
+        // Valida los datos recibidos
+        $request->validate([
+            'id' => 'required|exists:historias,id',
+            'estado' => 'required|string|max:255'
+        ]);
+
+        // Encuentra la historia y actualiza el estado
+        $historia = Historia::find($request->id);
+        $historia->estado = $request->estado; // Asegúrate de que la tabla 'historias' tenga una columna 'estado'
+        $historia->save();
+
+        return response()->json(['success' => true, 'message' => 'Estado actualizado correctamente.']);
+    }
+
 }

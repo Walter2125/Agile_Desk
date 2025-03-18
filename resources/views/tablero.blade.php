@@ -251,18 +251,37 @@
                     new Sortable(el, {
                         group: 'scrum',
                         animation: 150,
+                        //nuevo codigo
                         onEnd(evt) {
-                            const tarjeta = evt.item;
-                            const columnaDestino = evt.to.closest('.columna');
-                            const estado = columnaDestino.querySelector('.titulo-columna').textContent;
+                            const tarjeta = evt.item; // Historia movida
+                            const columnaDestino = evt.to.closest('.columna'); // Columna de destino
+                            const nuevoEstado = columnaDestino.querySelector('.titulo-columna').textContent; // Estado de la columna
+                            const historiaId = tarjeta.dataset.id; // ID de la historia
 
-                            const nombreHistoria = tarjeta.textContent.trim();
-
-
-                            toastr.success(`La historia ${nombreHistoria} ha cambiado a ${estado}.`);
-
-                            tarjeta.classList.add('bg-yellow-100'); // Puedes personalizar el color
+                            // Enviar la actualización al servidor
+                            fetch('/actualizar-estado', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                },
+                                body: JSON.stringify({ id: historiaId, estado: nuevoEstado })
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        toastr.success(`La historia ha cambiado al estado: ${nuevoEstado}.`);
+                                    } else {
+                                        toastr.error('Error al actualizar el estado.');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    toastr.error('No se pudo conectar con el servidor.');
+                                });
+                            //aqui finaliza el codigo
                         }
+
                     });
                 });
             }
