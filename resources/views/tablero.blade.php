@@ -8,6 +8,8 @@
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Toastr CSS -->
@@ -83,6 +85,7 @@
                     <div class="flex justify-between items-center">
                         <span class="titulo-columna text-lg font-bold text-pink-800">Backlog</span>
                         <div class="relative">
+
                             <button class="opciones-columna text-gray-700">⋮</button>
                             <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
                                 <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
@@ -214,14 +217,6 @@
                     }
                 });
 
-                document.querySelectorAll('.editar-columna').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        columnaActual = btn.closest('.columna');
-                        const titulo = columnaActual.querySelector('.titulo-columna').textContent;
-                        nuevoNombreInput.value = titulo;
-                        modal.classList.remove('hidden');
-                    });
-                });
 
                 document.querySelectorAll('.eliminar-columna').forEach(btn => {
                     btn.addEventListener('click', () => {
@@ -253,9 +248,9 @@
                         animation: 150,
                         //nuevo codigo
                         onEnd(evt) {
-                            const tarjeta = evt.item; // Historia movida
-                            const columnaDestino = evt.to.closest('.columna'); // Columna de destino
-                            const nuevoEstado = columnaDestino.querySelector('.titulo-columna').textContent; // Estado de la columna
+                            const tarjeta = evt.item; // Tarjeta movida
+                            const columnaDestino = evt.to.closest('.columna'); // Columna destino
+                            const nuevoEstado = columnaDestino.querySelector('.titulo-columna').textContent.trim(); // Nombre de la columna
                             const historiaId = tarjeta.dataset.id; // ID de la historia
 
                             // Enviar la actualización al servidor
@@ -270,7 +265,7 @@
                                 .then(response => response.json())
                                 .then(data => {
                                     if (data.success) {
-                                        toastr.success(`La historia ha cambiado al estado: ${nuevoEstado}.`);
+                                        toastr.success(`El estado de la historia ha cambiado a: ${nuevoEstado}.`);
                                     } else {
                                         toastr.error('Error al actualizar el estado.');
                                     }
@@ -279,24 +274,16 @@
                                     console.error('Error:', error);
                                     toastr.error('No se pudo conectar con el servidor.');
                                 });
-                            //aqui finaliza el codigo
                         }
+
+
 
                     });
                 });
             }
 
-            document.getElementById('cancelar').addEventListener('click', () => {
-                modal.classList.add('hidden');
-            });
 
-            document.getElementById('guardar').addEventListener('click', () => {
-                const nuevoNombre = nuevoNombreInput.value;
-                if (nuevoNombre) {
-                    columnaActual.querySelector('.titulo-columna').textContent = nuevoNombre;
-                    modal.classList.add('hidden');
-                }
-            });
+
 
             inicializarArrastrables();
             agregarEventosOpciones();
@@ -438,5 +425,6 @@
                 });
             }
         });
+
     </script>
 @stop

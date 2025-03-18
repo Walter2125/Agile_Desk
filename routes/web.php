@@ -73,8 +73,11 @@ Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware(
 // Rutas para calendario
 Route::controller(FullCalendarController::class)->group(function () {
     Route::get('fullcalendar', 'index');
-    Route::get('fullcalendar/ajax', 'ajax');     
-    Route::post('fullcalendar/store', 'store'); 
+    Route::get('fullcalendar/ajax', 'ajax');
+    Route::post('fullcalendar/store', 'store');
     Route::delete('fullcalendar/destroy/{id}', 'destroy');
-    Route::put('fullcalendar/update/{id}', 'update');   
+    Route::put('fullcalendar/update/{id}', 'update');
 });
+
+Route::post('/actualizar-estado', [HistoriaController::class, 'actualizarEstado'])->name('actualizar.estado');
+
