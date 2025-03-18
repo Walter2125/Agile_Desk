@@ -16,13 +16,7 @@
 @stop
 
 @section('content')
-<<<<<<< HEAD
-    <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.5);">
-=======
-
     <div class="bg-gray-100 p-4 sm:p-6 md:p-10" style="background-color: rgba(243, 244, 246, 0.5);">
-
-
         <!--El mensage de guradado con exito -->
 
         
@@ -37,7 +31,6 @@
         <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.5);">
 
->>>>>>> main
         <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen">
             <h2 class="text-2xl font-bold text-center mb-6">Tablero Scrum</h2>
 
@@ -87,44 +80,49 @@
                         </div>
                     </div>
                     <div class="min-h-[150px] space-y-2 sortable">
-<<<<<<< HEAD
-                    <div class="card bg-white p-3 rounded shadow cursor-pointer">Modo de reunión</div>
-=======
-
                         <div class="card bg-white p-3 rounded shadow cursor-pointer">Modo de reunión</div>
->>>>>>> main
                         <div class="card bg-white p-3 rounded shadow cursor-pointer">Reflejo de imágenes</div>
                     </div>
 
 
-                    @foreach ($historias as $historia )
-                        <div class="card bg-white p-3 rounded shadow cursor-pointer" >
+                    @php
+                        $ordenPrioridad = ['Alta' => 1, 'Media' => 2, 'Baja' => 3];
+                        $historiasOrdenadas = $historias->sortBy(function($historia) use ($ordenPrioridad) {
+                            return $ordenPrioridad[$historia->prioridad] ?? 4;
+                        });
+                    @endphp
 
-                        
+                    @foreach ($historiasOrdenadas as $historia)
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer">
                             <div class="font-semibold text-gray-800">Id: {{ $historia->id }}</div>
-                            Nombre: 
-                            <div class="font-semibold text-gray-800">{{ $historia->nombre }}</div>
+                            <!-- Usa 'titulo' si ese es el campo correcto -->
+                            <div class="font-semibold text-gray-800">Nombre: {{ $historia->nombre }}</div>
+                            <div class="font-semibold text-gray-800">Prioridad: {{ $historia->prioridad }}</div>
                             <table class="table">
                                 <thead>
                                     <tr>
-                                         <th scope="col"><a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary">
-                                         <i class="bi bi-pencil"></i>
-                                         </a></th>
-                                         <th scope="col"><form action="{{ route('formulario.destroy',$historia->id) }}" method="post">
-                                @csrf
-                                @method('DELETE')<button type="submit" class="btn btn-danger btn-sm">
-                                         <i class="bi bi-trash"></i></button>
-                                        </form></th>
+                                        <th scope="col">
+                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        </th>
+                                        <th scope="col">
+                                            <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
-
                             </table>
-
-                            
                         </div>
                     @endforeach
+
                 </div>
 
                 </div>
