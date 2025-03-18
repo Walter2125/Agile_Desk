@@ -17,6 +17,9 @@
 
 @section('content')
 
+    <div class="bg-gray-100 p-4 sm:p-6 md:p-10" style="background-color: rgba(243, 244, 246, 0.5);">
+
+
         <!--El mensage de guradado con exito -->
 
         
@@ -30,40 +33,40 @@
         @endif
         <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.5);">
+
         <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen">
             <h2 class="text-2xl font-bold text-center mb-6">Tablero Scrum</h2>
 
             <!-- Barra de búsqueda y filtros -->
-            <div class="flex flex-wrap items-center justify-between mb-4 space-y-2">
-                <input type="text" id="buscar" class="border p-2 rounded w-1/3" placeholder="Buscar historias o tareas...">
+            <div class="flex flex-col sm:flex-row sm:space-x-4 items-center justify-between mb-4 space-y-4 sm:space-y-0">
+                <input type="text" id="buscar" class="border p-2 rounded w-full sm:w-1/3" placeholder="Buscar historias o tareas...">
                 
-                <select id="filtrarEstado" class="border p-2 rounded">
+                <select id="filtrarEstado" class="border p-2 rounded w-full sm:w-1/4">
                     <option value="">Todos los estados</option>
                     <option value="Historia">Historia</option>
                     <option value="Tarea">Tarea</option>
                 </select>
 
-                <input type="date" id="filtrarFecha" class="border p-2 rounded">
+                <input type="date" id="filtrarFecha" class="border p-2 rounded w-full sm:w-1/4">
 
-                <select id="filtrarResponsable" class="border p-2 rounded">
-                <option value="">Todos los responsables</option>
-    
-                @if (!empty($responsables))
-                @foreach ($responsables as $responsable)
-            <option value="{{ $responsable }}">{{ $responsable }}</option>
-            @endforeach
-            @endif
-           </select>
+                <select id="filtrarResponsable" class="border p-2 rounded w-full sm:w-1/4">
+                    <option value="">Todos los responsables</option>
+                    @if (!empty($responsables))
+                        @foreach ($responsables as $responsable)
+                            <option value="{{ $responsable }}">{{ $responsable }}</option>
+                        @endforeach
+                    @endif
+                </select>
 
-           <select id="filtrarEtiqueta" class="border p-2 rounded">
+                <select id="filtrarEtiqueta" class="border p-2 rounded w-full sm:w-1/4">
                     <option value="">Todas las etiquetas</option>
                 </select>
 
-                <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded">Limpiar</button>
+                <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded w-full sm:w-auto">Limpiar</button>
             </div>
 
             <div class="flex justify-between mb-4">
-                <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded">Agregar Columna</button>
+                <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto">Agregar Columna</button>
             </div>
 
             <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
@@ -80,6 +83,11 @@
                         </div>
                     </div>
                     <div class="min-h-[150px] space-y-2 sortable">
+
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer">Modo de reunión</div>
+                        <div class="card bg-white p-3 rounded shadow cursor-pointer">Reflejo de imágenes</div>
+                    </div>
+
 
                     @foreach ($historias as $historia )
                         <div class="card bg-white p-3 rounded shadow cursor-pointer" >
@@ -110,6 +118,7 @@
                         </div>
                     @endforeach
                 </div>
+
                 </div>
             </div>
         </div>
@@ -127,9 +136,8 @@
         </div>
     </div>
 
-
-<!-- Modal para etiquetas -->
-<div id="modalEtiquetas" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+    <!-- Modal para etiquetas -->
+    <div id="modalEtiquetas" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h3 class="text-xl font-bold mb-4">Asignar Etiquetas</h3>
             <div id="listaEtiquetas" class="mb-4 space-y-2"></div>
@@ -319,88 +327,119 @@
         });
     </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const modalEtiquetas = document.getElementById('modalEtiquetas');
-            const cerrarEtiquetas = document.getElementById('cerrarEtiquetas');
-            const guardarEtiquetas = document.getElementById('guardarEtiquetas');
-            const listaEtiquetas = document.getElementById('listaEtiquetas');
-            const filtrarEtiqueta = document.getElementById('filtrarEtiqueta');
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const modalEtiquetas = document.getElementById('modalEtiquetas');
+    const cerrarEtiquetas = document.getElementById('cerrarEtiquetas');
+    const guardarEtiquetas = document.getElementById('guardarEtiquetas');
+    const listaEtiquetas = document.getElementById('listaEtiquetas');
 
-            const etiquetasDisponibles = [
-                { nombre: "Urgente", color: "bg-red-500" },
-                { nombre: "Bug", color: "bg-yellow-500" },
-                { nombre: "Mejora", color: "bg-green-500" },
-                { nombre: "Investigación", color: "bg-blue-500" }
-            ];
+    const etiquetasDisponibles = [
+        { nombre: "Urgente", color: "bg-red-500" },
+        { nombre: "Bug", color: "bg-yellow-500" },
+        { nombre: "Mejora", color: "bg-green-500" },
+        { nombre: "Investigación", color: "bg-blue-500" }
+    ];
 
-            etiquetasDisponibles.forEach(etiqueta => {
-                const option = document.createElement('option');
-                option.value = etiqueta.nombre;
-                option.textContent = etiqueta.nombre;
-                filtrarEtiqueta.appendChild(option);
-            });
+    document.querySelectorAll('.card').forEach(card => {
+        let clickCount = 0; // Contador de clics
 
-            document.querySelectorAll('.card').forEach(card => {
-                card.addEventListener('dblclick', () => {
-                    modalEtiquetas.classList.remove('hidden');
-                    modalEtiquetas.dataset.target = card;
-                    generarOpcionesEtiquetas(card);
-                });
-            });
+        card.addEventListener('click', () => {
+            clickCount++; // Incrementar el contador por cada clic
 
-            function generarOpcionesEtiquetas(card) {
-                listaEtiquetas.innerHTML = "";
-                etiquetasDisponibles.forEach(etiqueta => {
-                    const div = document.createElement('div');
-                    div.classList.add('flex', 'items-center', 'space-x-2');
-
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.value = etiqueta.nombre;
-                    checkbox.checked = card.dataset.etiquetas?.includes(etiqueta.nombre) || false;
-                    
-                    const label = document.createElement('span');
-                    label.textContent = etiqueta.nombre;
-                    label.classList.add('px-2', 'py-1', 'rounded', etiqueta.color, 'text-white');
-
-                    div.appendChild(checkbox);
-                    div.appendChild(label);
-                    listaEtiquetas.appendChild(div);
-                });
-            }
-
-            guardarEtiquetas.addEventListener('click', () => {
-                const targetCard = modalEtiquetas.dataset.target;
-                const etiquetasSeleccionadas = Array.from(listaEtiquetas.querySelectorAll('input:checked'))
-                                                    .map(input => input.value);
-                targetCard.dataset.etiquetas = etiquetasSeleccionadas.join(',');
-                mostrarEtiquetasEnTarea(targetCard, etiquetasSeleccionadas);
-                
-                if (etiquetasSeleccionadas.includes("Urgente")) {
-                    toastr.warning("Tarea marcada como Urgente. Notificando al líder técnico...");
-                }
-
-                modalEtiquetas.classList.add('hidden');
-            });
-
-            function mostrarEtiquetasEnTarea(card, etiquetas) {
-                let etiquetaContainer = card.querySelector('.etiquetas');
-                if (!etiquetaContainer) {
-                    etiquetaContainer = document.createElement('div');
-                    etiquetaContainer.classList.add('flex', 'space-x-1', 'mt-2', 'etiquetas');
-                    card.appendChild(etiquetaContainer);
-                }
-                etiquetaContainer.innerHTML = "";
-
-                etiquetas.forEach(nombreEtiqueta => {
-                    const etiquetaData = etiquetasDisponibles.find(e => e.nombre === nombreEtiqueta);
-                    const etiquetaSpan = document.createElement('span');
-                    etiquetaSpan.textContent = nombreEtiqueta;
-                    etiquetaSpan.classList.add('px-2', 'py-1', 'text-white', 'rounded', etiquetaData.color);
-                    etiquetaContainer.appendChild(etiquetaSpan);
-                });
+            if (clickCount === 3) {
+                // Al llegar a 3 clics, mostrar el modal
+                modalEtiquetas.classList.remove('hidden');
+                modalEtiquetas.targetCard = card;
+                generarOpcionesEtiquetas(card);
+                clickCount = 0; // Resetear el contador después de abrir el modal
             }
         });
-    </script>
+    });
+
+    function generarOpcionesEtiquetas(card) {
+        listaEtiquetas.innerHTML = "";
+        const etiquetaActual = card.dataset.etiqueta || "";
+
+        // Opción para eliminar etiquetas
+        const divSinEtiqueta = document.createElement('div');
+        divSinEtiqueta.classList.add('flex', 'items-center', 'space-x-2');
+
+        const radioSinEtiqueta = document.createElement('input');
+        radioSinEtiqueta.type = 'radio';
+        radioSinEtiqueta.name = 'etiquetaSeleccionada';
+        radioSinEtiqueta.value = "";
+        radioSinEtiqueta.checked = etiquetaActual === "";
+
+        const labelSinEtiqueta = document.createElement('span');
+        labelSinEtiqueta.textContent = "Sin etiqueta";
+        labelSinEtiqueta.classList.add('px-2', 'py-1', 'rounded', 'bg-gray-300', 'text-black');
+
+        divSinEtiqueta.appendChild(radioSinEtiqueta);
+        divSinEtiqueta.appendChild(labelSinEtiqueta);
+        listaEtiquetas.appendChild(divSinEtiqueta);
+
+        // Opciones de etiquetas disponibles
+        etiquetasDisponibles.forEach(etiqueta => {
+            const div = document.createElement('div');
+            div.classList.add('flex', 'items-center', 'space-x-2');
+
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'etiquetaSeleccionada';
+            radio.value = etiqueta.nombre;
+            radio.checked = etiqueta.nombre === etiquetaActual;
+
+            const label = document.createElement('span');
+            label.textContent = etiqueta.nombre;
+            label.classList.add('px-2', 'py-1', 'rounded', etiqueta.color, 'text-white');
+
+            div.appendChild(radio);
+            div.appendChild(label);
+            listaEtiquetas.appendChild(div);
+        });
+    }
+
+    guardarEtiquetas.addEventListener('click', () => {
+        const targetCard = modalEtiquetas.targetCard;
+        const etiquetaSeleccionada = listaEtiquetas.querySelector('input[name="etiquetaSeleccionada"]:checked');
+
+        if (etiquetaSeleccionada && etiquetaSeleccionada.value !== "") {
+            targetCard.dataset.etiqueta = etiquetaSeleccionada.value;
+            mostrarEtiquetaEnTarea(targetCard, etiquetaSeleccionada.value);
+
+            if (etiquetaSeleccionada.value === "Urgente") {
+                toastr.warning("Tarea marcada como Urgente. Notificando al líder técnico...");
+            }
+        } else {
+            targetCard.dataset.etiqueta = "";
+            mostrarEtiquetaEnTarea(targetCard, ""); // Eliminar etiqueta visualmente
+        }
+
+        modalEtiquetas.classList.add('hidden');
+    });
+
+    cerrarEtiquetas.addEventListener('click', () => {
+        modalEtiquetas.classList.add('hidden');
+    });
+
+    function mostrarEtiquetaEnTarea(card, nombreEtiqueta) {
+        let etiquetaContainer = card.querySelector('.etiquetas');
+        if (!etiquetaContainer) {
+            etiquetaContainer = document.createElement('div');
+            etiquetaContainer.classList.add('flex', 'space-x-1', 'mt-2', 'etiquetas');
+            card.appendChild(etiquetaContainer);
+        }
+        etiquetaContainer.innerHTML = "";
+
+        if (nombreEtiqueta) {
+            const etiquetaData = etiquetasDisponibles.find(e => e.nombre === nombreEtiqueta);
+            const etiquetaSpan = document.createElement('span');
+            etiquetaSpan.textContent = nombreEtiqueta;
+            etiquetaSpan.classList.add('px-2', 'py-1', 'text-white', 'rounded', etiquetaData.color);
+            etiquetaContainer.appendChild(etiquetaSpan);
+        }
+    }
+});
+</script>
 @stop
