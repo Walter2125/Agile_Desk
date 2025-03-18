@@ -51,10 +51,11 @@ class LoginController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'user', // Asignando valor por defecto
         ]);
 
         Auth::login($user);
 
-        return redirect('/home');
+        return redirect('/HomeUser');
     }
 }
