@@ -96,39 +96,46 @@
                     </div>
                     <div class="min-h-[150px] space-y-2 sortable">
 
-                    @foreach ($historias as $historia )
-                        <div class="card bg-white p-3 rounded shadow cursor-pointer" >
-
-                            Nombre:
-                            <div class="font-semibold text-gray-800">{{ $historia->nombre }}</div>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">
-                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary boton-uniforme">
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
-                                        </th>
-                                        <th scope="col">
-                                            <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger boton-uniforme">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
-                                        </th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-
-                            </table>
-
-
+                <!-- para ordenarlos segun la prioridad -->
+                @php
+                    $ordenPrioridad = ['Alta' => 1, 'Media' => 2, 'Baja' => 3];
+                    $historiasOrdenadas = $historias->sortBy(function($historia) use ($ordenPrioridad) {
+                        return $ordenPrioridad[$historia->prioridad] ?? 4;
+                    });
+                @endphp
+            
+                @foreach ($historiasOrdenadas as $historia)
+                    <div class="card bg-white p-3 rounded shadow cursor-pointer">
+                        <div class="font-semibold text-gray-800">Nombre:
+                            <span>{{ $historia->nombre }}</span>
                         </div>
-                    @endforeach
+                        <div class="font-semibold text-gray-800">Prioridad:
+                            <span>{{ $historia->prioridad }}</span>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary boton-uniforme">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </th>
+                                    <th scope="col">
+                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger boton-uniforme">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                @endforeach
                 </div>
                 </div>
             </div>

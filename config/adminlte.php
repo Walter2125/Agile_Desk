@@ -328,7 +328,7 @@ return [
         ],
         [
             'text' => 'Miembros',
-            'url' => 'members',
+            'url' => 'miembros',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
