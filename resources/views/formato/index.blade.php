@@ -4,74 +4,69 @@
 
 @section('content')
 
-<div class="container">
-        <div><h2>Historia de Usuario </h2></div>
-        <div><a href="{{ route('formulario.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i>Crear</a></div>
-        
-        <div class="row">
-            <div class="col field">
-                <label>Nombre de la historia:</label>
-                <input type="text" id="nombreHistoria" placeholder="Ingrese el nombre">
-            </div>
-            <div class="col field" style="max-width: 120px;">
-                <label># Historia:</label>
-                <input type="text" id="numeroHistoria" readonly>
-            </div>
+@if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
-        
+    @endif
+  <br>
+ 
+
+@foreach ($historias as $historia)
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col"><a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary">
+                        <i class="bi bi-pencil"></i> Editar
+                        </a></th>
+                    <th scope="col"><form action="{{ route('formulario.destroy',$historia->id) }}" method="post">
+                        @csrf
+                        @method('DELETE')<button type="submit" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i> Eliminar</button>
+                        </form></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+
+        </table>
+    
+@endforeach
+
+    <div>
+    <a href="{{ route('formulario.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i>Crear</a>
+    </div>
+    <div>
+        <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary"><i class="bi bi-plus"></i>editar</a>
+    </div>
+
         <div class="row">
             <div class="col field">
-                <label>Estado:</label>
-                <input type="text" id="estadoHistoria" readonly>
-            </div>
-            <div class="col field">
-                <label>Sprint:</label>
-                <input type="number" id="sprintHistoria" placeholder="Número del sprint">
-            </div>
-            <div class="col field">
-                <label>Trabajo estimado (horas):</label>
-                <input type="number" id="trabajoEstimado" placeholder="Horas estimadas">
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col field">
-                <label>Responsable:</label>
-                <input type="text" id="responsableHistoria" placeholder="Nombre del responsable">
-            </div>
-            <div class="col field">
-                <label>Prioridad:</label>
-                <select id="prioridadHistoria">
-                    <option value="Alta">Alta</option>
-                    <option value="Media">Media</option>
-                    <option value="Baja">Baja</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col field" style="flex: 2;">
-                <label>Descripción:</label>
-                <textarea id="descripcionHistoria" placeholder="Ingrese la descripción"></textarea>
-            </div class="col field" style="flex: 1;">
-            <label>Tareas:</label>
+                <label>Tareas:</label>
                 <button onclick="agregarTarea()">Agregar Tarea</button>
                 <div id="listaTareas" class="tareas"></div>
-                
             </div>
         </div>
+
     </div>
-    
-    <script>
-        function agregarTarea() {
-            let lista = document.getElementById("listaTareas");
-            let nuevaTarea = document.createElement("div");
-            nuevaTarea.className = "tarea-item";
-            nuevaTarea.innerHTML = `<input type="text" placeholder="Descripción de la tarea">`;
-            lista.appendChild(nuevaTarea);
-        }
-    </script>
+</div>
+</div>
 
-        </div>
+<script>
+    function abrirModal() {
+        document.getElementById("miModal").style.display = "flex";
+    }
 
+    function cerrarModal() {
+        document.getElementById("miModal").style.display = "none";
+    }
+
+    function agregarTarea() {
+        let lista = document.getElementById("listaTareas");
+        let nuevaTarea = document.createElement("div");
+        nuevaTarea.className = "tarea-item";
+        nuevaTarea.innerHTML = `<input type="text" placeholder="Descripción de la tarea">`;
+        lista.appendChild(nuevaTarea);
+    }
+</script>
 @endsection

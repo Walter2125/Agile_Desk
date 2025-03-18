@@ -8,26 +8,37 @@
 @stop
 
 @section('content')
+    <section>
+        <img src="{{ asset('img/notas.jpg') }}" alt="Fondo decorativo" id="notas" class="img-fluid">
+        <img src="{{ asset('img/home/software.png') }}" alt="Imagen de software" id="sobre" class="img-fluid">
+        <h1 id="text" class="mt-3">Agile Desk</h1>
+    </section>
 
-<section class="text-center">
-    <img src="{{ asset('img/notas.jpg') }}" alt="Fondo decorativo" id="notas" class="img-fluid">
-    <img src="{{ asset('img/home/software.png') }}" alt="Imagen de software" id="sobre" class="img-fluid">
-    <h1 id="text" class="mt-3">Agile Desk</h1>
-</section>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var notas = document.getElementById('notas');
+            var sobre = document.getElementById('sobre');
+            var text = document.getElementById('text');
 
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function () {
-        var notas = document.getElementById('notas');
-        var sobre = document.getElementById('sobre');
-        var text = document.getElementById('text');
-
-        window.addEventListener('scroll', function () {
+        function parallaxEffect() {
             var value = window.scrollY;
-            notas.style.transform = translateY(${value}px);
-            sobre.style.transform = translateX(${-value * 0.5}px);
-            text.style.transform = translateY(${value * 0.5}px);
-        });
+            
+            if (window.innerWidth > 768) {
+                notas.style.transform = `translateY(${value}px)`;
+                sobre.style.transform = `translateX(${-value * 0.5}px)`;
+                text.style.transform = `translateY(${value * 0.5}px)`;
+            } else {
+                notas.style.transform = `translateY(${value * 0.2}px)`;
+                sobre.style.transform = `translateX(${-value * 0.1}px)`;
+                text.style.transform = `translateY(${value * 0.1}px)`;
+            }
+
+            requestAnimationFrame(parallaxEffect);
+        }
+
+        requestAnimationFrame(parallaxEffect);
     });
+
 </script>
 
 <div class="container-fluid text-center mt-5">
