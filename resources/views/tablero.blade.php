@@ -109,7 +109,7 @@
                                     </form>
                                 </th>
                                 <th scope="col">
-                                    <!-- Botón "Agregar Tarea" dentro de la tabla -->
+                                    <!--agregar tarea-->
                                     <button class="btn btn-secondary btn-sm" onclick="abrirModal()">
                                         <i class="bi bi-plus"></i> Tarea
                                     </button>
@@ -123,7 +123,7 @@
     </div>
 </div>
 
-<!-- Modal (Fuera del foreach para no duplicarlo) -->
+<!-- modal-->
 <div id="miModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white p-5 rounded shadow-lg w-1/3">
         <h2 class="text-xl font-bold mb-4">Agregar Tarea</h2>
