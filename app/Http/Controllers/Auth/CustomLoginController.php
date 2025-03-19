@@ -35,7 +35,7 @@ class CustomLoginController extends Controller
 
             // Redirigir al usuario según su rol
             if ($user->role == 'admin') {
-                return redirect()->route('home');
+                return redirect()->route('homeadmin');
             } else {
                 return redirect()->route('homeuser');
             }

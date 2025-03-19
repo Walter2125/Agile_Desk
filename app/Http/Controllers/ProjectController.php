@@ -18,7 +18,7 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:projects,name',
+            'name' => 'required|unique:nuevo_proyecto,name',
             'sprint_number' => 'required|integer',
             'users' => 'required|string',
         ]);
@@ -34,5 +34,11 @@ class ProjectController extends Controller
         $project->users()->attach($userIds);
 
         return redirect()->route('projects.create')->with('success', 'Proyecto creado exitosamente.');
+    }
+
+    public function index()
+    {
+        $nuevo_proyecto = Project::with('users')->get();
+        return view('projects.create', compact('nuevo_proyecto')); // Esta es la vista que has compartido
     }
 }

@@ -8,6 +8,8 @@
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Toastr CSS -->
@@ -19,14 +21,14 @@
 
         <!--El mensage de guradado con exito -->
 
-        
+
         @if (session('success'))
         <div class="alert alert-primary alert-dismissible fade show" role="alert">
         <strong></strong>
                 {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-            
+
         @endif
         <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.5);">
@@ -36,7 +38,7 @@
             <!-- Barra de búsqueda y filtros -->
             <div class="flex flex-wrap items-center justify-between mb-4 space-y-2">
                 <input type="text" id="buscar" class="border p-2 rounded w-1/3" placeholder="Buscar historias o tareas...">
-                
+
                 <select id="filtrarEstado" class="border p-2 rounded">
                     <option value="">Todos los estados</option>
                     <option value="Historia">Historia</option>
@@ -47,7 +49,7 @@
 
                 <select id="filtrarResponsable" class="border p-2 rounded">
                 <option value="">Todos los responsables</option>
-    
+
                 @if (!empty($responsables))
                 @foreach ($responsables as $responsable)
             <option value="{{ $responsable }}">{{ $responsable }}</option>
@@ -62,29 +64,82 @@
                 <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded">Limpiar</button>
             </div>
 
-            <div class="flex justify-between mb-4">
-                <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded">Agregar Columna</button>
+
+            <div class="flex justify-between mb-4 items-center">
+
+                <select id="comboboxColumna" class="border p-2 rounded">
+                    <option value="">Seleccionar opción</option>
+                    <option value="opcion1">Opción 1</option>
+                    <option value="opcion2">Opción 2</option>
+                    <option value="opcion3">Opción 3</option>
+                </select>
+
+                <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded">
+                    Agregar Columna
+                </button>
             </div>
 
+
             <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
-    <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
-        <div class="flex justify-between items-center">
-            <span class="titulo-columna text-lg font-bold text-pink-800">Historia</span>
-            <div class="relative">
-                <button class="opciones-columna text-gray-700">⋮</button>
-                <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
-                    <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
-                    <div class="container my-4">
-                        <div class="col-md-2">
-                            <a href="{{ route('formulario.create') }}" class="btn btn-primary">
-                                <i class="bi bi-plus"></i> Crear
-                            </a>
+                <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
+                    <div class="flex justify-between items-center">
+                        <span class="titulo-columna text-lg font-bold text-pink-800">Backlog</span>
+                        <div class="relative">
+
+                            <button class="opciones-columna text-gray-700">⋮</button>
+                            <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
+                                <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
+                                <div class="container my-4"><div class="col-md-2"><a href="{{ route('formulario.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i> Crear</a></div></div>
+                                </button>
+                            </div>
                         </div>
                     </div>
+                    <div class="min-h-[150px] space-y-2 sortable">
+
+                <!-- para ordenarlos segun la prioridad -->
+                @php
+                    $ordenPrioridad = ['Alta' => 1, 'Media' => 2, 'Baja' => 3];
+                    $historiasOrdenadas = $historias->sortBy(function($historia) use ($ordenPrioridad) {
+                        return $ordenPrioridad[$historia->prioridad] ?? 4;
+                    });
+                @endphp
+            
+                @foreach ($historiasOrdenadas as $historia)
+                    <div class="card bg-white p-3 rounded shadow cursor-pointer">
+                        <div class="font-semibold text-gray-800">Nombre:
+                            <span>{{ $historia->nombre }}</span>
+                        </div>
+                        <div class="font-semibold text-gray-800">Prioridad:
+                            <span>{{ $historia->prioridad }}</span>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary boton-uniforme">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </th>
+                                    <th scope="col">
+                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger boton-uniforme">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                @endforeach
+                </div>
                 </div>
             </div>
         </div>
-
         <div class="min-h-[150px] space-y-2 sortable">
             @foreach ($historias as $historia)
                 <div class="card bg-white p-3 rounded shadow cursor-pointer">
@@ -149,7 +204,8 @@
         nuevaTarea.innerHTML = `<input type="text" placeholder="Descripción de la tarea">`;
         lista.appendChild(nuevaTarea);
     }
-</script>
+  </script>
+    </div>
 
     <!-- Modal -->
     <div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
@@ -233,14 +289,6 @@
                     }
                 });
 
-                document.querySelectorAll('.editar-columna').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        columnaActual = btn.closest('.columna');
-                        const titulo = columnaActual.querySelector('.titulo-columna').textContent;
-                        nuevoNombreInput.value = titulo;
-                        modal.classList.remove('hidden');
-                    });
-                });
 
                 document.querySelectorAll('.eliminar-columna').forEach(btn => {
                     btn.addEventListener('click', () => {
@@ -270,33 +318,44 @@
                     new Sortable(el, {
                         group: 'scrum',
                         animation: 150,
+                        //nuevo codigo
                         onEnd(evt) {
-                            const tarjeta = evt.item;
-                            const columnaDestino = evt.from.closest('.columna');
-                            const estado = columnaDestino.querySelector('.titulo-columna').textContent;
+                            const tarjeta = evt.item; // Tarjeta movida
+                            const columnaDestino = evt.to.closest('.columna'); // Columna destino
+                            const nuevoEstado = columnaDestino.querySelector('.titulo-columna').textContent.trim(); // Nombre de la columna
+                            const historiaId = tarjeta.dataset.id; // ID de la historia
 
-                            const nombreHistoria = tarjeta.textContent.trim();
-
-
-                            toastr.success(`La historia ${nombreHistoria} ha cambiado a ${estado}.`);
-
-                            tarjeta.classList.add('bg-yellow-100'); // Puedes personalizar el color
+                            // Enviar la actualización al servidor
+                            fetch('/actualizar-estado', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                },
+                                body: JSON.stringify({ id: historiaId, estado: nuevoEstado })
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        toastr.success(`El estado de la historia ha cambiado a: ${nuevoEstado}.`);
+                                    } else {
+                                        toastr.error('Error al actualizar el estado.');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    toastr.error('No se pudo conectar con el servidor.');
+                                });
                         }
+
+
+
                     });
                 });
             }
 
-            document.getElementById('cancelar').addEventListener('click', () => {
-                modal.classList.add('hidden');
-            });
 
-            document.getElementById('guardar').addEventListener('click', () => {
-                const nuevoNombre = nuevoNombreInput.value;
-                if (nuevoNombre) {
-                    columnaActual.querySelector('.titulo-columna').textContent = nuevoNombre;
-                    modal.classList.add('hidden');
-                }
-            });
+
 
             inicializarArrastrables();
             agregarEventosOpciones();
@@ -377,13 +436,13 @@
                 filtrarEtiqueta.appendChild(option);
             });
 
-            document.querySelectorAll('.card').forEach(card => {
-                card.addEventListener('dblclick', () => {
-                    modalEtiquetas.classList.remove('hidden');
-                    modalEtiquetas.dataset.target = card;
-                    generarOpcionesEtiquetas(card);
-                });
-            });
+         //   document.querySelectorAll('.card').forEach(card => {
+          //      card.addEventListener('dblclick', () => {
+         //           modalEtiquetas.classList.remove('hidden');
+         //           modalEtiquetas.dataset.target = card;
+          //          generarOpcionesEtiquetas(card);
+          //      });
+          //  });
 
             function generarOpcionesEtiquetas(card) {
                 listaEtiquetas.innerHTML = "";
@@ -395,7 +454,7 @@
                     checkbox.type = 'checkbox';
                     checkbox.value = etiqueta.nombre;
                     checkbox.checked = card.dataset.etiquetas?.includes(etiqueta.nombre) || false;
-                    
+
                     const label = document.createElement('span');
                     label.textContent = etiqueta.nombre;
                     label.classList.add('px-2', 'py-1', 'rounded', etiqueta.color, 'text-white');
@@ -412,7 +471,7 @@
                                                     .map(input => input.value);
                 targetCard.dataset.etiquetas = etiquetasSeleccionadas.join(',');
                 mostrarEtiquetasEnTarea(targetCard, etiquetasSeleccionadas);
-                
+
                 if (etiquetasSeleccionadas.includes("Urgente")) {
                     toastr.warning("Tarea marcada como Urgente. Notificando al líder técnico...");
                 }
@@ -438,5 +497,6 @@
                 });
             }
         });
+
     </script>
 @stop
