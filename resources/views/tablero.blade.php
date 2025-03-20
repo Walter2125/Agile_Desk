@@ -140,6 +140,71 @@
                 </div>
             </div>
         </div>
+        <div class="min-h-[150px] space-y-2 sortable">
+            @foreach ($historias as $historia)
+                <div class="card bg-white p-3 rounded shadow cursor-pointer">
+                    <div class="font-semibold text-gray-800">Id: {{ $historia->id }}</div>
+                    <div>Nombre: <span class="font-semibold text-gray-800">{{ $historia->nombre }}</span></div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                </th>
+                                <th scope="col">
+                                    <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </th>
+                                <th scope="col">
+                                    <!--agregar tarea-->
+                                    <button class="btn btn-secondary btn-sm" onclick="abrirModal()">
+                                        <i class="bi bi-plus"></i> Tarea
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
+<!-- modal-->
+<div id="miModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-5 rounded shadow-lg w-1/3">
+        <h2 class="text-xl font-bold mb-4">Agregar Tarea</h2>
+        <div id="listaTareas"></div>
+        <button class="btn btn-success mt-2" onclick="agregarTarea()">Agregar Tarea</button>
+        <button class="btn btn-danger mt-2" onclick="cerrarModal()">Cerrar</button>
+    </div>
+</div>
+
+<script>
+    function abrirModal(id) {
+        document.getElementById("miModal").style.display = "flex";
+    }
+
+    function cerrarModal() {
+        document.getElementById("miModal").style.display = "none";
+    }
+
+    function agregarTarea() {
+        let lista = document.getElementById("listaTareas");
+        let nuevaTarea = document.createElement("div");
+        nuevaTarea.className = "tarea-item";
+        nuevaTarea.innerHTML = `<input type="text" placeholder="Descripción de la tarea">`;
+        lista.appendChild(nuevaTarea);
+    }
+  </script>
     </div>
 
     <!-- Modal -->

@@ -92,7 +92,6 @@ class FormatohistoriaControler extends Controller
             'descripcion' => 'nullable|string',
         ], [
             'nombre.unique' => 'El nombre ya existe, intente con otro.',
-            'sprint.required' => 'El Sprint es requerido.',
             'prioridad.required' => 'La prioridad es requerida.'
         ]);
         $historia = Formatohistoria::findOrFail($id);
