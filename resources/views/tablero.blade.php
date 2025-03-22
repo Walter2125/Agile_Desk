@@ -94,86 +94,53 @@
                             </div>
                         </div>
                     </div>
-                    <div class="min-h-[150px] space-y-2 sortable">
+                <div class="min-h-[150px] space-y-2 sortable">
 
-                <!-- para ordenarlos segun la prioridad -->
-                @php
-                    $ordenPrioridad = ['Alta' => 1, 'Media' => 2, 'Baja' => 3];
-                    $historiasOrdenadas = $historias->sortBy(function($historia) use ($ordenPrioridad) {
-                        return $ordenPrioridad[$historia->prioridad] ?? 4;
-                    });
-                @endphp
-            
-                @foreach ($historiasOrdenadas as $historia)
-                    <div class="card bg-white p-3 rounded shadow cursor-pointer">
-                        <div class="font-semibold text-gray-800">Nombre:
-                            <span>{{ $historia->nombre }}</span>
-                        </div>
-                        <div class="font-semibold text-gray-800">Prioridad:
-                            <span>{{ $historia->prioridad }}</span>
-                        </div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">
-                                        <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary boton-uniforme">
+                    <!-- Para ordenarlos según la prioridad -->
+                    <div class="min-h-[200px] space-y-4 sortable">
+                        @foreach ($historias as $historia)
+                            <div class="card bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+                                <div class="flex justify-between items-start mb-2 gap-6">
+                                    <div class="font-bold text-lg text-black truncate max-w-[90%]" title="{{ $historia->nombre }}">
+                                        {{ $historia->nombre }}
+                                    </div>
+                                    <div class="flex space-x-1 shrink-0">
+                                        <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                    </th>
-                                    <th scope="col">
-                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger boton-uniforme">
+                                            <button type="submit" class="text-red-500 hover:text-red-700 transition-colors">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                @endforeach
-                </div>
-                </div>
-            </div>
-        </div>
-        <div class="min-h-[150px] space-y-2 sortable">
-            @foreach ($historias as $historia)
-                <div class="card bg-white p-3 rounded shadow cursor-pointer">
-                    <div class="font-semibold text-gray-800">Id: {{ $historia->id }}</div>
-                    <div>Nombre: <span class="font-semibold text-gray-800">{{ $historia->nombre }}</span></div>
-
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">
-                                    <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                </th>
-                                <th scope="col">
-                                    <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </th>
-                                <th scope="col">
-                                    <!--agregar tarea-->
-                                    <button class="btn btn-secondary btn-sm" onclick="abrirModal()">
-                                        <i class="bi bi-plus"></i> Tarea
+                                    </div>
+                                </div>
+                                
+                                <!-- Información de la historia -->
+                                <div class="mb-3">
+                                    <div class="flex items-center mb-1">
+                                        <span class="text-gray-600 mr-2 shrink-0">Id:</span>
+                                        <span class="font-semibold text-gray-800">{{ $historia->id }}</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-gray-600 mr-2 shrink-0">Prioridad:</span>
+                                        <span class="font-semibold text-gray-800">{{ $historia->prioridad }}</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Botón de agregar tarea -->
+                                <div class="mt-3">
+                                    <button class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors" onclick="abrirModal()">
+                                        <i class="bi bi-plus mr-1"></i>Tarea
                                     </button>
-                                </th>
-                            </tr>
-                        </thead>
-                    </table>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
-            @endforeach
+                
         </div>
     </div>
 </div>
