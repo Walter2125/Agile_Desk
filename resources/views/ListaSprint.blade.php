@@ -1,40 +1,39 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Sprints</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+@extends('adminlte::page')
+
+@section('title', 'Agile Desk')
+
+@section('adminlte_css')
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('style.css') }}"> 
     <style>
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(to right, #1E3C72, #2A5298);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
         }
 
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 900px;
-            text-align: center;
+        .content-wrapper {
+            width: 100%;
+            padding: 20px;
         }
 
         h2 {
-            color: rgb(147, 182, 212);
-            margin-bottom: 20px;
-            font-size: 28px;
+            color: white;
+            text-align: left;
+            font-size: 20px;
             font-weight: 600;
             text-transform: uppercase;
+            margin-bottom: 20px;
         }
 
         .filters {
+            text-align: left;
             margin-bottom: 20px;
         }
 
@@ -54,17 +53,16 @@
             background: rgb(153, 193, 239);
         }
 
-        ul {
-            list-style: none;
-            padding: 0;
+        #sprint-list {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
             justify-content: center;
+            width: 100%;
         }
 
-        .sprint {
-            background: #ffffff;
+        .sprint-item {
+            background: white;
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
@@ -79,7 +77,7 @@
             cursor: pointer;
         }
 
-        .sprint:hover {
+        .sprint-item:hover {
             transform: translateY(-5px);
             box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3);
         }
@@ -95,70 +93,53 @@
         .PLANEADO { background: #FF9800; color: white; }
         .EN_CURSO { background: #4CAF50; color: white; }
         .FINALIZADO { background: #E53935; color: white; }
-
-        @media (max-width: 600px) {
-            ul {
-                flex-direction: column;
-                align-items: center;
-            }
-            .sprint {
-                width: 90%;
-            }
-        }
     </style>
-</head>
-<body>
-    <div class="container">
-        <h2>📌 Lista de Sprints</h2>
-        <div class="filters">
-            <label for="sort">Ordenar por:</label>
-            <select id="sort">
-                <option value="fecha_inicio">Fecha de inicio</option>
-                <option value="fecha_fin">Fecha de fin</option>
-            </select>
-        </div>
-        <ul id="sprint-list">
-            @foreach ($sprints as $sprint)
-                <li class="sprint" 
-                    data-start="{{ $sprint->fecha_inicio }}" 
-                    data-end="{{ $sprint->fecha_fin }}"
-                    data-id="{{ $sprint->id }}">  <!-- Agregamos un ID para la URL -->
-                    <h3>🚀 {{ $sprint->nombre }}</h3>
-                    <p>📅 Inicio: <span>{{ $sprint->fecha_inicio }}</span></p>
-                    <p>⏳ Fin: <span>{{ $sprint->fecha_fin }}</span></p>
-                    <p class="status {{ str_replace(' ', '_', $sprint->estado) }}">🔵 {{ ucfirst(strtolower($sprint->estado)) }}</p>
-                </li>
-            @endforeach
-        </ul>
-    </div>
+@stop
 
+@section('content')
+    <h2>📌 Lista de Sprints</h2>
+    <div class="filters">
+        <label for="sort">Ordenar por:</label>
+        <select id="sort">
+            <option value="fecha_inicio">Fecha de inicio</option>
+            <option value="fecha_fin">Fecha de fin</option>
+        </select>
+    </div>
+    <div id="sprint-list">
+        @foreach($sprints as $sprint)
+            <div class="sprint-item" data-start="{{ $sprint->fecha_inicio }}" data-end="{{ $sprint->fecha_fin }}" data-id="{{ $sprint->id }}">
+                <h3>🚀 {{ $sprint->nombre }}</h3>
+                <p>📅 Inicio: <span>{{ $sprint->fecha_inicio }}</span></p>
+                <p>⏳ Fin: <span>{{ $sprint->fecha_fin }}</span></p>
+                <p class="status {{ str_replace(' ', '_', $sprint->estado) }}">🔵 {{ ucfirst(strtolower($sprint->estado)) }}</p>
+            </div>
+        @endforeach
+    </div>
+@stop
+
+@section('adminlte_js')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Ordenar la lista de sprints cuando el usuario cambia el filtro
             document.getElementById('sort').addEventListener('change', function() {
                 let list = document.getElementById('sprint-list');
                 let sprints = Array.from(list.children);
                 let sortBy = this.value;
-        
                 sprints.sort((a, b) => {
                     let dateA = new Date(a.dataset[sortBy]);
                     let dateB = new Date(b.dataset[sortBy]);
                     return dateA - dateB;
                 });
-        
                 list.innerHTML = "";
                 sprints.forEach(sprint => list.appendChild(sprint));
             });
 
-            // Redirigir al tablero al hacer clic en un sprint
-            document.querySelectorAll(".sprint").forEach(sprint => {
+            document.querySelectorAll(".sprint-item").forEach(sprint => {
                 sprint.addEventListener("click", function() {
-                    let sprintId = this.dataset.id; 
-                    let url = /tablero/${sprintId};  // Redirige a la URL del tablero del sprint
+                    let sprintId = this.dataset.id;
+                    let url = `/tablero/${sprintId}`;
                     window.location.href = url;
                 });
             });
         });
     </script>
-</body>
-</html>
+@stop
