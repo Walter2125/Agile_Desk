@@ -12,8 +12,20 @@ class TableroController extends Controller
      */
     public function index()
     {
-        //
-        $historias = Formatohistoria::all();
+        // Obtener las historias y ordenarlas según prioridad
+        $historias = Formatohistoria::all()->sortBy(function ($historia) {
+            switch ($historia->prioridad) {
+                case 'Alta':
+                    return 1;
+                case 'Media':
+                    return 2;
+                case 'Baja':
+                    return 3;
+                default:
+                    return 4;
+            }
+        });
+
         return view('tablero',compact('historias'));
     }
 
