@@ -70,10 +70,10 @@ Route::get('/projects/listaproyectos', [ProjectController::class, 'index'])->nam
 // Rutas para calendario
 Route::controller(FullCalendarController::class)->group(function () {
     Route::get('fullcalendar', 'index');
-    Route::get('fullcalendar/ajax', 'ajax');
-    Route::post('fullcalendar/store', 'store');
+    Route::get('fullcalendar/ajax', 'ajax');     
+    Route::post('fullcalendar/store', 'store'); 
     Route::delete('fullcalendar/destroy/{id}', 'destroy');
-    Route::put('fullcalendar/update/{id}', 'update');
+    Route::put('fullcalendar/update/{id}', 'update');   
 });
 
 //Ruta para el historial de cambios
