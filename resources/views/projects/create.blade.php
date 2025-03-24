@@ -1,7 +1,12 @@
 @extends('adminlte::page')
 
+@section('adminlte_css')
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
+@stop
+
+</style>
 @section('content')
-    <div class="container mt-5">
+    <div class="container mt-4">
     <h1>Crear Proyecto</h1>
 
     @if(session('success'))
@@ -47,7 +52,8 @@
         <!-- Botón para Guardar Proyecto -->
         <button type="submit" class="btn btn-primary mt-3">Guardar Proyecto</button>
                         </form>
-                    </div>
+        </div>
+    </div>
 
 <!-- Scripts -->
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
@@ -122,3 +128,6 @@
 
     </script>
 @endsection
+@section('adminlte_js')
+    <script src="{{ asset('color.js') }}"></script>
+@stop
