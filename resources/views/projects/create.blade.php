@@ -17,12 +17,6 @@
                                 <input type="text" class="form-control" id="name" name="name" required>
                             </div>
 
-        <!-- Número del Sprint -->
-                            <div class="mb-3">
-                                <label for="sprint_number" class="form-label">Número de Sprint</label>
-                                <input type="number" class="form-control" id="sprint_number" name="sprint_number" required>
-                            </div>
-
         <!-- Buscador de Usuarios -->
                             <div class="mb-3">
                                 <label for="user_search" class="form-label">Buscar Usuarios</label>
