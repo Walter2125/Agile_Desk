@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('nuevo_proyecto', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique(); 
-            $table->integer('sprint_number'); 
+            $table->string('name')->unique();
             $table->timestamps();
         });
     }

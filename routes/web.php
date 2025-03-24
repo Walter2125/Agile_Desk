@@ -65,15 +65,15 @@ Route::get('/users/search', [UserController::class, 'search'])->name('users.sear
 Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create')->middleware('auth');
 Route::post('/projects/store', [ProjectController::class, 'store'])->name('projects.store')->middleware('auth');
 
-Route::get('/projects/listaproyectos', [ProjectController::class, 'index'])->name('projects.create')->middleware('auth');
+Route::get('/projects/', [ProjectController::class, 'myProjects'])->name('projects.my')->middleware('auth');
 
 // Rutas para calendario
 Route::controller(FullCalendarController::class)->group(function () {
     Route::get('fullcalendar', 'index');
-    Route::get('fullcalendar/ajax', 'ajax');
-    Route::post('fullcalendar/store', 'store');
+    Route::get('fullcalendar/ajax', 'ajax');     
+    Route::post('fullcalendar/store', 'store'); 
     Route::delete('fullcalendar/destroy/{id}', 'destroy');
-    Route::put('fullcalendar/update/{id}', 'update');
+    Route::put('fullcalendar/update/{id}', 'update');   
 });
 
 //Ruta para el historial de cambios
