@@ -69,9 +69,14 @@
                 </div>
             </div>
 
-            <div class="container">
-                <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i>Actualizar</button>
-            </div>
+           
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary" >
+                        <i class="bi bi-save"></i>
+                        Actualizar
+                    </button>
+                </div>
+           
         </div>
     </form>
 

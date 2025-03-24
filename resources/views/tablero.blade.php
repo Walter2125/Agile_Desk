@@ -3,7 +3,8 @@
 @section('title', 'Agile Desk')
 
 @section('adminlte_css')
-
+    // que las columnas no sean tarjetas que sean planas
+    // si es tarjeta con elevacion que deje de serlo quitar que las columas sean tarjetas , no resltar botones en tarjetas
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
@@ -31,8 +32,8 @@
         @endif
         <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.5);">
-        <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen">
-            <h2 class="text-2xl font-bold text-center mb-6">Tablero Scrum</h2>
+        <!-- <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen"> -->
+            <h2 class="text-2xl font-bold mb-6">Tablero Scrum</h2>
 
       <!-- Barra de búsqueda y filtros -->
     <div class="flex flex-wrap items-center gap-2 mb-4">
@@ -73,9 +74,11 @@
 
                 <select id="comboboxColumna" class="border p-2 rounded">
                     <option value="">Seleccionar opción</option>
-                    <option value="opcion1">Opción 1</option>
-                    <option value="opcion2">Opción 2</option>
-                    <option value="opcion3">Opción 3</option>
+                    <option value="opcion1">Sprint 1</option>
+                    <option value="opcion2">Sprint 2</option>
+                    <option value="opcion3">Sprint 3</option>
+                    <option value="opcion4">Sprint 4</option>
+                    <option value="opcion5">Sprint 5</option>
                 </select>
 
                 <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded">
@@ -98,52 +101,84 @@
                             </div>
                         </div>
                     </div>
-                    <div class="min-h-[150px] space-y-2 sortable">
+                <div class="min-h-[150px] space-y-2 sortable">
 
-                <!-- para ordenarlos segun la prioridad -->
-                @php
-                    $ordenPrioridad = ['Alta' => 1, 'Media' => 2, 'Baja' => 3];
-                    $historiasOrdenadas = $historias->sortBy(function($historia) use ($ordenPrioridad) {
-                        return $ordenPrioridad[$historia->prioridad] ?? 4;
-                    });
-                @endphp
-            
-                @foreach ($historiasOrdenadas as $historia)
-                    <div class="card bg-white p-3 rounded shadow cursor-pointer">
-                        <div class="font-semibold text-gray-800">Nombre:
-                            <span>{{ $historia->nombre }}</span>
-                        </div>
-                        <div class="font-semibold text-gray-800">Prioridad:
-                            <span>{{ $historia->prioridad }}</span>
-                        </div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">
-                                        <a href="{{ route('formulario.edit', $historia->id) }}" class="btn btn-primary boton-uniforme">
+                    <!-- Para ordenarlos según la prioridad -->
+                    <div class="min-h-[200px] space-y-4 sortable">
+                        @foreach ($historias as $historia)
+                            <div class="card bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+                                <div class="flex justify-between items-start mb-2 gap-6">
+                                    <div class="font-bold text-lg text-black truncate max-w-[90%]" title="{{ $historia->nombre }}">
+                                        {{ $historia->nombre }}
+                                    </div>
+                                    <div class="flex space-x-1 shrink-0">
+                                        <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                    </th>
-                                    <th scope="col">
-                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger boton-uniforme">
+                                            <button type="submit" class="text-red-500 hover:text-red-700 transition-colors">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Información de la historia -->
+                                <div class="mb-3">
+                                    <div class="flex items-center mb-1">
+                                        <span class="text-gray-600 mr-2 shrink-0">Id:</span>
+                                        <span class="font-semibold text-gray-800">{{ $historia->id }}</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-gray-600 mr-2 shrink-0">Prioridad:</span>
+                                        <span class="font-semibold text-gray-800">{{ $historia->prioridad }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Botón de agregar tarea -->
+                                <div class="mt-3">
+                                    <button class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors" onclick="abrirModal()">
+                                        <i class="bi bi-plus mr-1"></i>Tarea
+                                    </button>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
                 </div>
-                </div>
-            </div>
+
         </div>
+    </div>
+</div>
+
+<!-- modal-->
+<div id="miModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-5 rounded shadow-lg w-1/3">
+        <h2 class="text-xl font-bold mb-4">Agregar Tarea</h2>
+        <div id="listaTareas"></div>
+        <button class="btn btn-success mt-2" onclick="agregarTarea()">Agregar Tarea</button>
+        <button class="btn btn-danger mt-2" onclick="cerrarModal()">Cerrar</button>
+    </div>
+</div>
+
+<script>
+    function abrirModal(id) {
+        document.getElementById("miModal").style.display = "flex";
+    }
+
+    function cerrarModal() {
+        document.getElementById("miModal").style.display = "none";
+    }
+
+    function agregarTarea() {
+        let lista = document.getElementById("listaTareas");
+        let nuevaTarea = document.createElement("div");
+        nuevaTarea.className = "tarea-item";
+        nuevaTarea.innerHTML = `<input type="text" placeholder="Descripción de la tarea">`;
+        lista.appendChild(nuevaTarea);
+    }
+  </script>
     </div>
 
     <!-- Modal -->
