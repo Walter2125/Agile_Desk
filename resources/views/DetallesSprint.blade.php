@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Detalles de Sprints')
+@section('title', 'Agile Desk')
 
 @section('content_header')
     <h1>Detalles de Sprints</h1>

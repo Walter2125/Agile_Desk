@@ -10,30 +10,25 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(to right, #1E3C72, #2A5298);
             margin: 0;
-            padding: 0;
+            padding: 20px;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
         }
 
         .content-wrapper {
             width: 100%;
-            padding: 20px;
         }
 
         h2 {
             color: white;
             text-align: left;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 600;
             text-transform: uppercase;
             margin-bottom: 20px;
         }
 
         .filters {
-            text-align: left;
+            text-align: center;
             margin-bottom: 20px;
         }
 
@@ -58,7 +53,6 @@
             flex-wrap: wrap;
             gap: 20px;
             justify-content: center;
-            width: 100%;
         }
 
         .sprint-item {
@@ -97,7 +91,7 @@
 @stop
 
 @section('content')
-    <h2>📌 Lista de Sprints</h2>
+    <h2>Lista de Sprints</h2>
     <div class="filters">
         <label for="sort">Ordenar por:</label>
         <select id="sort">
