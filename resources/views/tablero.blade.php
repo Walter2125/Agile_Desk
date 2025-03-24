@@ -89,7 +89,31 @@
                         <span class="titulo-columna text-lg font-bold text-pink-800">Backlog</span>
                         <div class="relative">
 
-                            <button class="opciones-columna text-gray-700">⋮</button>
+                            <div class="btn-group dropend">
+                                <!-- Botón del Dropdown -->
+                                <button type="button" class="btn btn-secondary dropdown-toggle  hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10" data-bs-toggle="dropdown" aria-expanded="false">
+                                </button>
+
+
+                                <!-- Contenido del Dropdown -->
+                                <ul class="dropdown-menu">
+                                    <!-- Opción: Crear Historia -->
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('formulario.create') }}">
+                                            <i class="bi bi-plus"></i> Crear Historia
+                                        </a>
+                                    </li>
+                                    <!-- Opción: Editar Nombre de la Columna -->
+                                    <li>
+                                        <button class="dropdown-item editar-columna">
+                                            Editar Nombre
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+
+                               <!-- Parte COrregida del codigo -->
+                             <button class="opciones-columna text-gray-700">⋮</button>
                             <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
                                 <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
                                 <div class="container my-4"><div class="col-md-2"><a href="{{ route('formulario.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i> Crear</a></div></div>
