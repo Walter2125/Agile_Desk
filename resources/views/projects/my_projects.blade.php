@@ -29,6 +29,9 @@
                         <div class="card h-100 d-flex flex-column">
                             <div class="card-body">
                                 <h3>{{ $project->name }}</h3>
+                                <p>Fecha de inicio: {{ $project->fecha_inicio }}</p>
+                                <p>Fecha de finalización: {{ $project->fecha_fin }}</p>
+                                <p>Estado: {{ $project->estado }}</p>
                                 <p></p>
                                 <p></p>
                                 <h5>

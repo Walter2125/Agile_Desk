@@ -16,15 +16,24 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request->all());
+        
         $request->validate([
             'name' => 'required|unique:nuevo_proyecto,name',
+            'fecha_inicio' => 'required|date', // Validación para fecha de inicio
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio', // Validación para fecha de fin
+            'estado' => 'required|in:activo,inactivo,completado', // Validación para estado
             'users' => 'required|string',
         ]);
-
+    
+        // Crear el proyecto con los nuevos campos
         $project = Project::create([
             'name' => $request->name,
+            'fecha_inicio' => $request->fecha_inicio, // Guardar fecha de inicio
+            'fecha_fin' => $request->fecha_fin, // Guardar fecha de fin
+            'estado' => $request->estado, // Guardar estado
         ]);
-
+    
         $userIds = explode(',', $request->users);
         $project->users()->attach($userIds);
 

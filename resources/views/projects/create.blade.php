@@ -2,55 +2,75 @@
 
 @section('content')
     <div class="container mt-5">
-    <h1>Crear Proyecto</h1>
+        <h1>Crear Proyecto</h1>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
 
-                        <form action="{{ route('projects.store') }}" method="POST">
-                            @csrf
+        <form action="{{ route('projects.store') }}" method="POST">
+            @csrf
 
-        <!-- Nombre del Proyecto -->
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Nombre del Proyecto</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
-                            </div>
+            <!-- Nombre del Proyecto -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Nombre del Proyecto</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
 
-        <!-- Buscador de Usuarios -->
-                            <div class="mb-3">
-                                <label for="user_search" class="form-label">Buscar Usuarios</label>
-            <input type="text" class="form-control" id="user_search" placeholder="Escriba un nombre...">
-            <div id="user_results" class="list-group mt-2"></div>
-                            </div>
+            <!-- Fechas -->
+            <div class="mb-3">
+                <label for="fecha_inicio" class="form-label">Fecha de Inicio</label>
+                <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
+            </div>
 
-        <!-- Botón para Añadir Miembro -->
-        <button type="button" id="add_member" class="btn btn-success">Añadir Miembro</button>
+            <div class="mb-3">
+                <label for="fecha_fin" class="form-label">Fecha de Fin</label>
+                <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" required>
+            </div>
 
-        <!-- Tabla de Usuarios Seleccionados -->
-        <div class="mt-4">
-                                <h4>Usuarios Seleccionados</h4>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>Acción</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="selected_users"></tbody>
-                                </table>
-                            </div>
+            <!-- Estado -->
+            <div class="mb-3">
+                <label for="estado" class="form-label">Estado</label>
+                <select class="form-control" id="estado" name="estado" required>
+                    <option value="activo">Activo</option>
+                    <option value="inactivo">Inactivo</option>
+                    <option value="completado">Completado</option>
+                </select>
+            </div>
 
-        <!-- Input Oculto para Enviar IDs -->
-                            <input type="hidden" name="users" id="users">
+            <!-- Buscador de Usuarios -->
+            <div class="mb-3">
+                <label for="user_search" class="form-label">Buscar Usuarios</label>
+                <input type="text" class="form-control" id="user_search" placeholder="Escriba un nombre...">
+                <div id="user_results" class="list-group mt-2"></div>
+            </div>
 
-        <!-- Botón para Guardar Proyecto -->
-        <button type="submit" class="btn btn-primary mt-3">Guardar Proyecto</button>
-                        </form>
-                    </div>
+            <!-- Botón para Añadir Miembro -->
+            <button type="button" id="add_member" class="btn btn-success">Añadir Miembro</button>
+
+            <!-- Tabla de Usuarios Seleccionados -->
+            <div class="mt-4">
+                <h4>Usuarios Seleccionados</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="selected_users"></tbody>
+                </table>
+            </div>
+
+            <!-- Input Oculto para Enviar IDs -->
+            <input type="hidden" name="users" id="users">
+
+            <!-- Botón para Guardar Proyecto -->
+            <button type="submit" class="btn btn-primary mt-3">Guardar Proyecto</button>
+        </form>
+    </div>
 
 <!-- Scripts -->
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             let selectedUsers = [];
@@ -119,6 +139,5 @@
                 document.getElementById("users").value = selectedUsers.join(",");
             }
         });
-
     </script>
 @endsection
