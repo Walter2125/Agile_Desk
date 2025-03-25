@@ -94,8 +94,8 @@
                         <div class="relative">
 
                             <div class="btn-group dropend">
-                                <!-- Botón del Dropdown -->
-                                <button type="button" class="btn btn-secondary dropdown-toggle  hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
+                                <!-- Botón del Dropend -->
+                                <button type="button" class="btn btn-secondary dropdown-toggle  hidden absolute right-0 top-6 bg-white border rounded shadow-lg " data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
                                 </button>
 
 
@@ -258,7 +258,30 @@
                     <div class="flex justify-between items-center">
                         <span class="titulo-columna text-lg font-bold">Nueva columna</span>
                         <div class="relative">
-                            <button class="opciones-columna text-gray-700">⋮</button>
+                        <div class="btn-group dropend">
+                                <!-- Botón del Dropdown -->
+                                <button type="button" class="btn btn-secondary dropdown-toggle  hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
+                                </button>
+
+
+                                <!-- Contenido del Dropdown -->
+                                <ul class="dropdown-menu">
+                                    <!-- Opción: Crear Historia -->
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('formulario.create') }}">
+                                            <i class="bi bi-plus"></i> Crear Historia
+                                        </a>
+                                    </li>
+                                    <!-- Opción: Editar Nombre de la Columna -->
+                                    <li>
+                                        <button class="dropdown-item editar-columna">
+                                            Editar Nombre de la Columna
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+
+
                             <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
                                 <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
                                 <button class="eliminar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Eliminar Columna</button>
