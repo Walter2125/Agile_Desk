@@ -1,5 +1,9 @@
 @extends('adminlte::page')
 
+@section('adminlte_css')
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
+@stop
+
 @section('content')
     <div class="container mt-5">
         <h1>Mis Proyectos:</h1>
@@ -63,4 +67,7 @@
     </div>
 @endsection
 
+@section('adminlte_js')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('color.js') }}"></script>
+@stop

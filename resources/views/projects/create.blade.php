@@ -1,8 +1,13 @@
 @extends('adminlte::page')
 
+@section('adminlte_css')
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
+@stop
+
+</style>
 @section('content')
     <div class="container mt-5">
-        <h1>Crear Proyecto</h1>
+    <h1>Crear Proyecto</h1>
 
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -65,10 +70,10 @@
             <!-- Input Oculto para Enviar IDs -->
             <input type="hidden" name="users" id="users">
 
-            <!-- Botón para Guardar Proyecto -->
-            <button type="submit" class="btn btn-primary mt-3">Guardar Proyecto</button>
-        </form>
-    </div>
+        <!-- Botón para Guardar Proyecto -->
+        <button type="submit" class="btn btn-primary mt-3">Guardar Proyecto</button>
+                        </form>
+                    </div>
 
 <!-- Scripts -->
     <script>
