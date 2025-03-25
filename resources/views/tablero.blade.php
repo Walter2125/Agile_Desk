@@ -125,7 +125,8 @@
                             </div>
                         </div>
                     </div>
-                <div class="min-h-[150px] space-y-2 sortable">
+                <div class="min-h-[150px] space-y-2 sortable" style="margin-top: 20px;">
+
 
                     <!-- Para ordenarlos según la prioridad -->
                     <div class="min-h-[200px] space-y-4 sortable">
