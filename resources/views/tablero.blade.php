@@ -95,7 +95,7 @@
 
                             <div class="btn-group dropend">
                                 <!-- Botón del Dropdown -->
-                                <button type="button" class="btn btn-secondary dropdown-toggle  hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button type="button" class="btn btn-secondary dropdown-toggle  hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -4px;">
                                 </button>
 
 
@@ -302,7 +302,7 @@
                     });
                 });
 
-            
+
             }
 
             function inicializarArrastrables() {
@@ -475,7 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Guardar etiqueta seleccionada
     guardarEtiquetas.addEventListener('click', () => {
-        if (!tarjetaSeleccionada) return; 
+        if (!tarjetaSeleccionada) return;
         const etiquetaSeleccionada = listaEtiquetas.querySelector('input[name="etiquetaSeleccionada"]:checked').value;
         tarjetaSeleccionada.dataset.etiquetas = etiquetaSeleccionada;
         mostrarEtiquetasEnTarea(tarjetaSeleccionada, etiquetaSeleccionada);
