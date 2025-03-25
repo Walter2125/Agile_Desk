@@ -18,4 +18,14 @@ class UserController extends Controller
         $users = User::all();
         return view('admin.users.index', compact('users'));
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        // Buscar usuarios que coincidan con el nombre
+        $users = User::where('name', 'like', "%$query%")->get(['id', 'name']); // Solo devuelve id y name
+
+        return response()->json($users); // Retorna JSON en lugar de HTML
+    }
 }

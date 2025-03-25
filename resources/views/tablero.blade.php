@@ -22,7 +22,6 @@
 
         <!--El mensage de guradado con exito -->
 
-
         @if (session('success'))
         <div class="alert alert-primary alert-dismissible fade show" role="alert">
         <strong></strong>
@@ -36,34 +35,39 @@
         <!-- <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen"> -->
             <h2 class="text-2xl font-bold mb-6">Tablero Scrum</h2>
 
-            <!-- Barra de búsqueda y filtros -->
-            <div class="flex flex-wrap items-center justify-between mb-4 space-y-2">
-                <input type="text" id="buscar" class="border p-2 rounded w-1/3" placeholder="Buscar historias o tareas...">
+      <!-- Barra de búsqueda y filtros -->
+    <div class="flex flex-wrap items-center gap-2 mb-4">
+    <!-- Input de búsqueda -->
+    <input type="text" id="buscar" class="border p-2 rounded w-full sm:w-1/3" placeholder="Buscar historias o tareas...">
 
-                <select id="filtrarEstado" class="border p-2 rounded">
-                    <option value="">Todos los estados</option>
-                    <option value="Historia">Historia</option>
-                    <option value="Tarea">Tarea</option>
-                </select>
+    <!-- Select de estado -->
+    <select id="filtrarEstado" class="border p-2 rounded w-full sm:w-1/3">
+        <option value="">Todos los estados</option>
+        <option value="Historia">Historia</option>
+        <option value="Tarea">Tarea</option>
+    </select>
 
-                <input type="date" id="filtrarFecha" class="border p-2 rounded">
+    <!-- Input de fecha -->
+    <input type="date" id="filtrarFecha" class="border p-2 rounded w-full sm:w-1/3">
 
-                <select id="filtrarResponsable" class="border p-2 rounded">
-                <option value="">Todos los responsables</option>
-
-                @if (!empty($responsables))
-                @foreach ($responsables as $responsable)
-            <option value="{{ $responsable }}">{{ $responsable }}</option>
+    <!-- Select de responsable -->
+    <select id="filtrarResponsable" class="border p-2 rounded w-full sm:w-1/3">
+        <option value="">Todos los responsables</option>
+        @if (!empty($responsables))
+            @foreach ($responsables as $responsable)
+                <option value="{{ $responsable }}">{{ $responsable }}</option>
             @endforeach
-            @endif
-           </select>
+        @endif
+    </select>
 
-           <select id="filtrarEtiqueta" class="border p-2 rounded">
-                    <option value="">Todas las etiquetas</option>
-                </select>
+    <!-- Select de etiqueta -->
+    <select id="filtrarEtiqueta" class="border p-2 rounded w-full sm:w-1/3">
+        <option value="">Todas las etiquetas</option>
+    </select>
 
-                <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded">Limpiar</button>
-            </div>
+    <!-- Botón limpiar filtros más pequeño -->
+    <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded w-auto sm:w-24">Limpiar</button>
+</div>
 
 
             <div class="flex justify-between mb-4 items-center">
@@ -298,13 +302,7 @@
                     });
                 });
 
-                document.querySelectorAll('.card').forEach(card => {
-                    card.addEventListener('dblclick', () => {
-                        if (confirm('¿Eliminar esta tarea?')) {
-                            card.remove();
-                        }
-                    });
-                });
+            
             }
 
             function inicializarArrastrables() {
@@ -342,14 +340,9 @@
                                 });
                         }
 
-
-
                     });
                 });
             }
-
-
-
 
             inicializarArrastrables();
             agregarEventosOpciones();
@@ -408,89 +401,121 @@
         });
     </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const modalEtiquetas = document.getElementById('modalEtiquetas');
-            const cerrarEtiquetas = document.getElementById('cerrarEtiquetas');
-            const guardarEtiquetas = document.getElementById('guardarEtiquetas');
-            const listaEtiquetas = document.getElementById('listaEtiquetas');
-            const filtrarEtiqueta = document.getElementById('filtrarEtiqueta');
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const modalEtiquetas = document.getElementById('modalEtiquetas');
+    const cerrarEtiquetas = document.getElementById('cerrarEtiquetas');
+    const guardarEtiquetas = document.getElementById('guardarEtiquetas');
+    const listaEtiquetas = document.getElementById('listaEtiquetas');
+    let tarjetaSeleccionada = null;
 
-            const etiquetasDisponibles = [
-                { nombre: "Urgente", color: "bg-red-500" },
-                { nombre: "Bug", color: "bg-yellow-500" },
-                { nombre: "Mejora", color: "bg-green-500" },
-                { nombre: "Investigación", color: "bg-blue-500" }
-            ];
+    // Lista de etiquetas disponibles
+    const etiquetasDisponibles = [
+        { nombre: "Sin etiqueta", color: "bg-gray-400" },
+        { nombre: "Urgente", color: "bg-red-500" },
+        { nombre: "Bug", color: "bg-yellow-500" },
+        { nombre: "Mejora", color: "bg-green-500" },
+        { nombre: "Investigación", color: "bg-blue-500" }
+    ];
 
-            etiquetasDisponibles.forEach(etiqueta => {
-                const option = document.createElement('option');
-                option.value = etiqueta.nombre;
-                option.textContent = etiqueta.nombre;
-                filtrarEtiqueta.appendChild(option);
-            });
+    // Asigna un ID único a cada tarjeta si no lo tiene
+    document.querySelectorAll('.card').forEach((card, index) => {
+        if (!card.dataset.id) {
+            card.dataset.id = `tarea_${index}`; // Corrección en la interpolación
+        }
+    });
 
-         //   document.querySelectorAll('.card').forEach(card => {
-          //      card.addEventListener('dblclick', () => {
-         //           modalEtiquetas.classList.remove('hidden');
-         //           modalEtiquetas.dataset.target = card;
-          //          generarOpcionesEtiquetas(card);
-          //      });
-          //  });
+    // Restaurar etiquetas guardadas en localStorage al cargar la página
+    document.querySelectorAll('.card').forEach(card => {
+        const idTarea = card.dataset.id;
+        const etiquetaGuardada = localStorage.getItem(`etiqueta_${idTarea}`); // Corrección en la interpolación
+        if (etiquetaGuardada) {
+            card.dataset.etiquetas = etiquetaGuardada;
+            mostrarEtiquetasEnTarea(card, etiquetaGuardada);
+        }
+    });
 
-            function generarOpcionesEtiquetas(card) {
-                listaEtiquetas.innerHTML = "";
-                etiquetasDisponibles.forEach(etiqueta => {
-                    const div = document.createElement('div');
-                    div.classList.add('flex', 'items-center', 'space-x-2');
-
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.value = etiqueta.nombre;
-                    checkbox.checked = card.dataset.etiquetas?.includes(etiqueta.nombre) || false;
-
-                    const label = document.createElement('span');
-                    label.textContent = etiqueta.nombre;
-                    label.classList.add('px-2', 'py-1', 'rounded', etiqueta.color, 'text-white');
-
-                    div.appendChild(checkbox);
-                    div.appendChild(label);
-                    listaEtiquetas.appendChild(div);
-                });
-            }
-
-            guardarEtiquetas.addEventListener('click', () => {
-                const targetCard = modalEtiquetas.dataset.target;
-                const etiquetasSeleccionadas = Array.from(listaEtiquetas.querySelectorAll('input:checked'))
-                                                    .map(input => input.value);
-                targetCard.dataset.etiquetas = etiquetasSeleccionadas.join(',');
-                mostrarEtiquetasEnTarea(targetCard, etiquetasSeleccionadas);
-
-                if (etiquetasSeleccionadas.includes("Urgente")) {
-                    toastr.warning("Tarea marcada como Urgente. Notificando al líder técnico...");
-                }
-
-                modalEtiquetas.classList.add('hidden');
-            });
-
-            function mostrarEtiquetasEnTarea(card, etiquetas) {
-                let etiquetaContainer = card.querySelector('.etiquetas');
-                if (!etiquetaContainer) {
-                    etiquetaContainer = document.createElement('div');
-                    etiquetaContainer.classList.add('flex', 'space-x-1', 'mt-2', 'etiquetas');
-                    card.appendChild(etiquetaContainer);
-                }
-                etiquetaContainer.innerHTML = "";
-
-                etiquetas.forEach(nombreEtiqueta => {
-                    const etiquetaData = etiquetasDisponibles.find(e => e.nombre === nombreEtiqueta);
-                    const etiquetaSpan = document.createElement('span');
-                    etiquetaSpan.textContent = nombreEtiqueta;
-                    etiquetaSpan.classList.add('px-2', 'py-1', 'text-white', 'rounded', etiquetaData.color);
-                    etiquetaContainer.appendChild(etiquetaSpan);
-                });
-            }
+    // Abrir modal solo al hacer doble clic
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('dblclick', (e) => {
+            e.stopPropagation(); // Evita conflictos con otros eventos
+            console.log("Doble clic detectado en:", card); // Debugging
+            abrirModal(card);
         });
+    });
 
-    </script>
+    function abrirModal(card) {
+        tarjetaSeleccionada = card;
+        modalEtiquetas.classList.remove('hidden');
+        generarOpcionesEtiquetas(card);
+    }
+
+    // Generar opciones de etiquetas en el modal
+    function generarOpcionesEtiquetas(card) {
+        listaEtiquetas.innerHTML = "";
+        etiquetasDisponibles.forEach(etiqueta => {
+            const div = document.createElement('div');
+            div.classList.add('flex', 'items-center', 'space-x-2');
+
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'etiquetaSeleccionada';
+            radio.value = etiqueta.nombre;
+            radio.checked = card.dataset.etiquetas === etiqueta.nombre || (etiqueta.nombre === "Sin etiqueta" && !card.dataset.etiquetas);
+
+            const label = document.createElement('span');
+            label.textContent = etiqueta.nombre;
+            label.classList.add('px-2', 'py-1', 'rounded', etiqueta.color, 'text-white');
+
+            div.appendChild(radio);
+            div.appendChild(label);
+            listaEtiquetas.appendChild(div);
+        });
+    }
+
+    // Guardar etiqueta seleccionada
+    guardarEtiquetas.addEventListener('click', () => {
+        if (!tarjetaSeleccionada) return; 
+        const etiquetaSeleccionada = listaEtiquetas.querySelector('input[name="etiquetaSeleccionada"]:checked').value;
+        tarjetaSeleccionada.dataset.etiquetas = etiquetaSeleccionada;
+        mostrarEtiquetasEnTarea(tarjetaSeleccionada, etiquetaSeleccionada);
+
+        // Guardar etiqueta en localStorage
+        const idTarea = tarjetaSeleccionada.dataset.id;
+        localStorage.setItem(`etiqueta_${idTarea}`, etiquetaSeleccionada); // Corrección en la interpolación
+
+        if (etiquetaSeleccionada === "Urgente") {
+            toastr.warning("Tarea marcada como Urgente. Notificando al líder técnico...");
+        }
+
+        modalEtiquetas.classList.add('hidden');
+        tarjetaSeleccionada = null;
+    });
+
+    // Cerrar modal sin guardar
+    cerrarEtiquetas.addEventListener('click', () => {
+        modalEtiquetas.classList.add('hidden');
+        tarjetaSeleccionada = null;
+    });
+
+    // Función para mostrar etiquetas en la tarjeta
+    function mostrarEtiquetasEnTarea(card, etiqueta) {
+        let etiquetaContainer = card.querySelector('.etiquetas');
+        if (!etiquetaContainer) {
+            etiquetaContainer = document.createElement('div');
+            etiquetaContainer.classList.add('flex', 'space-x-1', 'mt-2', 'etiquetas');
+            card.appendChild(etiquetaContainer);
+        }
+        etiquetaContainer.innerHTML = "";
+
+        if (etiqueta !== "Sin etiqueta") {
+            const etiquetaData = etiquetasDisponibles.find(e => e.nombre === etiqueta);
+            const etiquetaSpan = document.createElement('span');
+            etiquetaSpan.textContent = etiqueta;
+            etiquetaSpan.classList.add('px-2', 'py-1', 'text-white', 'rounded', etiquetaData.color);
+            etiquetaContainer.appendChild(etiquetaSpan);
+        }
+    }
+});
+</script>
 @stop

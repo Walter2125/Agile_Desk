@@ -5,6 +5,33 @@
 @section('adminlte_css')
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('style.css') }}"> 
+    <style>
+        .button-container {
+            display: flex;
+            justify-content: flex-end; /* Alinea los botones a la derecha */
+            gap: 10px; /* Espacio entre botones */
+            margin-top: 20px;
+            padding-right: 20px; /* Margen derecho */
+        }
+
+        .button-container .btn {
+            background: linear-gradient(to right, #6fb3f2, #4a90e2); /* Azul más claro */
+            border: none;
+            color: white;
+            padding: 8px 18px; /* Tamaño más pequeño */
+            font-size: 14px; /* Texto más pequeño */
+            font-weight: bold;
+            border-radius: 6px;
+            text-transform: uppercase;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-container .btn:hover {
+            background: linear-gradient(to right, #4a90e2, #357abd); /* Efecto hover con un tono más fuerte */
+            transform: scale(1.05);
+        }
+    </style>
 @stop
 
 @section('content')
@@ -17,45 +44,38 @@
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
-        var fondo = document.getElementById('fondo');
-        var sobre = document.getElementById('sobre');
-        var persona = document.getElementById('persona');
-        var text = document.getElementById('text');
+            var fondo = document.getElementById('fondo');
+            var sobre = document.getElementById('sobre');
+            var persona = document.getElementById('persona');
+            var text = document.getElementById('text');
 
-        function parallaxEffect() {
-            var value = window.scrollY;
-            
-            if (window.innerWidth > 768) {
-                fondo.style.transform = `translateY(${value * 0.5}px)`;
-                sobre.style.transform = `translateX(${-value * 0.3}px)`;
-                persona.style.transform = `translateY(${-value * 0.2}px)`;
-                text.style.transform = `translateY(${value * 0.2}px)`; 
-            } else {
-                fondo.style.transform = `translateY(${value * 0.2}px)`;
-                sobre.style.transform = `translateX(${-value * 0.1}px)`;
-                persona.style.transform = `translateY(${-value * 0.05}px)`;
-                text.style.transform = `translateY(${value * 0.1}px)`; 
+            function parallaxEffect() {
+                var value = window.scrollY;
+
+                if (window.innerWidth > 768) {
+                    fondo.style.transform = `translateY(${value * 0.5}px)`;
+                    sobre.style.transform = `translateX(${-value * 0.3}px)`;
+                    persona.style.transform = `translateY(${-value * 0.2}px)`;
+                    text.style.transform = `translateY(${value * 0.2}px)`; 
+                } else {
+                    fondo.style.transform = `translateY(${value * 0.2}px)`;
+                    sobre.style.transform = `translateX(${-value * 0.1}px)`;
+                    persona.style.transform = `translateY(${-value * 0.05}px)`;
+                    text.style.transform = `translateY(${value * 0.1}px)`; 
+                }
+
+                requestAnimationFrame(parallaxEffect);
             }
 
             requestAnimationFrame(parallaxEffect);
-        }
-
-        requestAnimationFrame(parallaxEffect);
-    });
-
+        });
     </script>
 
     <div id="contenido">
-        <div class="mt-4 text-center">
-            <a href="{{route('sprints.index')}}" class="btn btn-primary mt-2" id="boton">Lista de Sprint</a>
+        <div class="button-container">
+            <a href="{{ route('sprints.index') }}" class="btn">Lista de Sprint</a>
+            <a href="{{ route('historial.cambios') }}" class="btn">Historial de Cambios</a>
         </div>
-
-        <div id="contenido">
-    <div class="mt-4 text-center">
-        <!-- Enlace que se ve como un botón -->
-        <a href="{{ route('historial.cambios') }}" class="btn btn-primary mt-2" id="boton">Historial de Cambios</a>
-    </div>
-</div>
 
         <div id="carouselExampleFade" class="carousel slide carousel-fade mt-3">
             <div class="carousel-inner">

@@ -322,6 +322,11 @@ return [
         ],
         ['header' => 'Configuración'],
         [
+            'text' => 'Proyectos',
+            'url' => 'projects',
+            'icon' => 'fas fa-fw fa-folder',
+        ],
+        [
             'text' => 'Tableros',
             'url' => 'tab',
             'icon' => 'fas fa-fw fa-folder',
