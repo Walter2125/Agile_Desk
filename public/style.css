@@ -123,6 +123,27 @@ section {
     border-color: #444;
 }
 
+/* CSS DE AGUNAS FUNCIONES DEL TABLERO  */
+#filtrarEstado {
+    color: #333;              
+    background-color: #fff;   
+    border-color: #ccc;       
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  #filtrarEstado option {
+    color: #333;             
+    background-color: #fff;  
+  }
+
+  #filtrarFecha, #filtrarResponsable, #filtrarEtiqueta, #buscar{
+    color: #333;              
+    background-color: #fff;   
+    border-color: #ccc;       
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+
 /* CALENDARIO FULLCALENDAR - MODO OSCURO */
 [data-theme="dark"] .fc-theme-standard .fc-scrollgrid,
 [data-theme="dark"] .fc-theme-standard td,
