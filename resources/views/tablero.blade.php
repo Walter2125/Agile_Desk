@@ -3,7 +3,7 @@
 @section('title', 'Agile Desk')
 
 @section('adminlte_css')
-    // que las columnas no sean tarjetas que sean planas
+    <! -- que las columnas no sean tarjetas que sean planas -->
     // si es tarjeta con elevacion que deje de serlo quitar que las columas sean tarjetas , no resltar botones en tarjetas
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -90,12 +90,12 @@
             <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
                 <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
                     <div class="flex justify-between items-center">
-                        <span class="titulo-columna text-lg font-bold text-pink-800">Backlog</span>
+                        <span class="titulo-columna text-lg font-bold text-pink-800" style="font-size: 30px; line-height: 1.2;">Backlog</span>
                         <div class="relative">
 
                             <div class="btn-group dropend">
                                 <!-- Botón del Dropdown -->
-                                <button type="button" class="btn btn-secondary dropdown-toggle  hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -4px;">
+                                <button type="button" class="btn btn-secondary dropdown-toggle  hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
                                 </button>
 
 
@@ -110,14 +110,14 @@
                                     <!-- Opción: Editar Nombre de la Columna -->
                                     <li>
                                         <button class="dropdown-item editar-columna">
-                                            Editar Nombre
+                                            Editar Nombre de la Columna
                                         </button>
                                     </li>
                                 </ul>
                             </div>
 
                                <!-- Parte COrregida del codigo -->
-                             <button class="opciones-columna text-gray-700">⋮</button>
+
                             <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
                                 <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
                                 <div class="container my-4"><div class="col-md-2"><a href="{{ route('formulario.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i> Crear</a></div></div>
