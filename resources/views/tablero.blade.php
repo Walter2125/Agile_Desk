@@ -3,8 +3,6 @@
 @section('title', 'Agile Desk')
 
 @section('adminlte_css')
-    // que las columnas no sean tarjetas que sean planas
-    // si es tarjeta con elevacion que deje de serlo quitar que las columas sean tarjetas , no resltar botones en tarjetas
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
