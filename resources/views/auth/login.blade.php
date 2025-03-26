@@ -7,50 +7,49 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <title>Iniciar Sesión</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         html, body {
-        height: 100vh;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-    }
-
-    .container {
-        height: 100vh;  
-    }
-
-    #cardlogin {
-        width: 100%;
-        max-width: 400px;
-        padding: 20px;
-    }
+            height: 100%;
+        }
+        .container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
-    <body class="d-flex justify-content-center align-items-center vh-100">
-        <div class="card shadow-lg rounded" id="cardlogin">
-            <div class="card-body p-4">
-                <div class="text-center mb-4">
-                    <h2 class="fw-bold text-primary">Iniciar Sesión</h2>
+    <div class="container">
+        <div class="card">
+            <h2 class="text-center text-primary fw-bold">Iniciar Sesión</h2>
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
                 </div>
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="email" class="form-label fw-bold">Correo Electrónico</label>
-                        <input id="email" type="email" class="form-control" name="email" required autofocus>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label fw-bold">Contraseña</label>
-                        <input id="password" type="password" class="form-control" name="password" required>
-                    </div>
-                    <div class="mb-3 text-center">
-                        <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
-                    </div>
-                </form>
-                <div class="text-center">
-                    ¿No tienes cuenta? <a href="{{ route('register') }}">Regístrate aquí</a>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
                 </div>
-            </div>
+                <div class="mb-3 text-center">
+                    <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                </div>
+            </form>
+            <p class="text-center">¿No tienes cuenta? <a href="{{ route('register') }}">Regístrate aquí</a></p>
         </div>
-    </body>    
+    </div>
 </body>
 </html>
