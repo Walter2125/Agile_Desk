@@ -15,6 +15,8 @@
         }
 
         html, body {
+            top: -5%;
+            position: relative;
             height: 100%;
             overflow: hidden;  
             background-color: #1c314e;
@@ -31,8 +33,6 @@
         }
 
         #logo {
-            top: 0;
-            position: relative;
             width: 150px;  /* Ajusta el tamaño según tu logo */
             height: 150px;
             object-fit: contain;
