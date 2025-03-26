@@ -31,6 +31,8 @@
         }
 
         #logo {
+            top: 0;
+            position: relative;
             width: 150px;  /* Ajusta el tamaño según tu logo */
             height: 150px;
             object-fit: contain;
