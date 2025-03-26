@@ -257,11 +257,12 @@
                 nuevaColumna.classList.add('columna', 'bg-gray-200', 'p-4', 'rounded', 'w-60', 'flex-shrink-0');
                 nuevaColumna.innerHTML = `
                     <div class="flex justify-between items-center">
-                        <span class="titulo-columna text-lg font-bold">Nueva columna</span>
+                        <span class="titulo-columna text-lg font-bold" >Nueva columna</span>
+
                         <div class="relative">
                         <div class="btn-group dropend">
                                 <!-- Botón del Dropdown -->
-                                <button type="button" class="btn btn-secondary dropdown-toggle   absolute right-0 top-6 bg-white border rounded shadow-lg z-10" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
+                                <button type="button" class="btn btn-secondary dropdown-toggle   absolute right-0 top-6 bg-white border rounded shadow-lg " data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
                                 </button>
 
 
@@ -279,6 +280,11 @@
                                             Editar Nombre de la Columna
                                         </button>
                                     </li>
+                                     <li>
+                                        <button class="dropdown-item editar-columna">
+                                            Eliminar Columna
+                                        </button>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -289,7 +295,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="min-h-[150px] space-y-2 sortable"></div>
+                    <div class="min-h-[150px] space-y-2 sortable" style="margin-top: 20px;">
                 `;
                 tablero.appendChild(nuevaColumna);
                 inicializarArrastrables();
