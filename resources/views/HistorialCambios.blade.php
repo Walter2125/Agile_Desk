@@ -157,9 +157,9 @@
         </table>
 
         <div class="pagination">
-            <button id="prevPage" onclick="cambiarPagina(-1)">Anterior</button>
+            <button id="prevPage" onclick="cambiarPagina(-1)" disabled>Anterior</button>
             <span id="paginaActual">1</span>
-            <button id="nextPage" onclick="cambiarPagina(1)">Siguiente</button>
+            <button id="nextPage" onclick="cambiarPagina(1)" disabled>Siguiente</button>
         </div>
     </div>
 
@@ -180,7 +180,8 @@
             const accion = document.getElementById("accionFiltro").value;
             const fecha = document.getElementById("fechaFiltro").value;
 
-            const url = `/historialcambios?usuario=${usuario}&accion=${accion}&fecha=${fecha}&page=${paginaActual}`;
+            // Asegurarse de que la URL se construye correctamente
+            const url = `/historialcambios?usuario=${encodeURIComponent(usuario)}&accion=${encodeURIComponent(accion)}&fecha=${encodeURIComponent(fecha)}&page=${paginaActual}`;
 
             fetch(url)
                 .then(response => response.json())
@@ -188,22 +189,31 @@
                     const tbody = document.getElementById("historialBody");
                     tbody.innerHTML = ''; // Limpiar contenido actual
 
-                    data.data.forEach(item => {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                            <td>${item.fecha}</td>
-                            <td>${item.usuario}</td>
-                            <td>${item.accion}</td>
-                            <td>${item.detalles}</td>
-                            <td><button class="btn-revert" onclick="revertirCambio(${item.id})">Revertir</button></td>
-                        `;
-                        tbody.appendChild(row);
-                    });
+                    // Comprobar si hay datos
+                    if (data.data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5">No hay resultados para mostrar.</td></tr>';
+                    } else {
+                        data.data.forEach(item => {
+                            const row = document.createElement("tr");
+                            row.innerHTML = `
+                                <td>${item.fecha}</td>
+                                <td>${item.usuario}</td>
+                                <td>${item.accion}</td>
+                                <td>${item.detalles}</td>
+                                <td><button class="btn-revert" onclick="revertirCambio(${item.id})">Revertir</button></td>
+                            `;
+                            tbody.appendChild(row);
+                        });
+                    }
 
                     // Actualizar la paginación
                     document.getElementById("paginaActual").textContent = data.current_page;
                     document.getElementById("prevPage").disabled = !data.prev_page_url;
                     document.getElementById("nextPage").disabled = !data.next_page_url;
+                })
+                .catch(error => {
+                    console.error('Error al obtener los datos:', error);
+                    alert('Hubo un problema al cargar los datos.');
                 });
         }
 

@@ -74,7 +74,7 @@
     <div id="contenido">
         <div class="button-container">
             <a href="{{ route('sprints.index') }}" class="btn">Lista de Sprint</a>
-            <a href="{{ route('historial.cambios') }}" class="btn">Historial de Cambios</a>
+            <a href="{{ route('historialcambios.index') }}" class="btn">Historial de Cambios</a>
         </div>
 
         <div id="carouselExampleFade" class="carousel slide carousel-fade mt-3">

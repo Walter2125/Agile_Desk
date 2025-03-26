@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Formatohistoria;
 use App\Models\HistoriaModel;
+use App\Models\HistorialCambios;
+
 use Illuminate\Http\Request;
 
 class FormatohistoriaControler extends Controller

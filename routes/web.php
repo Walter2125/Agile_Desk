@@ -76,10 +76,6 @@ Route::controller(FullCalendarController::class)->group(function () {
     Route::put('fullcalendar/update/{id}', 'update');   
 });
 
-//Ruta para el historial de cambios
-Route::get('/historialcambios', [HistorialCambiosController::class, 'index'])->name('historial.cambios');
-Route::post('/historialcambios/revertir/{id}', [HistorialCambiosController::class, 'revertir']);
-
 //ruta para miembros
 Route::get('/miembros', [UserController::class, 'index'])->name('admin.users.index');
 
@@ -95,3 +91,8 @@ Route::get('/register', [LoginController::class, 'showRegisterForm'])->name('reg
 Route::post('/register', [LoginController::class, 'register']);
 
 Route::post('/actualizar-estado', [HistoriaController::class, 'actualizarEstado'])->name('actualizar.estado');
+
+//Ruta para el historial de cambios
+Route::get('/historialcambios', [HistorialCambiosController::class, 'index'])->name('historialcambios.index');
+Route::post('/historialcambios', [HistorialCambiosController::class, 'store']);
+Route::post('/historialcambios/revertir/{id}', [HistorialCambiosController::class, 'revertir']);
