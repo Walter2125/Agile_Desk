@@ -8,20 +8,21 @@
     <title>Iniciar Sesión</title>
     <style>
         html, body {
-            height: 100%;
+            height: 100vh;
             margin: 0;
             padding: 0;
+            overflow: hidden; 
         }
         #cardlogin {
             width: 100%;
-            max-width: 400px; /* Mantiene un ancho máximo */
-            margin: 0 auto; /* Centra horizontalmente */
-            padding: 20px; /* Añade padding para mejor apariencia en móviles */
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
         }
         @media (max-width: 576px) {
             #cardlogin {
-                width: 90%; /* Ocupa el 90% del ancho en pantallas pequeñas */
-                margin: 0 auto; /* Asegura centrado */
+                width: 90%;
+                margin: 0 auto;
             }
         }
     </style>
@@ -29,7 +30,7 @@
 <body>
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card shadow-lg rounded" id="cardlogin">
-            <div class="card-body p-4"> <!-- Añadido card-body para mejor padding -->
+            <div class="card-body p-4">
                 <div class="text-center mb-4">
                     <h2 class="fw-bold text-primary">Iniciar Sesión</h2>
                 </div>
