@@ -16,13 +16,11 @@
         #cardlogin {
             width: 100%;
             max-width: 400px;
-            margin: 0 auto;
             padding: 20px;
         }
         @media (max-width: 576px) {
             #cardlogin {
-                width: 90%;
-                margin: 0 auto;
+                width: 100%;
             }
         }
     </style>
