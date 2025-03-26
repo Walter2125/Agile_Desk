@@ -3,6 +3,7 @@
 @section('title', 'Agile Desk')
 
 @section('adminlte_css')
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
@@ -88,10 +89,34 @@
             <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
                 <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
                     <div class="flex justify-between items-center">
-                        <span class="titulo-columna text-lg font-bold text-pink-800">Backlog</span>
+                        <span class="titulo-columna text-lg font-bold text-pink-800" style="font-size: 30px; line-height: 1.2;">Backlog</span>
                         <div class="relative">
 
-                            <button class="opciones-columna text-gray-700">⋮</button>
+                            <div class="btn-group dropend">
+                                <!-- Botón del Dropend -->
+                                <button type="button" class="btn btn-secondary dropdown-toggle  hidden absolute right-0 top-6 bg-white border rounded shadow-lg " data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
+                                </button>
+
+
+                                <!-- Contenido del Dropdown -->
+                                <ul class="dropdown-menu">
+                                    <!-- Opción: Crear Historia -->
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('formulario.create') }}">
+                                            <i class="bi bi-plus"></i> Crear Historia
+                                        </a>
+                                    </li>
+                                    <!-- Opción: Editar Nombre de la Columna -->
+                                    <li>
+                                        <button class="dropdown-item editar-columna">
+                                            Editar Nombre de la Columna
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+
+                               <!-- Parte COrregida del codigo -->
+
                             <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
                                 <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
                                 <div class="container my-4"><div class="col-md-2"><a href="{{ route('formulario.create') }}" class="btn btn-primary"><i class="bi bi-plus"></i> Crear</a></div></div>
@@ -99,8 +124,12 @@
                             </div>
                         </div>
                     </div>
+
+                <div class="min-h-[150px] space-y-2 sortable" style="margin-top: 20px;">
+
+
                 <div class="min-h-[150px] space-y-2 sortable">
-//
+
                     <!-- Para ordenarlos según la prioridad -->
                     <div class="min-h-[200px] space-y-4 sortable">
                         @foreach ($historias as $historia)
@@ -232,7 +261,30 @@
                     <div class="flex justify-between items-center">
                         <span class="titulo-columna text-lg font-bold">Nueva columna</span>
                         <div class="relative">
-                            <button class="opciones-columna text-gray-700">⋮</button>
+                        <div class="btn-group dropend">
+                                <!-- Botón del Dropdown -->
+                                <button type="button" class="btn btn-secondary dropdown-toggle  hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
+                                </button>
+
+
+                                <!-- Contenido del Dropdown -->
+                                <ul class="dropdown-menu">
+                                    <!-- Opción: Crear Historia -->
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('formulario.create') }}">
+                                            <i class="bi bi-plus"></i> Crear Historia
+                                        </a>
+                                    </li>
+                                    <!-- Opción: Editar Nombre de la Columna -->
+                                    <li>
+                                        <button class="dropdown-item editar-columna">
+                                            Editar Nombre de la Columna
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+
+
                             <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
                                 <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
                                 <button class="eliminar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Eliminar Columna</button>
@@ -276,7 +328,7 @@
                     });
                 });
 
-            
+
             }
 
             function inicializarArrastrables() {
@@ -449,7 +501,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Guardar etiqueta seleccionada
     guardarEtiquetas.addEventListener('click', () => {
-        if (!tarjetaSeleccionada) return; 
+        if (!tarjetaSeleccionada) return;
         const etiquetaSeleccionada = listaEtiquetas.querySelector('input[name="etiquetaSeleccionada"]:checked').value;
         tarjetaSeleccionada.dataset.etiquetas = etiquetaSeleccionada;
         mostrarEtiquetasEnTarea(tarjetaSeleccionada, etiquetaSeleccionada);
