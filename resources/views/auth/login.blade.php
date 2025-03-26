@@ -12,15 +12,20 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         html, body {
             height: 100%;
+            overflow: hidden;  /* Evita scroll */
         }
+
         .container {
             height: 100vh;
+            width: 100%;  /* Para evitar scroll horizontal */
             display: flex;
             align-items: center;
             justify-content: center;
         }
+
         .card {
             max-width: 400px;
             width: 100%;
