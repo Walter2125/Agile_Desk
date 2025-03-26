@@ -5,6 +5,7 @@
 @section('adminlte_css')
     <! -- que las columnas no sean tarjetas que sean planas -->
     <! -- si es tarjeta con elevacion que deje de serlo quitar que las columas sean tarjetas , no resltar botones en tarjetas -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
@@ -31,7 +32,7 @@
 
         @endif
         <!-- -->
-    <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.5);">
+    <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.068);">
         <!-- <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen"> -->
             <h2 class="text-2xl font-bold mb-6">Tablero Scrum</h2>
 
@@ -280,11 +281,6 @@
                                             Editar Nombre de la Columna
                                         </button>
                                     </li>
-                                     <li>
-                                        <button class="dropdown-item editar-columna">
-                                            Eliminar Columna
-                                        </button>
-                                    </li>
                                 </ul>
                             </div>
 
@@ -295,7 +291,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="min-h-[150px] space-y-2 sortable" style="margin-top: 20px;">
+                    <div class="min-h-[150px] space-y-2 sortable"></div>
                 `;
                 tablero.appendChild(nuevaColumna);
                 inicializarArrastrables();
