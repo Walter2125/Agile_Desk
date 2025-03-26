@@ -8,25 +8,25 @@
     <title>Iniciar Sesión</title>
     <style>
         html, body {
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-            overflow: hidden; 
-        }
-        #cardlogin {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-        }
-        @media (max-width: 576px) {
-            #cardlogin {
-                width: 100%;
-            }
-        }
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .container {
+        height: 100vh;  
+    }
+
+    #cardlogin {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+    }
     </style>
 </head>
 <body>
-    <div class="container d-flex justify-content-center align-items-center vh-100">
+    <body class="d-flex justify-content-center align-items-center vh-100">
         <div class="card shadow-lg rounded" id="cardlogin">
             <div class="card-body p-4">
                 <div class="text-center mb-4">
@@ -51,6 +51,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </body>    
 </body>
 </html>
