@@ -4,7 +4,7 @@
 
 @section('adminlte_css')
     <! -- que las columnas no sean tarjetas que sean planas -->
-    // si es tarjeta con elevacion que deje de serlo quitar que las columas sean tarjetas , no resltar botones en tarjetas
+    <! -- si es tarjeta con elevacion que deje de serlo quitar que las columas sean tarjetas , no resltar botones en tarjetas -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
@@ -95,7 +95,7 @@
 
                             <div class="btn-group dropend">
                                 <!-- Botón del Dropend -->
-                                <button type="button" class="btn btn-secondary dropdown-toggle  hidden absolute right-0 top-6 bg-white border rounded shadow-lg " data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
+                                <button type="button" class="btn btn-secondary dropdown-toggle absolute right-0 top-6 bg-white border rounded shadow-lg " data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
                                 </button>
 
 
@@ -261,7 +261,7 @@
                         <div class="relative">
                         <div class="btn-group dropend">
                                 <!-- Botón del Dropdown -->
-                                <button type="button" class="btn btn-secondary dropdown-toggle  hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
+                                <button type="button" class="btn btn-secondary dropdown-toggle   absolute right-0 top-6 bg-white border rounded shadow-lg z-10" data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
                                 </button>
 
 
