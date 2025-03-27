@@ -64,8 +64,12 @@ Route::get('/users/search', [UserController::class, 'search'])->name('users.sear
 // Rutas para proyectos
 Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create')->middleware('auth');
 Route::post('/projects/store', [ProjectController::class, 'store'])->name('projects.store')->middleware('auth');
-
+Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+Route::get('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
+Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
 Route::get('/projects', [ProjectController::class, 'myProjects'])->name('projects.my')->middleware('auth');
+Route::delete('/projects/{project}/remove-user/{user}', [ProjectController::class, 'removeUser'])->name('projects.removeUser');
+Route::get('/projects/search-users', [ProjectController::class, 'searchUsers'])->name('projects.searchUsers');
 
 // Rutas para calendario
 Route::controller(FullCalendarController::class)->group(function () {

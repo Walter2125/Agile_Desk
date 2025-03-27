@@ -11,39 +11,52 @@ class ProjectController extends Controller
     // Mostrar formulario de creación de proyectos
     public function create()
     {
-        return view('projects.create');
+        // Buscar todos los usuarios para mostrar en la búsqueda
+        $users = User::all();
+
+        // Obtener los usuarios seleccionados si se ha editado un proyecto
+        $selectedUsers = [];
+
+        return view('projects.create', compact('users', 'selectedUsers'));
     }
 
     public function store(Request $request)
     {
-        //dd($request->all());
-        
+        // Validación
         $request->validate([
-            'name' => 'required|unique:nuevo_proyecto,name',
-            'fecha_inicio' => 'required|date', // Validación para fecha de inicio
-            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio', // Validación para fecha de fin
-            'estado' => 'required|in:activo,inactivo,completado', // Validación para estado
-            'users' => 'required|string',
+            'name' => 'required|unique:nuevo_proyecto,name', // Cambiado 'projects' por 'nuevo_proyecto'
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+            'users' => 'required|array|min:1',  // Aseguramos que al menos un usuario se seleccione
+            'users.*' => 'exists:users,id', // Aseguramos que todos los usuarios seleccionados existen
         ]);
-    
-        // Crear el proyecto con los nuevos campos
+
+        // Crear el proyecto
         $project = Project::create([
             'name' => $request->name,
-            'fecha_inicio' => $request->fecha_inicio, // Guardar fecha de inicio
-            'fecha_fin' => $request->fecha_fin, // Guardar fecha de fin
-            'estado' => $request->estado, // Guardar estado
+            'fecha_inicio' => $request->fecha_inicio,
+            'fecha_fin' => $request->fecha_fin,
+            'user_id' => auth()->id(), // El usuario que crea el proyecto
         ]);
-    
-        $userIds = explode(',', $request->users);
-        $project->users()->attach($userIds);
+
+        // Asignar el usuario autenticado al proyecto automáticamente
+        $project->users()->attach(auth()->id()); // Esto es importante para asegurarnos que el creador del proyecto está asignado
+
+        // Asignar los demás usuarios seleccionados al proyecto (si los hay)
+        if ($request->has('users')) {
+            $project->users()->attach($request->users);
+        }
 
         return redirect()->route('projects.my')->with('success', 'Proyecto creado exitosamente.');
     }
 
+
+
+
     public function index()
     {
         $nuevo_proyecto = Project::with('users')->get();
-        return view('projects.create', compact('nuevo_proyecto')); // Esta es la vista que has compartido
+        return view('projects.create', compact('nuevo_proyecto'));
     }
 
     public function myProjects()
@@ -53,5 +66,101 @@ class ProjectController extends Controller
 
         return view('projects.my_projects', compact('projects'));
     }
+
+    public function edit($id)
+    {
+        // Obtener el proyecto por su ID, con los usuarios asignados
+        $project = Project::with('users')->findOrFail($id);
+
+        // Verificar si el usuario logueado es el propietario del proyecto
+        if (auth()->id() !== $project->user_id) {
+            return redirect()->route('projects.my')->with('error', 'No tienes permiso para editar este proyecto.');
+        }
+
+        // Obtener todos los usuarios
+        $users = User::all();
+
+        return view('projects.edit', compact('project', 'users'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validación de datos
+        $request->validate([
+            'name' => 'required|unique:nuevo_proyecto,name,' . $id,
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+            'users' => 'required|array|min:1', // Aseguramos que al menos un usuario se seleccione
+            'users.*' => 'exists:users,id', // Aseguramos que todos los usuarios seleccionados existen
+        ]);
+
+        // Buscar el proyecto a actualizar
+        $project = Project::findOrFail($id);
+
+        // Verificar si el usuario logueado es el propietario del proyecto
+        if (auth()->id() !== $project->user_id) {
+            return redirect()->route('projects.my')->with('error', 'No tienes permiso para editar este proyecto.');
+        }
+
+        // Actualizar el proyecto
+        $project->update([
+            'name' => $request->name,
+            'fecha_inicio' => $request->fecha_inicio,
+            'fecha_fin' => $request->fecha_fin,
+        ]);
+
+        // Agregar el creador del proyecto a la lista de usuarios, si no está ya en la lista
+        $users = $request->users;
+        if (!in_array($project->user_id, $users)) {
+            $users[] = $project->user_id; // Aseguramos que el creador siempre esté incluido
+        }
+
+        // Sincronizar los usuarios asignados al proyecto, asegurando que el creador siempre esté incluido
+        $project->users()->sync($users);
+
+        return redirect()->route('projects.my')->with('success', 'Proyecto actualizado exitosamente.');
+    }
+
+
+
+    public function removeUser($projectId, $userId)
+    {
+        $project = Project::findOrFail($projectId);
+        $user = User::findOrFail($userId);
+
+        if ($project->users->contains($user)) {
+            $project->users()->detach($user);
+            return response()->json(['success' => 'Usuario eliminado exitosamente'], 200);
+        }
+
+        return response()->json(['error' => 'El usuario no está asociado a este proyecto'], 404);
+    }
+
+    public function destroy($id)
+    {
+        $project = Project::findOrFail($id);
+
+        if (auth()->id() !== $project->user_id) {
+            return redirect()->route('projects.my')->with('error', 'No tienes permiso para eliminar este proyecto.');
+        }
+
+        $project->delete();
+
+        return redirect()->route('projects.my')->with('success', 'Proyecto eliminado exitosamente.');
+    }
+
+    public function searchUsers(Request $request)
+    {
+        $query = $request->input('query');
+
+        // Filtrar usuarios según el nombre, excluyendo al usuario autenticado
+        $users = User::where('name', 'like', "%{$query}%")
+            ->where('id', '!=', auth()->id()) // Excluir al usuario autenticado
+            ->get();
+
+        // Retornar los usuarios como JSON
+        return response()->json($users);
+    }
+
 
 }
