@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('nuevo_proyecto', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->date('fecha_inicio');
+            $table->date('fecha_fin');
+            $table->unsignedBigInteger('user_id'); 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // Relación con la tabla users
             $table->timestamps();
         });
     }
