@@ -1,9 +1,5 @@
 @extends('adminlte::page')
 
-@section('adminlte_css')
-    <link rel="stylesheet" href="{{ asset('style.css') }}">
-@stop
-
 @section('content')
     <div class="container mt-5">
         <h1>Mis Proyectos:</h1>
@@ -33,8 +29,9 @@
                         <div class="card h-100 d-flex flex-column">
                             <div class="card-body">
                                 <h3>{{ $project->name }}</h3>
-                                <p></p>
-                                <p></p>
+                                <p>Fecha de inicio: {{ $project->fecha_inicio }}</p>
+                                <p>Fecha de finalización: {{ $project->fecha_fin }}</p>
+
                                 <h5>
                                     Integrantes:
                                     <button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#members{{ $project->id }}" aria-expanded="false" aria-controls="members{{ $project->id }}">
@@ -53,6 +50,41 @@
                                 <a href="" class="btn btn-info btn-sm mt-3">
                                     <i class="fas fa-eye"></i> Ver Proyecto
                                 </a>
+
+                                @if(auth()->id() === $project->user_id)
+                                    <!-- Botón de editar proyecto -->
+                                    <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-warning btn-sm mt-3">
+                                        <i class="fas fa-pencil-alt"></i> Editar Proyecto
+                                    </a>
+
+                                    <!-- Botón que abre el modal de confirmación -->
+                                    <button class="btn btn-danger btn-sm mt-3" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ $project->id }}">
+                                        <i class="fas fa-trash"></i> Eliminar Proyecto
+                                    </button>
+
+                                    <!-- Modal de confirmación de eliminación -->
+                                    <div class="modal fade" id="confirmDeleteModal{{ $project->id }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel{{ $project->id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="confirmDeleteModalLabel{{ $project->id }}">Confirmar Eliminación</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    ¿Estás seguro de que deseas eliminar el proyecto <strong>{{ $project->name }}</strong>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger">Eliminar Proyecto</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -64,7 +96,4 @@
     </div>
 @endsection
 
-@section('adminlte_js')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('color.js') }}"></script>
-@stop
