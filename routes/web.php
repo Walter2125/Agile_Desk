@@ -95,4 +95,5 @@ Route::post('/actualizar-estado', [HistoriaController::class, 'actualizarEstado'
 //Ruta para el historial de cambios
 Route::get('/historialcambios', [HistorialCambiosController::class, 'index'])->name('historialcambios.index');
 Route::post('/historialcambios', [HistorialCambiosController::class, 'store']);
-Route::post('/historialcambios/revertir/{id}', [HistorialCambiosController::class, 'revertir']);
+Route::post('/historialcambios/revertir/{id}', [HistorialCambiosController::class, 'revertir'])
+    ->name('historialcambios.revertir');

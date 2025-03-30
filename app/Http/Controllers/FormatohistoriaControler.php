@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Formatohistoria;
 use App\Models\HistoriaModel;
 use App\Models\HistorialCambios;
-
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Auth; // Para obtener el usuario autenticado
 
 class FormatohistoriaControler extends Controller
 {
@@ -57,6 +58,14 @@ class FormatohistoriaControler extends Controller
         $historia->save();
 
 
+        // Registrar en el historial de cambios
+        HistorialCambios::create([
+            'fecha' => now(),
+            'usuario' => Auth::user()->name ?? 'Desconocido', // Usuario autenticado o "Desconocido"
+            'accion' => 'Creación',
+            'detalles' => 'Se creó una nueva historia: ' . $historia->nombre,
+        ]);
+
         session()->flash('success','Historia Creada correctamente');
         return redirect()->route('tablero');//aqui devera devolver al tablero donde se haga la conexion 
     }
@@ -105,6 +114,23 @@ class FormatohistoriaControler extends Controller
         'prioridad' => $request->prioridad,
         'descripcion' => $request->descripcion,
     ]);
+
+    // Determinar cambios
+    $detalles = "Historia actualizada: " . $historia->nombre . ".\n";
+    foreach ($historia->toArray() as $campo => $valorNuevo) {
+        if ($datosAnteriores[$campo] != $valorNuevo) {
+            $detalles .= ucfirst($campo) . " cambiado de '" . ($datosAnteriores[$campo] ?? 'N/A') . "' a '" . $valorNuevo . "'.\n";
+        }
+    }
+
+    // Registrar en el historial de cambios
+    HistorialCambios::create([
+        'fecha' => now(),
+        'usuario' => Auth::user()->name ?? 'Desconocido',
+        'accion' => 'Edición',
+        'detalles' => $detalles,
+    ]);
+
     session()->flash('success','Historia Actualizada correctamente');
     return redirect()->route('tablero');
 
@@ -118,7 +144,17 @@ class FormatohistoriaControler extends Controller
         //
          
     $historia = Formatohistoria::findOrFail($id);
+    $nombreHistoria = $historia->nombre;
     $historia->delete();
+
+    // Registrar en el historial de cambios
+    HistorialCambios::create([
+        'fecha' => now(),
+        'usuario' => Auth::user()->name ?? 'Desconocido',
+        'accion' => 'Eliminación',
+        'detalles' => "Se eliminó la historia: " . $nombreHistoria,
+    ]);
+
     session()->flash('success','Historia eliminada correctamente');
     return redirect()->route('tablero');
 

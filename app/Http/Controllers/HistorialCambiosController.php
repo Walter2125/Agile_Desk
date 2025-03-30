@@ -12,7 +12,8 @@ class HistorialCambiosController extends Controller
     public function index(Request $request)
     {
         $query = HistorialCambios::query();
-
+    
+        // Filtros
         if ($request->has('usuario')) {
             $query->where('usuario', 'LIKE', '%' . $request->usuario . '%');
         }
@@ -22,10 +23,17 @@ class HistorialCambiosController extends Controller
         if ($request->has('fecha')) {
             $query->whereDate('fecha', $request->fecha);
         }
-
+    
+        // Obtener historial con paginación
         $historial = $query->orderBy('fecha', 'desc')->paginate(10);
-
-        return response()->json($historial);
+    
+        // Si la solicitud es AJAX, devolvemos JSON
+        if ($request->ajax()) {
+            return response()->json($historial);
+        }
+    
+        // Si no es AJAX, devolvemos la vista
+        return view('HistorialCambios', compact('historial'));
     }
 
     // Registrar un nuevo cambio
