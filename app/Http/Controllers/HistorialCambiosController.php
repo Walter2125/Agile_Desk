@@ -5,38 +5,46 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\HistorialCambios;
 
-
 class HistorialCambiosController extends Controller
 {
-    // Obtener historial con filtros y paginación
+    /**
+     * Muestra el historial de cambios con filtros y paginación.
+     */
     public function index(Request $request)
     {
         $query = HistorialCambios::query();
-    
-        // Filtros
-        if ($request->has('usuario')) {
+
+        if ($request->filled('usuario')) {
             $query->where('usuario', 'LIKE', '%' . $request->usuario . '%');
         }
-        if ($request->has('accion')) {
+        if ($request->filled('accion')) {
             $query->where('accion', $request->accion);
         }
-        if ($request->has('fecha')) {
+        if ($request->filled('fecha')) {
             $query->whereDate('fecha', $request->fecha);
         }
-    
-        // Obtener historial con paginación
-        $historial = $query->orderBy('fecha', 'desc')->paginate(10);
-    
-        // Si la solicitud es AJAX, devolvemos JSON
+
+        $historial = $query->orderBy('fecha', 'desc')->paginate(5);
+
         if ($request->ajax()) {
             return response()->json($historial);
         }
-    
-        // Si no es AJAX, devolvemos la vista
-        return view('HistorialCambios', compact('historial'));
+
+        return view('HistorialCambios')->with('historial', $historial);
     }
 
-    // Registrar un nuevo cambio
+    /**
+     * Muestra un cambio específico.
+     */
+    public function show($id)
+    {
+        $cambio = HistorialCambios::findOrFail($id);
+        return view('historial.show')->with('cambio', $cambio);
+    }
+
+    /**
+     * Almacena un nuevo registro de historial de cambios.
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -52,22 +60,20 @@ class HistorialCambiosController extends Controller
             'detalles' => $request->detalles,
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Cambio registrado']);
+        return redirect()->route('historialcambios.index')->with('exito', 'Cambio registrado exitosamente');
     }
 
-    // Revertir un cambio
+    /**
+     * Revertir un cambio específico.
+     */
     public function revertir($id)
     {
-        $cambio = HistorialCambios::find($id);
+        $cambio = HistorialCambios::findOrFail($id);
 
-        if (!$cambio) {
-            return response()->json(['success' => false, 'message' => 'Cambio no encontrado'], 404);
+        if ($cambio->delete()) {
+            return redirect()->route('historialcambios.index')->with('exito', 'Cambio revertido exitosamente');
+        } else {
+            return redirect()->route('historialcambios.index')->with('error', 'Error al revertir el cambio');
         }
-
-        // Lógica de reversión (ejemplo: restaurar valores previos si se tiene un backup)
-        // Aquí solo eliminamos el registro como ejemplo
-        $cambio->delete();
-
-        return response()->json(['success' => true, 'message' => 'Cambio revertido']);
     }
 }
