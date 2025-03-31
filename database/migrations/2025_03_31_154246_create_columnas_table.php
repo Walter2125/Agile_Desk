@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('columnas', function (Blueprint $table) {
             $table->id();
+            // Relación con el tablero del sprint
+            $table->foreignId('tablero_id')
+                ->constrained('tableros')
+                ->cascadeOnDelete();
+            $table->string('nombre'); // Ejemplo: "Backlog", "En Progreso", "Terminado"
+            $table->integer('position')->default(0); // Para ordenar las columnas
             $table->timestamps();
         });
     }
