@@ -18,13 +18,12 @@ return new class extends Migration
 
             $table->string('titulo', 255);      // Equivale a 'nombreHistoria'
             $table->text('descripcion')->nullable();
-            
+
             // Campos extra que usas en los formularios
             $table->integer('trabajo_estimado')->nullable();
             $table->string('responsable')->nullable();
             // Alta, Media, Baja
             $table->string('prioridad')->default('Media');
-
             $table->timestamps();
         });
     }
@@ -41,7 +40,7 @@ return new class extends Migration
 /*
 return new class extends Migration
 {
-    
+
     public function up(): void
     {
         Schema::create('historias_usuarios', function (Blueprint $table) {
@@ -51,7 +50,7 @@ return new class extends Migration
             $table->text('descripcion');
             $table->timestamps();
         });
-        
+
     }
 
     public function down(): void
