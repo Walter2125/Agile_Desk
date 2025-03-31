@@ -14,7 +14,7 @@
             </ul>
         </div>
     @endif
-    
+
 
     <form action="{{ route('formulario.store') }}" method="post">
         @csrf
@@ -44,7 +44,7 @@
                 <div class="col-md-4">
                     <label for="trabajoEstimado">Trabajo estimado (horas):</label>
                     <input type="number" name="trabajo_estimado" placeholder="Horas estimadas" value={{ old("trabajo_estimado")}} min="0" >
-                
+
                 </div>
             </div>
 
