@@ -3,24 +3,7 @@
 @section('title', 'Agile Desk')
 
 @section('adminlte_css')
-    <! -- que las columnas no sean tarjetas que sean planas -->
-    <! -- si es tarjeta con elevacion que deje de serlo quitar que las columas sean tarjetas , no resltar botones en tarjetas -->
-    <! -- debe poder existir sprint 0 , debe existir columna 0, y solo deberian de poderse crear historias , si esta en pendiente es por que ya tiene a alguien asignado ,
-     si crea una columna en otro sprint no deberia de poder crearse en las demas -->
-    siempre mantener visualmente como columnas
-    asociar los estados directamente al proyecto y si agrega un estado si cambio los formatos de un sprint
-    los estados de historias debes estar asociados y puede ser a las historias o al proyecto
-    orden de las columnas como sabe que esta ahi orden de regustro y debo ponerle un orden por que las historias isguen un flujo
-    por que las histroias van a pasar entre los estados de las columnas -->
-    incluir el soft-delete (permite como usuario recuperar la cuenta borrada)
-    se deben de poder eliminar interantes pero que eso no afecte el proyecto , que aunque se borren a los usuarios pero no la infrmacion o actividades que realizo en el proyecto -->
-    <! -- al crear un sprint se tome en cuenta que columnas habia en el sprint anterior del mismo proyecto o se que al crear un nuevo sprint tome como base el que estaba antes de ese  -->
-    <!-- Backlog debe ser una ventana separada , en una seccion aparte tdodas las historias regustradas sin columnas solo las historias registradas  -->
-    <!-- la columna deberia de ocupar todo el espacio de la ventana no solo debria ser una notita pequeñan -->
-    guiarme de jira  deberia de ocupar todito el espacio a su disposicion si solo hay una que ocupe tod el recuadro si hay dos que entre las dos que ocupen -->
-    usar nombre cortos en el menu , ajustes para enviar a los ajustes de la columna cuando tengamos 4 columnas el ancho se debe distribir entre el espacio en la pantalla , si hay mas de 4 se dberia de implementar un scroll y que sean las demas columnas del mismo tamaño de las otras 4 columnas
-    que el menu cambie en funcion del proyecto
-    -- >
+
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
