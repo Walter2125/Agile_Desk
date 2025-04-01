@@ -136,14 +136,17 @@ section {
     background-color: #fff;  
   }
 
-  #filtrarFecha, #filtrarResponsable, #filtrarEtiqueta, #buscar{
+  #filtrarFecha, #filtrarResponsable, #filtrarEtiqueta, #buscar, #comboboxColumna{
     color: #333;              
     background-color: #fff;   
     border-color: #ccc;       
     transition: background-color 0.3s, color 0.3s;
   }
 
-
+  .fas.fa-bell {
+    display: inline-block !important;
+    visibility: visible !important;
+  }
 /* CALENDARIO FULLCALENDAR - MODO OSCURO */
 [data-theme="dark"] .fc-theme-standard .fc-scrollgrid,
 [data-theme="dark"] .fc-theme-standard td,
