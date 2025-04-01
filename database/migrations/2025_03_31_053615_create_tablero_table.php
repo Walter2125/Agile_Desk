@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tablero', function (Blueprint $table) {
+        Schema::create('tableros', function (Blueprint $table) {
             $table->id();
             // Cada tablero se relaciona con un sprint
             $table->foreignId('sprint_id')

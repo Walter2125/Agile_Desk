@@ -50,7 +50,8 @@ class TableroController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $tablero = Tablero::findOrFail($id);
+        return view('tableros.show', compact('tablero'));
     }
 
     /**
@@ -66,7 +67,15 @@ class TableroController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255',
+        ]);
+
+        $tablero = Tablero::findOrFail($id);
+        $tablero->update($validated);
+
+        return redirect()->route('tableros.show', $tablero->id)
+            ->with('success', 'Tablero actualizado correctamente.');
     }
 
     /**
@@ -74,6 +83,8 @@ class TableroController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Tablero::destroy($id);
+        return redirect()->route('tableros.index')
+            ->with('success', 'Tablero eliminado correctamente.');
     }
 }
