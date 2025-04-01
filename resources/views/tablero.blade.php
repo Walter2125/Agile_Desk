@@ -135,6 +135,7 @@
                                 <div class="flex justify-between items-start mb-2 gap-6">
                                     <div class="font-bold text-lg text-black truncate max-w-[90%]" title="{{ $historia->nombre }}">
                                         {{ $historia->nombre }}
+
                                         <div class="flex space-x-1 shrink-0">
                                             <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
                                                 <i class="bi bi-pencil"></i>
@@ -144,6 +145,23 @@
                                             <button type="button" class="text-red-500 hover:text-red-700 transition-colors" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}">
                                                 <i class="bi bi-trash"></i>
                                             </button>
+
+                                    </div>
+                                    <div class="flex space-x-1 shrink-0">
+                                        <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post" class="inline" >
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:text-red-700 transition-colors" data-bs-toggle="modal" data-bs-target="#confirmarBorrado{{ $historia->id }}">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                            
+                                        </form>
+                                    </div>
+                                </div>
+
 
                                             <!-- Modal de confirmación -->
                                             <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
@@ -184,9 +202,12 @@
 
                                 <!-- Botón de agregar tarea -->
                                 <div class="mt-3">
-                                    <button class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors" onclick="abrirModal()">
+                                <a href="{{ route('tareas.create',['historia_id' => $historia ->id]) }}" class="btn btn-primary"> Crear</a>
+     
+                                    <button><a href="{{ route('tareas.index') }}" class="btn btn-primary"> index</a></button>
+                                   <!-- <button class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors" onclick="abrirModal()">
                                         <i class="bi bi-plus mr-1"></i>Tarea
-                                    </button>
+--></button>
                                 </div>
                             </div>
                         @endforeach

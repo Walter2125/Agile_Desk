@@ -15,8 +15,8 @@ use App\Http\Controllers\HistoriaController;
 use App\Http\Controllers\HistorialCambiosController;
 
 use App\Http\Controllers\TableroController;
-
-
+use App\Http\Controllers\TareaController;
+use App\Http\Controllers\TareasController;
 
 // Redirección a login por defecto
 Route::get('/', function () {
@@ -32,6 +32,13 @@ Route::get('/form/{formulario}/edit',[FormatohistoriaControler::class,'edit'])->
 Route::patch('/form/{formulario}/update',[FormatohistoriaControler::class,'update'])->name('formulario.update')->middleware('auth');
 Route::delete('/form/{formulario}/destroy',[FormatohistoriaControler::class,'destroy'])->name('formulario.destroy')->middleware('auth');
 
+//Rutas para tareas
+Route::get('/tareas',[TareasController::class,'index'])->name('tareas.index');
+Route::get('/tareas/create',[TareasController::class,'create'])->name('tareas.create');
+Route::POST('/tareas/store',[TareasController::class,'store'])->name('tareas.store');
+Route::get('/tareas/{id}/edit',[TareasController::class,'edit'])->name('tareas.edit');
+Route::patch('/tareas/{id}',[TareaController::class,'update'])->name('tareas.update');
+
 // Rutas de autenticación personalizadas
 Route::get('/login', [CustomLoginController::class, 'showLoginForm'])->name('custom.login.form');
 Route::post('/login', [CustomLoginController::class, 'login'])->name('custom.login');
@@ -45,6 +52,11 @@ Route::get('/sprints/create', function () {
 })->name('sprints.create')->middleware('auth');
 Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index')->middleware('auth');
 Route::get('/sprints/detalle', [SprintController::class, 'detalleSprint'])->name('sprints.detalle')->middleware('auth');
+
+
+// btn para regresar
+//<!--<a href="{{ route('/tab')}}" class="btn btn-secundary" class="bi bi-arrow left">Atras </a>-->
+
 
 // Ruta para el tablero
 Route::get('/tab', [TableroController::class, 'index'])->name('tablero')->middleware('auth');
