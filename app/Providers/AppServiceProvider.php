@@ -6,6 +6,7 @@ use App\Models\Notificaciones;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,5 +34,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with('notificaciones', collect([])); // Para evitar errores si no está autenticado
         }
     });
+        Paginator::useBootstrap();
+
     }
 }

@@ -14,6 +14,7 @@ use App\Http\Controllers\FullCalendarController;
 use App\Http\Controllers\HistoriaController;
 use App\Http\Controllers\HistorialCambiosController;
 use App\Http\Controllers\NotificacionesController;
+use App\Http\Controllers\ReasignarHistoriaController;
 use App\Http\Controllers\TableroController;
 
 
@@ -80,10 +81,6 @@ Route::controller(FullCalendarController::class)->group(function () {
     Route::put('fullcalendar/update/{id}', 'update');   
 });
 
-//Ruta para el historial de cambios
-Route::get('/historialcambios', [HistorialCambiosController::class, 'index'])->name('historial.cambios');
-Route::post('/historialcambios/revertir/{id}', [HistorialCambiosController::class, 'revertir']);
-
 //ruta para miembros
 Route::get('/miembros', [UserController::class, 'index'])->name('admin.users.index');
 
@@ -107,3 +104,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/notificaciones/read-all', [NotificacionesController::class, 'markAllAsRead'])->name('notificaciones.markAllAsRead');
     Route::delete('/notificaciones/{id}', [NotificacionesController::class, 'destroy'])->name('notificaciones.destroy');
 });
+
+//Ruta para el historial de cambios
+Route::get('/historialcambios', [HistorialCambiosController::class, 'index'])->name('historialcambios.index');
+Route::get('/historialcambios/{id}', [HistorialCambiosController::class, 'show'])->name('historialcambios.show');
+Route::post('/historialcambios', [HistorialCambiosController::class, 'store'])->name('historialcambios.store');
+Route::match(['post', 'delete'], '/historialcambios/revertir/{id}', [HistorialCambiosController::class, 'revertir'])->name('historialcambios.revertir');
+
+//Reasignacion de historias
+Route::get('/reasignacion-historias', [ReasignarHistoriaController::class, 'index'])->name('reasinarhistoria.index');
+Route::post('/reasignacion-historias/reasignar', [ReasignarHistoriaController::class, 'reasignar']);
