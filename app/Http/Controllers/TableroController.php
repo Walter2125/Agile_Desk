@@ -50,7 +50,8 @@ class TableroController extends Controller
      */
     public function show(string $id)
     {
-        $tablero = Tablero::findOrFail($id);
+
+        $tablero = Tablero::with(['columnas.historias'])->findOrFail($id);
         return view('tableros.show', compact('tablero'));
     }
 
