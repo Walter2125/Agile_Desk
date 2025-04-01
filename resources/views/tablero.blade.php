@@ -3,8 +3,7 @@
 @section('title', 'Agile Desk')
 
 @section('adminlte_css')
-    <! -- que las columnas no sean tarjetas que sean planas -->
-    <! -- si es tarjeta con elevacion que deje de serlo quitar que las columas sean tarjetas , no resltar botones en tarjetas -->
+
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -136,6 +135,17 @@
                                 <div class="flex justify-between items-start mb-2 gap-6">
                                     <div class="font-bold text-lg text-black truncate max-w-[90%]" title="{{ $historia->nombre }}">
                                         {{ $historia->nombre }}
+
+                                        <div class="flex space-x-1 shrink-0">
+                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+
+                                            <!-- Botón para abrir el modal -->
+                                            <button type="button" class="text-red-500 hover:text-red-700 transition-colors" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+
                                     </div>
                                     <div class="flex space-x-1 shrink-0">
                                         <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
@@ -152,7 +162,33 @@
                                     </div>
                                 </div>
 
-                                <!-- Información de la historia -->
+
+                                            <!-- Modal de confirmación -->
+                                            <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="modalLabel-{{ $historia->id }}">Confirmar Eliminación</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            ¿Estás seguro de que deseas eliminar este registro?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <!-- Información de la historia -->
                                 <div class="mb-3">
                                     <div class="flex items-center mb-1">
                                         <span class="text-gray-600 mr-2 shrink-0">Id:</span>
