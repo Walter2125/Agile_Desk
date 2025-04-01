@@ -65,8 +65,11 @@ class ProjectController extends Controller
 
     public function index()
     {
-        $nuevo_proyecto = Project::with('users')->get();
-        return view('projects.create', compact('nuevo_proyecto'));
+        
+        // Obtener los proyectos más recientes primero
+        $projects = Project::orderBy('created_at', 'desc')->get();
+
+    return view('projects.create', compact('nuevo_proyecto'));
     }
 
     public function myProjects()
