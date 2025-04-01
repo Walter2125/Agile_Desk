@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Formatohistoria;
 use App\Models\HistoriaModel;
+use App\Models\Notificaciones;
 use Illuminate\Http\Request;
 
 class FormatohistoriaControler extends Controller
@@ -54,9 +55,18 @@ class FormatohistoriaControler extends Controller
         $historia->descripcion = $request->descripcion;
         $historia->save();
 
+        // Enviar notificación al usuario autenticado
+        Notificaciones::create([
+            'title' => 'Nueva Historia',
+            'message' => 'Has creado una nueva historia: ' . $historia->nombre,
+            'user_id' => auth()->id(),
+            'read' => false,
+        ]);
 
         session()->flash('success','Historia Creada correctamente');
         return redirect()->route('tablero');//aqui devera devolver al tablero donde se haga la conexion 
+        
+
     }
 
     /**
@@ -113,12 +123,19 @@ class FormatohistoriaControler extends Controller
      */
     public function destroy(string $id)
     {
-        //
-         
-    $historia = Formatohistoria::findOrFail($id);
-    $historia->delete();
-    session()->flash('success','Historia eliminada correctamente');
-    return redirect()->route('tablero');
+        $historia = Formatohistoria::findOrFail($id);
+        
+        // Notificar al usuario autenticado sobre la eliminación
+        Notificaciones::create([
+            'title' => 'Historia Eliminada',
+            'message' => 'Se ha eliminado la historia: ' . $historia->nombre,
+            'user_id' => auth()->id(),
+            'read' => false,
+        ]);
 
+        $historia->delete();
+
+        session()->flash('success', 'Historia eliminada correctamente');
+        return redirect()->route('tablero');
     }
 }
