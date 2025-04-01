@@ -37,7 +37,7 @@ class FormatohistoriaControler extends Controller
     {
         $request->validate([
             'nombre' => 'required|unique:formatohistorias,nombre|max:255', 
-            //'sprint' => 'required|integer|min:1',
+            'sprint' => 'required|integer|min:1',
             'trabajo_estimado' => 'integer|min:1',
             'responsable' => 'nullable|string|max:255',
             'prioridad' => 'required|in:Alta,Media,Baja',
@@ -46,12 +46,13 @@ class FormatohistoriaControler extends Controller
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.unique' =>'El nombre ya existe, intente con otro.',//personalizacion de alertas.
             'trabajo_estimado.min' =>'El Trabajo Estimado debe ser mayor a cero.',
+            'sprint.required'=>'El Sprint es requerido.',
             'prioridad.required'=> 'La prioridad es requerida.'
         ]);
        
         $historia = new Formatohistoria();
         $historia->nombre = $request->nombre;//aqui aun falta mas revisar
-        //$historia->sprint = $request->sprint;
+        $historia->sprint = $request->sprint;
         $historia->trabajo_estimado = $request->trabajo_estimado;
         $historia->responsable = $request->responsable;
         $historia->prioridad = $request->prioridad;
@@ -176,3 +177,4 @@ class FormatohistoriaControler extends Controller
     session()->flash('success', 'Historia eliminada correctamente');
     return redirect()->route('tablero');
     }
+}
