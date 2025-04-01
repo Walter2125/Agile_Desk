@@ -9,13 +9,21 @@ class Tablero extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nombre', 'fecha_inicio', 'fecha_fin', 'status'];
+    protected $fillable = ['nombre', 'sprint_id'];
 
     /**
-     * Relación: Un sprint tiene un tablero.
+     * Relación: Un tablero pertenece a un sprint.
      */
-    public function tablero()
+    public function sprint()
     {
-        return $this->hasOne(Tablero::class);
+        return $this->belongsTo(Sprint::class);
+    }
+
+    /**
+     * Relación: Un tablero tiene muchas columnas.
+     */
+    public function columnas()
+    {
+        return $this->hasMany(Columna::class);
     }
 }
