@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TareaModel;
+use App\Models\Tareas;
 use Illuminate\Http\Request;
 
 class TareaController extends Controller
@@ -12,7 +13,7 @@ class TareaController extends Controller
      */
     public function index()
     {
-        $tareas = TareaModel::all();
+        $tareas = Tareas::all();
         return response()->json($tareas);
     }
 
@@ -22,12 +23,12 @@ class TareaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'historia_id' => 'required|exists:historias_usuario,id',
+            'historia_id' => 'required|exists:historias_usuarios,id',
             'titulo' => 'required|string|max:255',
             'estado' => "required|in:Activo,En Proceso,Terminado",
         ]);
 
-        $tarea = TareaModel::create($request->all());
+        $tarea = Tareas::create($request->all());
 
         return response()->json($tarea, 201);
     }
@@ -37,7 +38,7 @@ class TareaController extends Controller
      */
     public function show($id)
     {
-        $tarea = TareaModel::find($id);
+        $tarea = Tareas::find($id);
         if (!$tarea) {
             return response()->json(['message' => 'Tarea no encontrada'], 404);
         }
@@ -49,13 +50,13 @@ class TareaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $tarea = TareaModel::find($id);
+        $tarea = Tareas::find($id);
         if (!$tarea) {
             return response()->json(['message' => 'Tarea no encontrada'], 404);
         }
 
         $request->validate([
-            'historia_id' => 'sometimes|exists:historias_usuario,id',
+            'historia_id' => 'sometimes|exists:historias_usuarios,id',
             'titulo' => 'sometimes|string|max:255',
             'estado' => "sometimes|in:Activo,En Proceso,Terminado",
         ]);
@@ -70,7 +71,7 @@ class TareaController extends Controller
      */
     public function destroy($id)
     {
-        $tarea = TareaModel::find($id);
+        $tarea = Tareas::find($id);
         if (!$tarea) {
             return response()->json(['message' => 'Tarea no encontrada'], 404);
         }
