@@ -27,7 +27,15 @@ class ColumnasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'tablero_id' => 'required|exists:tableros,id',
+            'nombre'     => 'required|string|max:255',
+            'position'   => 'nullable|integer'
+        ]);
+
+        Columna::create($validated);
+
+        return redirect()->back()->with('success', 'Columna creada correctamente.');
     }
 
     /**
@@ -51,7 +59,15 @@ class ColumnasController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'nombre'   => 'required|string|max:255',
+            'position' => 'nullable|integer'
+        ]);
+
+        $columna = Columna::findOrFail($id);
+        $columna->update($validated);
+
+        return redirect()->back()->with('success', 'Columna actualizada correctamente.');
     }
 
     /**
@@ -59,6 +75,8 @@ class ColumnasController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Columna::destroy($id);
+        return redirect()->back()->with('success', 'Columna eliminada correctamente.');
+
     }
 }
