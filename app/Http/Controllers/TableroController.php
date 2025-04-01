@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Formatohistoria;
 
+
 class TableroController extends Controller
 {
     /**
@@ -50,9 +51,10 @@ class TableroController extends Controller
      */
     public function show(string $id)
     {
-
         $tablero = Tablero::with(['columnas.historias'])->findOrFail($id);
-        return view('tableros.show', compact('tablero'));
+
+        // Retorna la vista 'tablero.blade.php' pasando la variable $tablero
+        return view('tablero', compact('tablero'));
     }
 
     /**
@@ -85,7 +87,7 @@ class TableroController extends Controller
     public function destroy(string $id)
     {
         Tablero::destroy($id);
-        return redirect()->route('tableros.index')
+        return redirect()->route('tablero.index')
             ->with('success', 'Tablero eliminado correctamente.');
     }
 }

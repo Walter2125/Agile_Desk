@@ -100,4 +100,11 @@ Route::post('/register', [LoginController::class, 'register']);
 
 Route::post('/actualizar-estado', [HistoriaController::class, 'actualizarEstado'])->name('actualizar.estado');
 Route::post('/actualizar-nombre-columna', [ColumnasController::class, 'actualizarNombre']);
+Route::get('/tableros/{id}', [TableroController::class, 'show'])->name('tableros.show');
+
+Route::post('/columnas', [ColumnasController::class, 'store'])->name('columnas.store');
+
+
+
+
 

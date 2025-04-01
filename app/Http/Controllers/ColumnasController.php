@@ -27,15 +27,25 @@ class ColumnasController extends Controller
      */
     public function store(Request $request)
     {
+        // Validar que exista el id del tablero y que se provea un nombre
         $validated = $request->validate([
             'tablero_id' => 'required|exists:tableros,id',
             'nombre'     => 'required|string|max:255',
             'position'   => 'nullable|integer'
         ]);
 
-        Columna::create($validated);
+        // Crear la columna y asignar una posición (podrías calcular la posición sumando 1 a la última posición)
+        $columna = Columna::create([
+            'tablero_id' => $validated['tablero_id'],
+            'nombre'     => $validated['nombre'],
+            'position'   => $validated['position'] ?? 0
+        ]);
 
-        return redirect()->back()->with('success', 'Columna creada correctamente.');
+        // Retornar una respuesta JSON para que el frontend sepa que fue exitoso
+        return response()->json([
+            'success' => true,
+            'columna' => $columna
+        ]);
     }
 
     /**
