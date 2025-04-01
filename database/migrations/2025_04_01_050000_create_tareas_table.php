@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('tareas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('historia_id')->constrained('historias_usuarios')->onDelete('cascade');
-            $table->string('titulo', 255);
-            $table->string('estado', 50)->check("estado IN ('Activo', 'En Proceso', 'Terminado')");
+            $table->string('nombre');
+            $table->text('descripcion')->nullable();
+            $table->text('historial')->nullable();
+            $table->enum('actividad',['Configuracion','Desarrollo','Prueba','Diseño']);
+            $table->string('asignado')->nullable();
+            $table->foreignId('historia_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
-        
     }
 
     /**

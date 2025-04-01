@@ -1,14 +1,15 @@
 
-@extends('layout.plantilla')
-
-@section('title', 'Edición de Historia')
+@extends('adminlte::page')
+@section('title', 'Agile Desk')
+@section("adminlte_css")
 
 @section('content')
+<link href="{{ asset('css/formato.css') }}" rel="stylesheet">
 
 
     @if ($errors->any())
         <div class="alert alert-danger">
-            <ul>
+            <ul class="alert alert-danger" >
                 @foreach ($errors->all() as $error )
                     <li>{{ $error }}</li>
                 @endforeach
@@ -19,13 +20,16 @@
     <form action="{{ route('formulario.update', $historia->id) }}" method="POST">
         @csrf
         @method('PATCH')
-
+        
         <div class="container">
             <div class="mb-3">
-                <div class="col field">
-                    <label>Nombre de la historia:</label>
-                    <input type="text" class="form-control" name="nombre" value="{{ old('nombre', $historia->nombre) }}" placeholder="Ingrese el nombre">
-                </div>
+                    <div class="cold field">
+                        <div class="col-md-8">
+                        <label>Nombre de la historia:</label>
+                        <input type="text" class="form-control" name="nombre" value="{{ old('nombre', $historia->nombre) }}" placeholder="Ingrese el nombre">
+                        </div>
+
+                    </div class="col-md-4">
                 <div class="col field" style="max-width: 120px;">
                     <label># Historia:</label>
                     <input type="text" value="{{ $historia->id }}" readonly>
@@ -81,4 +85,6 @@
     </form>
 
 @endsection
+
+@stop
 
