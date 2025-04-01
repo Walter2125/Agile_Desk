@@ -53,15 +53,15 @@
                 var value = window.scrollY;
 
                 if (window.innerWidth > 768) {
-                    fondo.style.transform = `translateY(${value * 0.5}px)`;
-                    sobre.style.transform = `translateX(${-value * 0.3}px)`;
-                    persona.style.transform = `translateY(${-value * 0.2}px)`;
-                    text.style.transform = `translateY(${value * 0.2}px)`; 
+                    fondo.style.transform = translateY(${value * 0.5}px);
+                    sobre.style.transform = translateX(${-value * 0.3}px);
+                    persona.style.transform = translateY(${-value * 0.2}px);
+                    text.style.transform = translateY(${value * 0.2}px); 
                 } else {
-                    fondo.style.transform = `translateY(${value * 0.2}px)`;
-                    sobre.style.transform = `translateX(${-value * 0.1}px)`;
-                    persona.style.transform = `translateY(${-value * 0.05}px)`;
-                    text.style.transform = `translateY(${value * 0.1}px)`; 
+                    fondo.style.transform = translateY(${value * 0.2}px);
+                    sobre.style.transform = translateX(${-value * 0.1}px);
+                    persona.style.transform = translateY(${-value * 0.05}px);
+                    text.style.transform = translateY(${value * 0.1}px); 
                 }
 
                 requestAnimationFrame(parallaxEffect);
@@ -75,7 +75,8 @@
         <div class="button-container">
             <a href="{{ route('sprints.index') }}" class="btn">Lista de Sprint</a>
             <a href="{{ route('historialcambios.index') }}" class="btn">Historial de Cambios</a>
-        </div>
+            <a href="{{ route('reasinarhistoria.index') }}" class="btn">Reasignar Historia</a>
+         </div>
 
         <div id="carouselExampleFade" class="carousel slide carousel-fade mt-3">
             <div class="carousel-inner">

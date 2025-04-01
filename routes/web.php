@@ -13,6 +13,7 @@ use App\Http\Controllers\FormatohistoriaControler;
 use App\Http\Controllers\FullCalendarController;
 use App\Http\Controllers\HistoriaController;
 use App\Http\Controllers\HistorialCambiosController;
+use App\Http\Controllers\ReasignarHistoriaController;
 
 use App\Http\Controllers\TableroController;
 
@@ -101,3 +102,7 @@ Route::get('/historialcambios', [HistorialCambiosController::class, 'index'])->n
 Route::get('/historialcambios/{id}', [HistorialCambiosController::class, 'show'])->name('historialcambios.show');
 Route::post('/historialcambios', [HistorialCambiosController::class, 'store'])->name('historialcambios.store');
 Route::match(['post', 'delete'], '/historialcambios/revertir/{id}', [HistorialCambiosController::class, 'revertir'])->name('historialcambios.revertir');
+
+//Reasignacion de historias
+Route::get('/reasignacion-historias', [ReasignarHistoriaController::class, 'index'])->name('reasinarhistoria.index');
+Route::post('/reasignacion-historias/reasignar', [ReasignarHistoriaController::class, 'reasignar']);

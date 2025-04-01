@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Formatohistoria;
 use App\Models\HistoriaModel;
 use App\Models\HistorialCambios;
+use App\Models\ReasinarHistorias;
+
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth; // Para obtener el usuario autenticado
@@ -16,7 +18,7 @@ class FormatohistoriaControler extends Controller
      */
     public function index()
     {
-        $historias = Formatohistoria::all();
+        $historias = Formatohistoria::all(['id', 'nombre', 'responsable']);
         return view('formato.index', compact('historias'));
     }
 
