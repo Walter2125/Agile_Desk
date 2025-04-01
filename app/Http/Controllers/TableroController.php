@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Formatohistoria;
+use App\Models\Notificaciones;
+use App\Models\User;
 
 class TableroController extends Controller
 {
@@ -42,7 +44,7 @@ class TableroController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       //
     }
 
     /**

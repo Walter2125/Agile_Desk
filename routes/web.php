@@ -13,8 +13,8 @@ use App\Http\Controllers\FormatohistoriaControler;
 use App\Http\Controllers\FullCalendarController;
 use App\Http\Controllers\HistoriaController;
 use App\Http\Controllers\HistorialCambiosController;
+use App\Http\Controllers\NotificacionesController;
 use App\Http\Controllers\ReasignarHistoriaController;
-
 use App\Http\Controllers\TableroController;
 
 
@@ -96,6 +96,14 @@ Route::get('/register', [LoginController::class, 'showRegisterForm'])->name('reg
 Route::post('/register', [LoginController::class, 'register']);
 
 Route::post('/actualizar-estado', [HistoriaController::class, 'actualizarEstado'])->name('actualizar.estado');
+
+Route::middleware(['auth'])->group(function () {
+    // Notificaciones routes
+    Route::get('/notificaciones', [NotificacionesController::class, 'index'])->name('notificaciones.index');
+    Route::post('/notificaciones/{id}/read', [NotificacionesController::class, 'markAsRead'])->name('notificaciones.markAsRead');
+    Route::post('/notificaciones/read-all', [NotificacionesController::class, 'markAllAsRead'])->name('notificaciones.markAllAsRead');
+    Route::delete('/notificaciones/{id}', [NotificacionesController::class, 'destroy'])->name('notificaciones.destroy');
+});
 
 //Ruta para el historial de cambios
 Route::get('/historialcambios', [HistorialCambiosController::class, 'index'])->name('historialcambios.index');

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Formatohistoria;
 use App\Models\HistoriaModel;
+use App\Models\Notificaciones;
 use App\Models\HistorialCambios;
 use App\Models\ReasinarHistorias;
-
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth; // Para obtener el usuario autenticado
@@ -59,6 +59,13 @@ class FormatohistoriaControler extends Controller
         $historia->descripcion = $request->descripcion;
         $historia->save();
 
+        // Enviar notificación al usuario autenticado
+        Notificaciones::create([
+            'title' => 'Nueva Historia',
+            'message' => 'Has creado una nueva historia: ' . $historia->nombre,
+            'user_id' => auth()->id(),
+            'read' => false,
+        ]);
 
         // Registrar en el historial de cambios
         HistorialCambios::create([
@@ -70,6 +77,8 @@ class FormatohistoriaControler extends Controller
 
         session()->flash('success','Historia Creada correctamente');
         return redirect()->route('tablero');//aqui devera devolver al tablero donde se haga la conexion 
+        
+
     }
 
     /**
@@ -143,10 +152,18 @@ class FormatohistoriaControler extends Controller
      */
     public function destroy(string $id)
     {
-        //
-         
     $historia = Formatohistoria::findOrFail($id);
     $nombreHistoria = $historia->nombre;
+
+    // Notificar al usuario autenticado sobre la eliminación
+    Notificaciones::create([
+        'title' => 'Historia Eliminada',
+        'message' => 'Se ha eliminado la historia: ' . $nombreHistoria,
+        'user_id' => auth()->id(),
+        'read' => false,
+    ]);
+
+    // Eliminar la historia
     $historia->delete();
 
     // Registrar en el historial de cambios
@@ -157,8 +174,6 @@ class FormatohistoriaControler extends Controller
         'detalles' => "Se eliminó la historia: " . $nombreHistoria,
     ]);
 
-    session()->flash('success','Historia eliminada correctamente');
+    session()->flash('success', 'Historia eliminada correctamente');
     return redirect()->route('tablero');
-
     }
-}
