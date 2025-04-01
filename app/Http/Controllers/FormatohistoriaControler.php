@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Formatohistoria;
 use App\Models\HistoriaModel;
+use App\Models\Notificaciones;
+use App\Models\HistorialCambios;
+use App\Models\ReasinarHistorias;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Auth; // Para obtener el usuario autenticado
 
 class FormatohistoriaControler extends Controller
 {
@@ -13,7 +18,7 @@ class FormatohistoriaControler extends Controller
      */
     public function index()
     {
-        $historias = Formatohistoria::all();
+        $historias = Formatohistoria::all(['id', 'nombre', 'responsable']);
         return view('formato.index', compact('historias'));
     }
 
@@ -54,9 +59,26 @@ class FormatohistoriaControler extends Controller
         $historia->descripcion = $request->descripcion;
         $historia->save();
 
+        // Enviar notificación al usuario autenticado
+        Notificaciones::create([
+            'title' => 'Nueva Historia',
+            'message' => 'Has creado una nueva historia: ' . $historia->nombre,
+            'user_id' => auth()->id(),
+            'read' => false,
+        ]);
+
+        // Registrar en el historial de cambios
+        HistorialCambios::create([
+            'fecha' => now(),
+            'usuario' => Auth::user()->name ?? 'Desconocido', // Usuario autenticado o "Desconocido"
+            'accion' => 'Creación',
+            'detalles' => 'Se creó una nueva historia: ' . $historia->nombre,
+        ]);
 
         session()->flash('success','Historia Creada correctamente');
         return redirect()->route('tablero');//aqui devera devolver al tablero donde se haga la conexion 
+        
+
     }
 
     /**
@@ -103,6 +125,23 @@ class FormatohistoriaControler extends Controller
         'prioridad' => $request->prioridad,
         'descripcion' => $request->descripcion,
     ]);
+
+    // Determinar cambios
+    $detalles = "Historia actualizada: " . $historia->nombre . ".\n";
+    foreach ($historia->toArray() as $campo => $valorNuevo) {
+        if ($datosAnteriores[$campo] != $valorNuevo) {
+            $detalles .= ucfirst($campo) . " cambiado de '" . ($datosAnteriores[$campo] ?? 'N/A') . "' a '" . $valorNuevo . "'.\n";
+        }
+    }
+
+    // Registrar en el historial de cambios
+    HistorialCambios::create([
+        'fecha' => now(),
+        'usuario' => Auth::user()->name ?? 'Desconocido',
+        'accion' => 'Edición',
+        'detalles' => $detalles,
+    ]);
+
     session()->flash('success','Historia Actualizada correctamente');
     return redirect()->route('tablero');
 
@@ -113,12 +152,28 @@ class FormatohistoriaControler extends Controller
      */
     public function destroy(string $id)
     {
-        //
-         
     $historia = Formatohistoria::findOrFail($id);
-    $historia->delete();
-    session()->flash('success','Historia eliminada correctamente');
-    return redirect()->route('tablero');
+    $nombreHistoria = $historia->nombre;
 
+    // Notificar al usuario autenticado sobre la eliminación
+    Notificaciones::create([
+        'title' => 'Historia Eliminada',
+        'message' => 'Se ha eliminado la historia: ' . $nombreHistoria,
+        'user_id' => auth()->id(),
+        'read' => false,
+    ]);
+
+    // Eliminar la historia
+    $historia->delete();
+
+    // Registrar en el historial de cambios
+    HistorialCambios::create([
+        'fecha' => now(),
+        'usuario' => Auth::user()->name ?? 'Desconocido',
+        'accion' => 'Eliminación',
+        'detalles' => "Se eliminó la historia: " . $nombreHistoria,
+    ]);
+
+    session()->flash('success', 'Historia eliminada correctamente');
+    return redirect()->route('tablero');
     }
-}

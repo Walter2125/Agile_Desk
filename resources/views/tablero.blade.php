@@ -463,28 +463,35 @@ document.addEventListener('DOMContentLoaded', () => {
         { nombre: "Investigación", color: "bg-blue-500" }
     ];
 
-    // Asigna un ID único a cada tarjeta si no lo tiene
+    // Asignar "Sin etiqueta" a cada nueva tarjeta si no tiene
     document.querySelectorAll('.card').forEach((card, index) => {
         if (!card.dataset.id) {
-            card.dataset.id = `tarea_${index}`; // Corrección en la interpolación
+            card.dataset.id = `tarea_${index}`;
+        }
+        if (!card.dataset.etiquetas) {
+            card.dataset.etiquetas = "Sin etiqueta";
+            mostrarEtiquetasEnTarea(card, "Sin etiqueta");
         }
     });
 
-    // Restaurar etiquetas guardadas en localStorage al cargar la página
+    // Restaurar etiquetas guardadas en localStorage
     document.querySelectorAll('.card').forEach(card => {
         const idTarea = card.dataset.id;
-        const etiquetaGuardada = localStorage.getItem(`etiqueta_${idTarea}`); // Corrección en la interpolación
+        const etiquetaGuardada = localStorage.getItem(`etiqueta_${idTarea}`);
+        
         if (etiquetaGuardada) {
             card.dataset.etiquetas = etiquetaGuardada;
             mostrarEtiquetasEnTarea(card, etiquetaGuardada);
+        } else {
+            card.dataset.etiquetas = "Sin etiqueta"; // Asegura la etiqueta por defecto
+            mostrarEtiquetasEnTarea(card, "Sin etiqueta");
         }
     });
 
-    // Abrir modal solo al hacer doble clic
+    // Evento de doble clic para abrir el modal
     document.querySelectorAll('.card').forEach(card => {
         card.addEventListener('dblclick', (e) => {
-            e.stopPropagation(); // Evita conflictos con otros eventos
-            console.log("Doble clic detectado en:", card); // Debugging
+            e.stopPropagation();
             abrirModal(card);
         });
     });
@@ -495,7 +502,6 @@ document.addEventListener('DOMContentLoaded', () => {
         generarOpcionesEtiquetas(card);
     }
 
-    // Generar opciones de etiquetas en el modal
     function generarOpcionesEtiquetas(card) {
         listaEtiquetas.innerHTML = "";
         etiquetasDisponibles.forEach(etiqueta => {
@@ -518,16 +524,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Guardar etiqueta seleccionada
     guardarEtiquetas.addEventListener('click', () => {
-        if (!tarjetaSeleccionada) return;
+        if (!tarjetaSeleccionada) return; 
         const etiquetaSeleccionada = listaEtiquetas.querySelector('input[name="etiquetaSeleccionada"]:checked').value;
         tarjetaSeleccionada.dataset.etiquetas = etiquetaSeleccionada;
         mostrarEtiquetasEnTarea(tarjetaSeleccionada, etiquetaSeleccionada);
 
-        // Guardar etiqueta en localStorage
         const idTarea = tarjetaSeleccionada.dataset.id;
-        localStorage.setItem(`etiqueta_${idTarea}`, etiquetaSeleccionada); // Corrección en la interpolación
+        localStorage.setItem(`etiqueta_${idTarea}`, etiquetaSeleccionada);
 
         if (etiquetaSeleccionada === "Urgente") {
             toastr.warning("Tarea marcada como Urgente. Notificando al líder técnico...");
@@ -537,13 +541,11 @@ document.addEventListener('DOMContentLoaded', () => {
         tarjetaSeleccionada = null;
     });
 
-    // Cerrar modal sin guardar
     cerrarEtiquetas.addEventListener('click', () => {
         modalEtiquetas.classList.add('hidden');
         tarjetaSeleccionada = null;
     });
 
-    // Función para mostrar etiquetas en la tarjeta
     function mostrarEtiquetasEnTarea(card, etiqueta) {
         let etiquetaContainer = card.querySelector('.etiquetas');
         if (!etiquetaContainer) {

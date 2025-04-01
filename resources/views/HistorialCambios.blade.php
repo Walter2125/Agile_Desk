@@ -1,48 +1,53 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de Cambios</title>
+@extends('adminlte::page')
+
+@section('title', 'Historial de Cambios')
+
+@section('adminlte_css')
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #bfd0e4;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            padding: 0;
+            background-color: rgb(120, 136, 163);
+            color: #333;
         }
 
         .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 50px auto;
             background: white;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
-            max-width: 900px;
-            width: 100%;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         h2 {
             text-align: center;
             color: #333;
+            font-size: 2rem;
+            margin-bottom: 20px;
         }
 
         .filters {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
             margin-bottom: 20px;
+            flex-wrap: wrap; /* Permite que los filtros se acomoden en pantallas pequeñas */
         }
 
-        .filters input, .filters select, .filters button {
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
+        .filters input,
+        .filters select,
+        .filters button {
+            padding: 10px 12px;
+            font-size: 14px;
             border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            max-width: 220px;
         }
 
         .filters button {
@@ -57,45 +62,46 @@
             background-color: #0056b3;
         }
 
-        .clear-btn {
+        .filters .clear-btn {
             background-color: #dc3545;
         }
 
-        .clear-btn:hover {
+        .filters .clear-btn:hover {
             background-color: #c82333;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
+            margin-top: 20px;
+            overflow-x: auto; /* Permite desplazamiento horizontal en pantallas pequeñas */
         }
 
         th, td {
             padding: 12px;
-            text-align: center;
+            text-align: left;
             border-bottom: 1px solid #ddd;
         }
 
         th {
             background-color: #007bff;
             color: white;
+            font-size: 1rem;
         }
 
         tr:hover {
-            background-color: #f1f1f1;
+            background-color: #f9f9f9;
         }
 
         .btn-revert {
             background-color: #dc3545;
             color: white;
-            border: none;
-            padding: 8px;
+            padding: 6px 10px;
             border-radius: 5px;
+            border: none;
             cursor: pointer;
             transition: 0.3s;
+            font-size: 14px;
         }
 
         .btn-revert:hover {
@@ -105,18 +111,19 @@
         .pagination {
             display: flex;
             justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 5px;
+            margin-top: 20px;
+            font-size: 14px;
+            flex-wrap: wrap; /* Asegura que los botones de paginación no se salgan de la pantalla */
         }
 
         .pagination button {
-            padding: 8px 12px;
+            padding: 6px 12px;
             border: none;
             background-color: #28a745;
             color: white;
-            cursor: pointer;
             border-radius: 5px;
+            cursor: pointer;
             transition: 0.3s;
         }
 
@@ -124,12 +131,70 @@
             background-color: #ccc;
             cursor: not-allowed;
         }
-    </style>
-</head>
-<body>
 
+        .pagination span {
+            align-self: center;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .empty-msg {
+            text-align: center;
+            font-size: 1rem;
+            color: #777;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        /* Media Queries para dispositivos pequeños */
+        @media (max-width: 768px) {
+            .filters input,
+            .filters select,
+            .filters button {
+                max-width: 100%; /* Los filtros ocupan el 100% del ancho */
+                width: 100%;
+            }
+
+            table {
+                width: 100%;
+                display: block;
+                overflow-x: auto; /* Permite desplazamiento horizontal */
+            }
+
+            .pagination button {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            h2 {
+                font-size: 1.5rem; /* Título más pequeño en pantallas pequeñas */
+            }
+        }
+
+        @media (max-width: 480px) {
+            h2 {
+                font-size: 1.2rem; /* Título aún más pequeño en pantallas muy pequeñas */
+            }
+
+            .filters {
+                flex-direction: column; /* Los filtros se apilan verticalmente */
+                align-items: stretch; /* Alinea los elementos de los filtros */
+            }
+
+            .filters input,
+            .filters select,
+            .filters button {
+                width: 100%; /* Los filtros ocupan todo el ancho */
+                margin-bottom: 10px; /* Espaciado entre los filtros */
+            }
+        }
+    </style>
+@stop
+
+@section('content')
     <div class="container">
         <h2>Historial de Cambios</h2>
+
         <div class="filters">
             <input type="text" id="usuarioFiltro" placeholder="Usuario">
             <select id="accionFiltro">
@@ -153,89 +218,76 @@
                     <th>Revertir</th>
                 </tr>
             </thead>
-            <tbody id="historialBody"></tbody>
+            <tbody>
+                @forelse($historial as $item)
+                    <tr>
+                        <td>{{ $item->fecha }}</td>
+                        <td>{{ $item->usuario }}</td>
+                        <td>{{ $item->accion }}</td>
+                        <td>{{ $item->detalles }}</td>
+                        <td>
+                            <form action="{{ route('historialcambios.revertir', $item->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-revert">Revertir</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="empty-msg">No hay resultados para mostrar.</td>
+                    </tr>
+                @endforelse
+            </tbody>
         </table>
 
-        <div class="pagination">
-            <button id="prevPage" onclick="cambiarPagina(-1)">Anterior</button>
-            <span id="paginaActual">1</span>
-            <button id="nextPage" onclick="cambiarPagina(1)">Siguiente</button>
+        <div class="pagination pagination-sm">
+            {{ $historial->links() }}
         </div>
     </div>
+@stop
 
+@section('adminlte_js')
     <script>
-        let paginaActual = 1;
+        // Función para aplicar los filtros y actualizar la URL
+        function fetchHistorial() {
+            let usuario = document.getElementById("usuarioFiltro").value;
+            let accion = document.getElementById("accionFiltro").value;
+            let fecha = document.getElementById("fechaFiltro").value;
 
-        // Función para limpiar filtros
+            let url = new URL(window.location.href);
+            if (usuario) url.searchParams.set("usuario", usuario);
+            else url.searchParams.delete("usuario");
+
+            if (accion) url.searchParams.set("accion", accion);
+            else url.searchParams.delete("accion");
+
+            if (fecha) url.searchParams.set("fecha", fecha);
+            else url.searchParams.delete("fecha");
+
+            window.location.href = url.toString();
+        }
+
+        // Función para limpiar los filtros y recargar la página sin parámetros
         function limpiarFiltros() {
             document.getElementById("usuarioFiltro").value = "";
             document.getElementById("accionFiltro").value = "";
             document.getElementById("fechaFiltro").value = "";
-            fetchHistorial();
+
+            let url = new URL(window.location.href);
+            url.searchParams.delete("usuario");
+            url.searchParams.delete("accion");
+            url.searchParams.delete("fecha");
+
+            window.location.href = url.toString();
         }
 
-        // Función para obtener el historial de cambios filtrado y paginado
-        function fetchHistorial() {
-            const usuario = document.getElementById("usuarioFiltro").value;
-            const accion = document.getElementById("accionFiltro").value;
-            const fecha = document.getElementById("fechaFiltro").value;
-
-            const url = `/historialcambios?usuario=${usuario}&accion=${accion}&fecha=${fecha}&page=${paginaActual}`;
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const tbody = document.getElementById("historialBody");
-                    tbody.innerHTML = ''; // Limpiar contenido actual
-
-                    data.data.forEach(item => {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                            <td>${item.fecha}</td>
-                            <td>${item.usuario}</td>
-                            <td>${item.accion}</td>
-                            <td>${item.detalles}</td>
-                            <td><button class="btn-revert" onclick="revertirCambio(${item.id})">Revertir</button></td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-
-                    // Actualizar la paginación
-                    document.getElementById("paginaActual").textContent = data.current_page;
-                    document.getElementById("prevPage").disabled = !data.prev_page_url;
-                    document.getElementById("nextPage").disabled = !data.next_page_url;
-                });
-        }
-
-        // Función para cambiar la página de resultados
-        function cambiarPagina(incremento) {
-            paginaActual += incremento;
-            fetchHistorial();
-        }
-
-        // Función para revertir un cambio
-        function revertirCambio(id) {
-            // Lógica para revertir el cambio (enviar al backend)
-            fetch(`/historialcambios/revertir/${id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Cambio revertido con éxito');
-                    fetchHistorial(); // Refrescar la tabla
-                } else {
-                    alert('Error al revertir el cambio');
-                }
-            });
-        }
-
-        // Cargar los datos al cargar la página
-        document.addEventListener('DOMContentLoaded', fetchHistorial);
+        // Opcional: Cargar los valores previos de los filtros desde la URL
+        document.addEventListener("DOMContentLoaded", function () {
+            let urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has("usuario")) document.getElementById("usuarioFiltro").value = urlParams.get("usuario");
+            if (urlParams.has("accion")) document.getElementById("accionFiltro").value = urlParams.get("accion");
+            if (urlParams.has("fecha")) document.getElementById("fechaFiltro").value = urlParams.get("fecha");
+        });
     </script>
-</body>
-</html>
+@stop

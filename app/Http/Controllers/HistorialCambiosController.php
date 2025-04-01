@@ -5,16 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\HistorialCambios;
 
-
 class HistorialCambiosController extends Controller
 {
+    /**
+     * Muestra el historial de cambios con filtros y paginación.
+     */
     public function index(Request $request)
     {
         $query = HistorialCambios::query();
 
-        // Filtrado
         if ($request->filled('usuario')) {
-            $query->where('usuario', 'like', '%' . $request->usuario . '%');
+            $query->where('usuario', 'LIKE', '%' . $request->usuario . '%');
         }
         if ($request->filled('accion')) {
             $query->where('accion', $request->accion);
@@ -23,23 +24,56 @@ class HistorialCambiosController extends Controller
             $query->whereDate('fecha', $request->fecha);
         }
 
-        // Paginación
-        $historial = $query->paginate(10);
+        $historial = $query->orderBy('fecha', 'desc')->paginate(5);
 
-        return response()->json($historial);
-    }
-
-    public function revertir($id)
-    {
-        $cambio = HistorialCambio::find($id);
-
-        if ($cambio) {
-            // Lógica para revertir el cambio (dependiendo de tu modelo de datos)
-            // Ejemplo: Deshacer una edición, restaurar un registro eliminado, etc.
-            $cambio->revertir(); // Método ficticio para revertir el cambio
-            return response()->json(['success' => true]);
+        if ($request->ajax()) {
+            return response()->json($historial);
         }
 
-        return response()->json(['success' => false], 404);
+        return view('HistorialCambios')->with('historial', $historial);
+    }
+
+    /**
+     * Muestra un cambio específico.
+     */
+    public function show($id)
+    {
+        $cambio = HistorialCambios::findOrFail($id);
+        return view('historial.show')->with('cambio', $cambio);
+    }
+
+    /**
+     * Almacena un nuevo registro de historial de cambios.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'usuario' => 'required|string',
+            'accion' => 'required|string',
+            'detalles' => 'required|string',
+        ]);
+
+        HistorialCambios::create([
+            'fecha' => now(),
+            'usuario' => $request->usuario,
+            'accion' => $request->accion,
+            'detalles' => $request->detalles,
+        ]);
+
+        return redirect()->route('historialcambios.index')->with('exito', 'Cambio registrado exitosamente');
+    }
+
+    /**
+     * Revertir un cambio específico.
+     */
+    public function revertir($id)
+    {
+        $cambio = HistorialCambios::findOrFail($id);
+
+        if ($cambio->delete()) {
+            return redirect()->route('historialcambios.index')->with('exito', 'Cambio revertido exitosamente');
+        } else {
+            return redirect()->route('historialcambios.index')->with('error', 'Error al revertir el cambio');
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Notificaciones;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -18,6 +19,7 @@ class ProjectController extends Controller
         $selectedUsers = [];
 
         return view('projects.create', compact('users', 'selectedUsers'));
+
     }
 
     public function store(Request $request)
@@ -38,16 +40,24 @@ class ProjectController extends Controller
             'fecha_fin' => $request->fecha_fin,
             'user_id' => auth()->id(), // El usuario que crea el proyecto
         ]);
+        
+        $project->users()->attach(auth()->id());
+        $usuarios = User::all();
+        
+        foreach ($usuarios as $usuario) {
+            Notificaciones::create([
+                'title' => 'Nuevo Proyecto',
+                'message' => 'Se ha creado un nuevo proyecto: ' . $project->name,
+                'user_id' => $usuario->id,
+                'read' => false,
+            ]);
+        }
 
-        // Asignar el usuario autenticado al proyecto automáticamente
-        $project->users()->attach(auth()->id()); // Esto es importante para asegurarnos que el creador del proyecto está asignado
-
-        // Asignar los demás usuarios seleccionados al proyecto (si los hay)
         if ($request->has('users')) {
             $project->users()->attach($request->users);
         }
 
-        return redirect()->route('projects.my')->with('success', 'Proyecto creado exitosamente.');
+        //return redirect()->route('projects.my')->with('success', 'Proyecto creado exitosamente.');
     }
 
 

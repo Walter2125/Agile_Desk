@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class HistorialCambios extends Model
 {
     use HasFactory;
+
+    protected $table = 'historialcambios';
+    protected $fillable = ['fecha', 'usuario', 'accion', 'detalles'];
+    public $timestamps = false; // Ya tienes `fecha` en la migración
 }
