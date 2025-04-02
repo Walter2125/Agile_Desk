@@ -28,7 +28,7 @@
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
                 <i class="fas fa-bell"></i>
-                <span class="badge badge-warning navbar-badge">
+                <span id="notificationCount" class="badge badge-warning navbar-badge">
                     {{ auth()->check() ? $notificaciones->count() : 0 }}
                 </span>
             </a>
