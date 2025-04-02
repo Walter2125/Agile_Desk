@@ -36,7 +36,7 @@ class FormatohistoriaControler extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|unique:formatohistorias,nombre|max:255', 
+            'nombre' => 'required|unique:formatohistorias,nombre|max:255',
             'sprint' => 'required|integer|min:1',
             'trabajo_estimado' => 'integer|min:1',
             'responsable' => 'nullable|string|max:255',
@@ -49,7 +49,7 @@ class FormatohistoriaControler extends Controller
             'sprint.required'=>'El Sprint es requerido.',
             'prioridad.required'=> 'La prioridad es requerida.'
         ]);
-       
+
         $historia = new Formatohistoria();
         $historia->nombre = $request->nombre;//aqui aun falta mas revisar
         $historia->sprint = $request->sprint;
@@ -76,8 +76,8 @@ class FormatohistoriaControler extends Controller
         ]);
 
         session()->flash('success','Historia Creada correctamente');
-        return redirect()->route('tablero');//aqui devera devolver al tablero donde se haga la conexion 
-        
+        return redirect()->route('tablero');//aqui devera devolver al tablero donde se haga la conexion
+
 
     }
 
@@ -101,12 +101,13 @@ class FormatohistoriaControler extends Controller
 
     /**
      * Update the specified resource in storage.
+     * @param $datosAnteriores
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id, $datosAnteriores)
     {
         //
         $request->validate([
-            'nombre' => 'required|max:255|unique:formatohistorias,nombre,' . $id, 
+            'nombre' => 'required|max:255|unique:formatohistorias,nombre,' . $id,
             'sprint' => 'required|integer|min:1',
             'trabajo_estimado' => 'nullable|integer|min:1',
             'responsable' => 'nullable|string|max:255',
