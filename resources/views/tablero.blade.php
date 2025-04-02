@@ -147,19 +147,7 @@
                                             </button>
 
                                     </div>
-                                    <div class="flex space-x-1 shrink-0">
-                                        <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post" class="inline" >
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:text-red-700 transition-colors" data-bs-toggle="modal" data-bs-target="#confirmarBorrado{{ $historia->id }}">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                            
-                                        </form>
-                                    </div>
+                                   
                                 </div>
 
 
