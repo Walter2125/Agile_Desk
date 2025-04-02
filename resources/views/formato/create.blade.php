@@ -2,6 +2,10 @@
 @section('title', 'Agile Desk')
 @section("adminlte_css")
 
+@section('adminlte_css')
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
+@stop
+
 @section('content')
 <link href="{{ asset('css/formato.css') }}" rel="stylesheet">
 
@@ -91,3 +95,6 @@
 
 @stop
 
+@section('adminlte_js')
+    <script src="{{ asset('color.js') }}"></script>
+@stop
