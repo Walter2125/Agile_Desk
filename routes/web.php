@@ -7,13 +7,15 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\CustomLoginController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ColumnasController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SprintController;
 use App\Http\Controllers\FormatohistoriaControler;
 use App\Http\Controllers\FullCalendarController;
 use App\Http\Controllers\HistoriaController;
 use App\Http\Controllers\HistorialCambiosController;
-
+use App\Http\Controllers\NotificacionesController;
+use App\Http\Controllers\ReasignarHistoriaController;
 use App\Http\Controllers\TableroController;
 use App\Http\Controllers\TareaController;
 use App\Http\Controllers\TareasController;
