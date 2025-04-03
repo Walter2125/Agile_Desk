@@ -57,7 +57,7 @@ class ProjectController extends Controller
             $project->users()->attach($request->users);
         }
 
-        //return redirect()->route('projects.my')->with('success', 'Proyecto creado exitosamente.');
+        return redirect()->route('projects.my')->with('success', 'Proyecto creado exitosamente.');
     }
 
 
