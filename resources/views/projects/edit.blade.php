@@ -40,27 +40,51 @@
             </div>
 
             <!-- Selección de Usuarios -->
-            <div class="mb-3">
-                <label for="users" class="form-label">Seleccionar Usuarios</label>
-                <div id="user_list">
-                    @foreach($users as $user)
-                        <!-- Mostrar al creador como seleccionado, pero no editable -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="users[]" value="{{ $user->id }}" id="user{{ $user->id }}"
-                                {{ in_array($user->id, $project->users->pluck('id')->toArray()) ? 'checked' : '' }}
-                                {{ $user->id == $project->user_id ? 'disabled' : '' }}>
-                            <label class="form-check-label" for="user{{ $user->id }}">{{ $user->name }}</label>
-                        </div>
-                    @endforeach
-                </div>
+   
+            
+            <div id="current_users">
+    @foreach($project->users as $user)
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="users[]" value="{{ $user->id }}" id="user{{ $user->id }}" checked>
+            <label class="form-check-label" for="user{{ $user->id }}">{{ $user->name }}</label>
+            
+            <!-- Botón de eliminar miembro -->
+            <button type="button" class="btn btn-danger btn-sm remove-user" data-user-id="{{ $user->id }}" data-project-id="{{ $project->id }}">Eliminar</button>
+        </div>
+    @endforeach
+</div>
 
-                <small class="form-text text-muted">Selecciona uno o más usuarios para asignar al proyecto.</small>
-            </div>
 
             <!-- Botón para Guardar Proyecto -->
             <button type="submit" class="btn btn-primary mt-3">Actualizar Proyecto</button>
         </form>
     </div>
+
+
+    <script>
+    $(document).on('click', '.remove-user', function() {
+        var userId = $(this).data('user-id');
+        var projectId = $(this).data('project-id');
+
+        $.ajax({
+            url: '/projects/' + projectId + '/remove-user/' + userId,
+            type: 'DELETE',
+            data: {
+                _token: '{{ csrf_token() }}',
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Eliminar el miembro del DOM
+                    $('button[data-user-id="'+ userId +'"]').parent().remove();
+                    alert('Usuario eliminado exitosamente');
+                } else {
+                    alert('Error al eliminar al usuario');
+                }
+            }
+        });
+    });
+</script>
+
 
     <style>
         #user_list .form-check {
