@@ -1,8 +1,5 @@
 @extends('adminlte::page')
 
-    @section('adminlte_css')
-        <link rel="stylesheet" href="{{ asset('style.css') }}">
-    @stop
 @section('content')
     <div class="container mt-5">
         <h1 class="text-primary mb-4">Mis Proyectos</h1>
@@ -21,7 +18,7 @@
             <div class="col-md-4">
                 <div class="card text-center create-project-card border-0 shadow-lg hover-effect">
                     <div class="card-body p-4">
-                        <div class="icon-circle bg-gradient-primary mb-3 mx-auto">
+                        <div>
                             <i class="fas fa-plus-circle fa-3x text-white"></i>
                         </div>
                         <h4 class="card-title font-weight-bold text-dark">Crear Nuevo Proyecto</h4>
@@ -39,18 +36,35 @@
             <div class="row">
                 @foreach($projects as $project)
                     <div class="col-md-4 mb-4">
-                        <div class="card h-100 d-flex flex-column">
+                        <div class="card project-card h-100 d-flex flex-column border-0 shadow-sm hover-effect">
+                            <div class="card-header bg-white border-0 pt-3">
+                                <h3 class="card-title font-weight-bold text-dark">
+                                    <i class="fas fa-project-diagram text-primary mr-2"></i>
+                                    {{ $project->name }}
+                                </h3>
+                            </div>
                             <div class="card-body">
-                                <h3>{{ $project->name }}</h3>
-                                <p>Fecha de inicio: {{ $project->fecha_inicio }}</p>
-                                <p>Fecha de finalización: {{ $project->fecha_fin }}</p>
+                                <div class="project-meta mb-3">
+                                    <p class="mb-1">
+                                        <i class="far fa-calendar-alt text-muted mr-2"></i>
+                                        <span class="font-weight-bold">Inicio:</span> 
+                                        <span class="text-dark">{{ $project->fecha_inicio }}</span>
+                                    </p>
+                                    <p>
+                                        <i class="far fa-calendar-check text-muted mr-2"></i>
+                                        <span class="font-weight-bold">Fin:</span> 
+                                        <span class="text-dark">{{ $project->fecha_fin }}</span>
+                                    </p>
+                                </div>
 
-                                <h5>
-                                    Integrantes:
-                                    <button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#members{{ $project->id }}" aria-expanded="false" aria-controls="members{{ $project->id }}">
-                                        Ver Miembros
-                                    </button>
-                                </h5>
+                                <div class="team-section mb-3">
+                                    <h5 class="d-flex align-items-center">
+                                        <i class="fas fa-users text-info mr-2"></i>
+                                        <span>Integrantes</span>
+                                        <button class="btn btn-link btn-sm ml-auto p-0" type="button" data-bs-toggle="collapse" data-bs-target="#members{{ $project->id }}" aria-expanded="false" aria-controls="members{{ $project->id }}">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                    </h5>
 
                                     <div class="collapse" id="members{{ $project->id }}">
                                         <ul class="list-group list-group-flush">
@@ -192,7 +206,4 @@
 </style>
 @endpush
 
-@section('adminlte_js')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('color.js') }}"></script>
-@stop
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
