@@ -38,7 +38,7 @@ class FormatohistoriaControler extends Controller
         $request->validate([
             'nombre' => 'required|unique:formatohistorias,nombre|max:255', 
             'sprint' => 'required|integer|min:1',
-            'trabajo_estimado' => 'nullable|integer|min:0',
+            'trabajo_estimado' => 'integer|min:1',
             'responsable' => 'nullable|string|max:255',
             'prioridad' => 'required|in:Alta,Media,Baja',
             'descripcion' => 'nullable|string',],
@@ -127,6 +127,7 @@ class FormatohistoriaControler extends Controller
     ]);
 
     // Determinar cambios
+    $datosAnteriores = $historia->getOriginal(); // Obtener los datos originales antes de la actualización
     $detalles = "Historia actualizada: " . $historia->nombre . ".\n";
     foreach ($historia->toArray() as $campo => $valorNuevo) {
         if ($datosAnteriores[$campo] != $valorNuevo) {
@@ -177,3 +178,4 @@ class FormatohistoriaControler extends Controller
     session()->flash('success', 'Historia eliminada correctamente');
     return redirect()->route('tablero');
     }
+}

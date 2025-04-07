@@ -57,11 +57,6 @@ class ProjectController extends Controller
         if ($request->has('users')) {
             $project->users()->attach($request->users);
         }
-
-        logger()->info('Proyecto creado:', [
-            'project' => $project->toArray(),
-            'users' => $project->users->pluck('id')
-        ]);
         return redirect()->route('projects.my')->with('success', 'Proyecto creado exitosamente.');
     }
 

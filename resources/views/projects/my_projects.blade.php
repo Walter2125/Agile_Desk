@@ -1,5 +1,8 @@
 @extends('adminlte::page')
 
+    @section('adminlte_css')
+        <link rel="stylesheet" href="{{ asset('style.css') }}">
+    @stop
 @section('content')
     <div class="container mt-5">
         <h1>Mis Proyectos:</h1>
@@ -27,8 +30,8 @@
             <div class="row">
                 @foreach($projects as $project)
                     <div class="col-md-4 mb-4">
-                        <div class="card h-100 d-flex flex-column">
-                            <div class="card-body">
+                        <div class="card h-100 d-flex flex-column ">
+                            <div class="card-body carddelproy" data-project-id="{{ $project->id }}">
                                 <h3>{{ $project->name }}</h3>
                                 <p>Fecha de inicio: {{ $project->fecha_inicio }}</p>
                                 <p>Fecha de finalización: {{ $project->fecha_fin }}</p>
@@ -97,4 +100,7 @@
     </div>
 @endsection
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+@section('adminlte_js')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('color.js') }}"></script>
+@stop

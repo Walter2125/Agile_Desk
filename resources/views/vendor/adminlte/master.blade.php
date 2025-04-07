@@ -56,14 +56,25 @@
     {{-- Body Content --}}
     @yield('body')
 
-    {{-- Base Scripts --}}
+    {{-- Base Scripts (depends on Laravel asset bundling tool) --}}
     @if(config('adminlte.enabled_laravel_mix', false))
         <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>
     @else
-        <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
-        <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
+        @switch(config('adminlte.laravel_asset_bundling', false))
+            @case('mix')
+                <script src="{{ mix(config('adminlte.laravel_js_path', 'js/app.js')) }}"></script>
+            @break
+
+            @case('vite')
+            @case('vite_js_only')
+            @break
+
+            @default
+                <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+                <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+                <script src="{{ asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+                <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
+        @endswitch
     @endif
 
     {{-- Extra Configured Plugins Scripts --}}
@@ -71,54 +82,15 @@
 
     {{-- Livewire Script --}}
     @if(config('adminlte.livewire'))
-        @livewireScripts
+        @if(intval(app()->version()) >= 7)
+            @livewireScripts
+        @else
+            <livewire:scripts />
+        @endif
     @endif
 
     {{-- Custom Scripts --}}
     @yield('adminlte_js')
-
-    {{-- Script de Notificaciones --}}
-    @if(auth()->check())
-        <div class="dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="notificacionesDropdown" role="button" data-toggle="dropdown">
-                <i class="far fa-bell"></i>
-                <span id="notificationCount" class="badge badge-warning navbar-badge">
-                    {{ $notificaciones->count() ?? 0 }}
-                </span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-header">Notificaciones</span>
-                <div class="dropdown-divider"></div>
-                <div id="notificationContainer">
-                    <ul id="notificationList" class="list-unstyled px-3">
-                        @foreach($notificaciones ?? collect() as $notificacion)
-                            <li>
-                                <form action="{{ route('notificaciones.markAsRead', $notificacion->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">
-                                        <div class="media">
-                                            <div class="media-body">
-                                                <h3 class="dropdown-item-title">{{ $notificacion->title }}</h3>
-                                                <p class="text-sm">{{ $notificacion->message }}</p>
-                                            </div>
-                                        </div>
-                                    </button>
-                                </form>
-                                <div class="dropdown-divider"></div>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-                <div class="dropdown-divider"></div>
-                <form action="{{ route('notificaciones.markAllAsRead') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="dropdown-item dropdown-footer">
-                        Marcar todas como leídas
-                    </button>
-                </form>
-            </div>
-        </div>
-    @endif
 
 </body>
 </html>

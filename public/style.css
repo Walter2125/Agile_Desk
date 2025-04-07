@@ -120,9 +120,14 @@ section {
 [data-theme="dark"] .create-project-card {
     background-color: #2e2e2e;
     color: #f8f9fa;
-    border-color: #444;
+    border-color: #333;
 }
 
+[data-theme="dark"] .carddelproy {
+    background-color: #2e2e2e;
+    color: #f8f9fa;
+    border-color: #333;
+}
 /* CSS DE AGUNAS FUNCIONES DEL TABLERO  */
 #filtrarEstado {
     color: #333;              
@@ -146,6 +151,20 @@ section {
   .fas.fa-bell {
     display: inline-block !important;
     visibility: visible !important;
+  }
+  /* CSS de algunas funciones del formato Historias  */
+  #nombreHistoria, #numeroHistoria, #responsableHistoria, #prioridadHistoria, #descripcionHistoria, #listaTareas{
+    color: #333;              
+    background-color: #fff;   
+    border-color: #ccc;       
+    transition: background-color 0.3s, color 0.3s;
+  }
+   /* CSS de algunas funciones para el proyecto */
+  #fecha_inicio, #fecha_fin, #name{
+    color: #333;              
+    background-color: #fff;   
+    border-color: #ccc;       
+    transition: background-color 0.3s, color 0.3s;
   }
 /* CALENDARIO FULLCALENDAR - MODO OSCURO */
 [data-theme="dark"] .fc-theme-standard .fc-scrollgrid,

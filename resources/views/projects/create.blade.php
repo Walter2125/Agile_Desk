@@ -1,5 +1,9 @@
 @extends('adminlte::page')
 
+@section('adminlte_css')
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
+@stop
+
 @section('content')
     <div class="container mt-5">
         <h1>Crear Proyecto</h1>
@@ -183,3 +187,7 @@
         }
     </style>
 @endsection
+
+@section('adminlte_js')
+    <script src="{{ asset('color.js') }}"></script>
+@stop

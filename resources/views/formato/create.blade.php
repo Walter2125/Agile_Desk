@@ -1,30 +1,37 @@
-@extends('layout.plantilla')
-@section('title', 'Creación')
+@extends('adminlte::page')
+@section('title', 'Agile Desk')
+@section("adminlte_css")
+
+@section('adminlte_css')
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
+@stop
 
 @section('content')
 <link href="{{ asset('css/formato.css') }}" rel="stylesheet">
 
     @if ($errors->any())
-        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <div>
 
-            <ul>
+            <ul class="alert alert-primary" role="alert">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
-            </ul>
+            </ulq>
         </div>
     @endif
-    
+
 
     <form action="{{ route('formulario.store') }}" method="post">
         @csrf
         <div class="container">
             <div class="mb-3">
-                <div class="row">
+                <div class="cold field">
                     <div class="col-md-8">
                         <label for="nombreHistoria">Nombre de la historia:</label>
                         <input type="text" class="form-control" id="nombreHistoria" name="nombre" placeholder="Ingrese el nombre" value="{{ old('nombre') }}">
                     </div>
+                   
+                   
                     <div class="col-md-4">
                         <label for="numeroHistoria"># Historia:</label>
                         <input type="text" class="form-control" id="numeroHistoria" readonly>
@@ -38,13 +45,13 @@
                     <input type="text" class="form-control" id="estadoHistoria" readonly>
                 </div>
                 <div class="col-md-4">
-                    <label for="sprintHistoria">Sprint:</label>
+                    <label for="sprintHistoria">Sprint:</label><!--El sprint no debe ser requerido revisar esto en controlador -->
                     <input type="number" class="form-control" id="sprintHistoria" name="sprint" placeholder="Número del sprint" value="{{ old('sprint') }}" min="0">
                 </div>
                 <div class="col-md-4">
                     <label for="trabajoEstimado">Trabajo estimado (horas):</label>
                     <input type="number" name="trabajo_estimado" placeholder="Horas estimadas" value={{ old("trabajo_estimado")}} min="0" >
-                
+
                 </div>
             </div>
 
@@ -84,3 +91,10 @@
         </div>
     </form>
 @endsection
+
+
+@stop
+
+@section('adminlte_js')
+    <script src="{{ asset('color.js') }}"></script>
+@stop

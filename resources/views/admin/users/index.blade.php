@@ -67,4 +67,5 @@
             // Por ejemplo, confirmaciones para eliminar usuarios, filtros, etc.
         });
     </script>
+    <script src="{{ asset('color.js') }}"></script>
 @stop
