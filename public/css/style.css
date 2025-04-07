@@ -200,3 +200,12 @@ button {
     display: block;
 }
 
+
+.alert-warning {
+    background-color: #fffae6; /* Color de fondo más suave */
+    border-left: 5px solid #e7543d; /* Borde lateral amarillo */
+    color: #e7543d; /* Color del texto */
+    font-weight: bold;
+    padding: 15px;
+    border-radius: 8px;
+}

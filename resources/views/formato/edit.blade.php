@@ -1,16 +1,18 @@
 
 @extends('adminlte::page')
 @section('title', 'Agile Desk')
-@section("adminlte_css")
+        @section("adminlte_css")
+        <link rel="stylesheet" href="{{ asset('css/cust.css') }}">
+        @endsection
 
 @section('content')
 <link href="{{ asset('css/formato.css') }}" rel="stylesheet">
 
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="alert alert-danger" >
-                @foreach ($errors->all() as $error )
+@if ($errors->any())
+        <div role="alert" id="mi_alerta" class="w-100">
+            <ul>
+                @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
@@ -47,7 +49,7 @@
                 </div>
                 <div class="col field">
                     <label>Trabajo estimado (horas):</label>
-                    <input type="number" name="trabajo_estimado" value="{{ old('trabajo_estimado', $historia->trabajo_estimado) }}" placeholder="Horas estimadas" min="0">
+                    <input type="number" name="trabajo_estimado" value="{{ old('trabajo_estimado', $historia->trabajo_estimado) }}" placeholder="Horas estimadas" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 </div>
             </div>
 
@@ -85,6 +87,4 @@
     </form>
 
 @endsection
-
-@stop
 

@@ -37,8 +37,8 @@ class FormatohistoriaControler extends Controller
     {
         $request->validate([
             'nombre' => 'required|unique:formatohistorias,nombre|max:255', 
-            'sprint' => 'required|integer|min:1',
-            'trabajo_estimado' => 'integer|min:1',
+            'sprint' => 'nullable|integer|min:1',
+            'trabajo_estimado' => 'nullable|integer|min:1',
             'responsable' => 'nullable|string|max:255',
             'prioridad' => 'required|in:Alta,Media,Baja',
             'descripcion' => 'nullable|string',],
@@ -46,7 +46,6 @@ class FormatohistoriaControler extends Controller
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.unique' =>'El nombre ya existe, intente con otro.',//personalizacion de alertas.
             'trabajo_estimado.min' =>'El Trabajo Estimado debe ser mayor a cero.',
-            'sprint.required'=>'El Sprint es requerido.',
             'prioridad.required'=> 'La prioridad es requerida.'
         ]);
        
@@ -107,7 +106,7 @@ class FormatohistoriaControler extends Controller
         //
         $request->validate([
             'nombre' => 'required|max:255|unique:formatohistorias,nombre,' . $id, 
-            'sprint' => 'required|integer|min:1',
+            'sprint' => 'nullable|integer|min:1',
             'trabajo_estimado' => 'nullable|integer|min:1',
             'responsable' => 'nullable|string|max:255',
             'prioridad' => 'required|in:Alta,Media,Baja',
@@ -127,7 +126,9 @@ class FormatohistoriaControler extends Controller
     ]);
 
     // Determinar cambios
-    $detalles = "Historia actualizada: " . $historia->nombre . ".\n";
+    $datosAnteriores = $historia->getOriginal();
+    $detalles = "Historia actualizada: ". $historia->nombre . ".\n";
+
     foreach ($historia->toArray() as $campo => $valorNuevo) {
         if ($datosAnteriores[$campo] != $valorNuevo) {
             $detalles .= ucfirst($campo) . " cambiado de '" . ($datosAnteriores[$campo] ?? 'N/A') . "' a '" . $valorNuevo . "'.\n";

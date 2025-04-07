@@ -1,0 +1,123 @@
+#mi_alerta {
+    background-color: #fff3cd; 
+    color: #856404;            
+    padding: 15px 20px;
+    border-radius: 8px;        
+    margin-bottom: 20px;
+    font-weight: 500;
+    width: 100%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #ffeeba;
+}
+
+#mi_alerta ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+#mi_alerta li {
+    list-style: disc;
+}
+
+/*estilo del formulario */
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+/*estilo para las etiqueta*/
+.label-custom {
+    font-weight: bold;
+    color: #4A4A4A;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/*estilo para los input y selectores */
+.input-custom {
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+}
+
+.input-custom:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/*estilo para el area de texto */
+textarea.input-custom {
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+}
+
+textarea.input-custom:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/*estilo para la filas del formulario */
+.row.mb-3 {
+    margin-bottom: 20px;
+}
+
+/*estilo para los btn */
+.btn-custom {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-custom:hover {
+    background-color: #0056b3;
+}
+
+/*centrado del btn */
+.text-center {
+    text-align: center;
+}
+
+
+.col-md-4, .col-md-6, .col-md-12 {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+
+.tareas {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+.contenedor-con-borde {
+    border: 2px solid #ccc;
+    border-radius: 10px;    
+    padding: 20px;
+    background-color: #adb5bd; 
+}
