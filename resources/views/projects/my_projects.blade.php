@@ -18,9 +18,7 @@
             <div class="col-md-4">
                 <div class="card text-center create-project-card border-0 shadow-lg hover-effect">
                     <div class="card-body p-4">
-                        <div>
-                            <i class="fas fa-plus-circle fa-3x text-white"></i>
-                        </div>
+                        
                         <h4 class="card-title font-weight-bold text-dark">Crear Nuevo Proyecto</h4>
                         <p class="card-text text-muted">Comienza un nuevo proyecto colaborativo</p>
                         <a href="{{ route('projects.create') }}" class="btn btn-primary btn-lg rounded-pill px-4">
