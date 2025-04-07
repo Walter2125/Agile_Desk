@@ -26,6 +26,7 @@
         </div>
 
         @if(count($projects) > 0)
+        <h2>Proyectos Recientes</h2>
             <div class="row">
                 @foreach($projects as $project)
                     <div class="col-md-4 mb-4">

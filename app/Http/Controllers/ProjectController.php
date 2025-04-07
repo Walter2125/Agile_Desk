@@ -42,6 +42,7 @@ class ProjectController extends Controller
         ]);
         
         $project->users()->attach(auth()->id());
+        
         $usuarios = User::all();
         
         foreach ($usuarios as $usuario) {
@@ -56,16 +57,16 @@ class ProjectController extends Controller
         if ($request->has('users')) {
             $project->users()->attach($request->users);
         }
-
         return redirect()->route('projects.my')->with('success', 'Proyecto creado exitosamente.');
     }
-
-
 
 
     public function index()
     {
         $nuevo_proyecto = Project::with('users')->get();
+
+        //$nuevo_proyecto = Project::with('users')->orderBy('created_at', 'desc')->get();
+
         return view('projects.create', compact('nuevo_proyecto'));
     }
 
@@ -74,7 +75,8 @@ class ProjectController extends Controller
         $user = auth()->user();
         $projects = $user->projects;
 
-        return view('projects.my_projects', compact('projects'));
+        return view('projects.my_projects', compact('projects')); 
+        
     }
 
     public function edit($id)
