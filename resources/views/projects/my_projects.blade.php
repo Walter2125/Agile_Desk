@@ -5,20 +5,29 @@
     @stop
 @section('content')
     <div class="container mt-5">
-        <h1>Mis Proyectos:</h1>
+        <h1 class="text-primary mb-4">Mis Proyectos</h1>
 
         @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+            <div class="alert alert-success alert-dismissible fade show">
+                {{ session('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         @endif
 
-        <div class="row mb-4">
+        <!-- Tarjeta para crear nuevo proyecto -->
+        <div class="row mb-5">
             <div class="col-md-4">
-                <div class="card text-center create-project-card">
-                    <div class="card-body">
-                        <h5 class="card-title">Crear Nuevo Proyecto</h5>
-                        <p class="card-text">Haz clic para crear un nuevo proyecto.</p>
-                        <a href="{{ route('projects.create') }}" class="btn btn-success">
-                            <i class="fas fa-plus"></i> Crear Proyecto
+                <div class="card text-center create-project-card border-0 shadow-lg hover-effect">
+                    <div class="card-body p-4">
+                        <div class="icon-circle bg-gradient-primary mb-3 mx-auto">
+                            <i class="fas fa-plus-circle fa-3x text-white"></i>
+                        </div>
+                        <h4 class="card-title font-weight-bold text-dark">Crear Nuevo Proyecto</h4>
+                        <p class="card-text text-muted">Comienza un nuevo proyecto colaborativo</p>
+                        <a href="{{ route('projects.create') }}" class="btn btn-primary btn-lg rounded-pill px-4">
+                            <i class="fas fa-plus mr-2"></i> Crear Proyecto
                         </a>
                     </div>
                 </div>
@@ -26,12 +35,12 @@
         </div>
 
         @if(count($projects) > 0)
-        <h2>Proyectos Recientes</h2>
+        <h2 class="text-secondary mb-4 border-bottom pb-2">Proyectos Recientes</h2>
             <div class="row">
                 @foreach($projects as $project)
                     <div class="col-md-4 mb-4">
-                        <div class="card h-100 d-flex flex-column ">
-                            <div class="card-body carddelproy" data-project-id="{{ $project->id }}">
+                        <div class="card h-100 d-flex flex-column">
+                            <div class="card-body">
                                 <h3>{{ $project->name }}</h3>
                                 <p>Fecha de inicio: {{ $project->fecha_inicio }}</p>
                                 <p>Fecha de finalización: {{ $project->fecha_fin }}</p>
@@ -43,62 +52,145 @@
                                     </button>
                                 </h5>
 
-                                <div class="collapse" id="members{{ $project->id }}">
-                                    <ul>
-                                        @foreach($project->users as $user)
-                                            <li>{{ $user->name }}</li>
-                                        @endforeach
-                                    </ul>
+                                    <div class="collapse" id="members{{ $project->id }}">
+                                        <ul class="list-group list-group-flush">
+                                            @foreach($project->users as $user)
+                                                <li class="list-group-item d-flex align-items-center border-0 py-2">
+                                                    <i class="fas fa-user-circle text-secondary mr-2"></i>
+                                                    {{ $user->name }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
-
-                                <a href="" class="btn btn-info btn-sm mt-3">
-                                    <i class="fas fa-eye"></i> Ver Proyecto
-                                </a>
-
-                                @if(auth()->id() === $project->user_id)
-                                    <!-- Botón de editar proyecto -->
-                                    <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-warning btn-sm mt-3">
-                                        <i class="fas fa-pencil-alt"></i> Editar Proyecto
+                            </div>
+                            
+                            <div class="card-footer bg-white border-0 pb-3">
+                                <div class="d-flex justify-content-between">
+                                    <a href="" class="btn btn-outline-info btn-sm rounded-pill">
+                                        <i class="fas fa-eye mr-1"></i> Ver
                                     </a>
 
-                                    <!-- Botón que abre el modal de confirmación -->
-                                    <button class="btn btn-danger btn-sm mt-3" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ $project->id }}">
-                                        <i class="fas fa-trash"></i> Eliminar Proyecto
-                                    </button>
+                                    @if(auth()->id() === $project->user_id)
+                                        <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-outline-warning btn-sm rounded-pill">
+                                            <i class="fas fa-pencil-alt mr-1"></i> Editar
+                                        </a>
 
-                                    <!-- Modal de confirmación de eliminación -->
-                                    <div class="modal fade" id="confirmDeleteModal{{ $project->id }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel{{ $project->id }}" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="confirmDeleteModalLabel{{ $project->id }}">Confirmar Eliminación</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    ¿Estás seguro de que deseas eliminar el proyecto <strong>{{ $project->name }}</strong>?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display: inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger">Eliminar Proyecto</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
+                                        <button class="btn btn-outline-danger btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ $project->id }}">
+                                            <i class="fas fa-trash mr-1"></i> Eliminar
+                                        </button>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal de confirmación de eliminación -->
+                    <div class="modal fade" id="confirmDeleteModal{{ $project->id }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel{{ $project->id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow">
+                                <div class="modal-header bg-light">
+                                    <h5 class="modal-title text-danger" id="confirmDeleteModalLabel{{ $project->id }}">
+                                        <i class="fas fa-exclamation-triangle mr-2"></i> Confirmar Eliminación
+                                    </h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>¿Estás seguro de que deseas eliminar el proyecto <strong class="text-primary">{{ $project->name }}</strong>?</p>
+                                    <p class="text-muted small">Esta acción no se puede deshacer.</p>
+                                </div>
+                                <div class="modal-footer border-0">
+                                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+                                    <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger rounded-pill px-4">
+                                            <i class="fas fa-trash mr-1"></i> Eliminar
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
         @else
-            <p>No estás asociado a ningún proyecto.</p>
+            <div class="empty-state text-center py-5">
+                <i class="fas fa-folder-open fa-4x text-muted mb-3"></i>
+                <h3 class="text-secondary">No tienes proyectos aún</h3>
+                <p class="text-muted">Crea tu primer proyecto para comenzar a colaborar</p>
+                <a href="{{ route('projects.create') }}" class="btn btn-primary mt-3">
+                    <i class="fas fa-plus mr-2"></i> Crear Primer Proyecto
+                </a>
+            </div>
         @endif
     </div>
 @endsection
+
+@push('css')
+<style>
+    /* Estilos personalizados */
+    .create-project-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        border: 1px dashed #adb5bd;
+    }
+    
+    .create-project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        border-color: #4e73df;
+    }
+    
+    .icon-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+    }
+    
+    .project-card {
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .hover-effect {
+        transition: all 0.3s ease;
+    }
+    
+    .hover-effect:hover {
+        transform: translateY(-3px);
+    }
+    
+    .empty-state {
+        background-color: #f8f9fa;
+        border-radius: 15px;
+        padding: 40px;
+    }
+    
+    .btn-rounded {
+        border-radius: 50px;
+    }
+    
+    .team-section {
+        background-color: #f8fafc;
+        padding: 15px;
+        border-radius: 10px;
+    }
+</style>
+@endpush
 
 @section('adminlte_js')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
