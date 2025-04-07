@@ -12,7 +12,7 @@ class RoleMiddleware
     {
         // Verificar si el usuario tiene el rol adecuado
         if (auth()->check() && auth()->user()->role === $role) {
-            return $next($request);
+            return $next($request);  
         }
 
         // Redirigir si no tiene el rol
