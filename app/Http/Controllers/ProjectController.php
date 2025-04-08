@@ -63,20 +63,16 @@ class ProjectController extends Controller
 
     public function index()
     {
-        $nuevo_proyecto = Project::with('users')->get();
-
-        //$nuevo_proyecto = Project::with('users')->orderBy('created_at', 'desc')->get();
-
+        $nuevo_proyecto = Project::with('users')->orderBy('created_at', 'desc')->get();
+    
         return view('projects.create', compact('nuevo_proyecto'));
     }
 
     public function myProjects()
     {
         $user = auth()->user();
-        $projects = $user->projects;
-
-        return view('projects.my_projects', compact('projects')); 
-        
+        $projects = $user->projects->sortByDesc('created_at');
+        return view('projects.my_projects', compact('projects'));
     }
 
     public function edit($id)
