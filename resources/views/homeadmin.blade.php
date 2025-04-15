@@ -3,8 +3,8 @@
 @section('title', 'Agile Desk')
 
 @section('adminlte_css')
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('style.css') }}"> 
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}"> 
     <style>
         .button-container {
             display: flex;
@@ -35,6 +35,15 @@
 @stop
 
 @section('content')
+    <div class="container py-3 migajas" id="migajas">
+        <ul class="breadcrumb">
+            <li class="breadcrumb__item breadcrumb__item-lastChild">
+                <span class="breadcrumb__inner">
+                    <span class="breadcrumb__title">Home</span>
+                </span>
+            </li>
+        </ul>
+    </div>
     <section>
         <img src="{{ asset('img/home/fondo.png') }}" alt="Fondo decorativo" id="fondo">
         <img src="{{ asset('img/home/software.png') }}" alt="Imagen de software" id="sobre">
@@ -121,6 +130,6 @@
 @stop
 
 @section('adminlte_js')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('color.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/color.js') }}"></script>
 @stop

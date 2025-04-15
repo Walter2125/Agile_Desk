@@ -166,39 +166,103 @@ section {
     border-color: #ccc;       
     transition: background-color 0.3s, color 0.3s;
   }
-/* CALENDARIO FULLCALENDAR - MODO OSCURO */
-[data-theme="dark"] .fc-theme-standard .fc-scrollgrid,
-[data-theme="dark"] .fc-theme-standard td,
-[data-theme="dark"] .fc-theme-standard th {
-    border-color: #333;
-}
+  /* CSS del fondo */
+  .content-wrapper{
+    background-color: #fff !important;
+    color: #333;
+  }
 
-[data-theme="dark"] .fc-col-header-cell-cushion,
-[data-theme="dark"] .fc-daygrid-day-number {
-    color: #fff;
-}
-
-[data-theme="dark"] .fc-button-primary {
-    background-color: #3c4b64;
-    border-color: #3c4b64;
-}
-
-[data-theme="dark"] .fc-button-primary:hover {
-    background-color: #515e78;
-    border-color: #515e78;
-}
-
-[data-theme="dark"] .fc-event {
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="dark"] .fc-day-today {
-    background-color: rgba(81, 94, 120, 0.3) !important;
-}
-
-[data-theme="dark"] .fc-daygrid-day-frame {
-    background-color: #1a1a1a;
-}
+/* CSS de las migajas */
+  .migajas {
+    margin-top: 1rem;
+    display: flex;  
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    min-width: 480px;
+    padding: 0 40px;
+    }
+    
+    .breadcrumb {
+    display: flex;
+    border-radius: 10px;
+    margin: auto;
+    text-align: left;
+    top: 50%;
+    width: 100%;
+    height: 40px;
+    transform: translateY(-50%);
+    z-index: 1;
+    justify-content: left;
+    }
+    
+    
+    .breadcrumb__item {
+    height: 100%;
+    background-color: white;
+    color: #252525;
+    font-family: 'Oswald', sans-serif;
+    border-radius: 7px;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    transform: skew(-21deg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+    margin: 5px;
+    padding: 0 40px;
+    cursor: pointer;
+    }
+    
+    
+    .breadcrumb__item:hover {
+    background: #490099;
+    color: #FFF;
+    }
+    
+    
+    .breadcrumb__inner {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    z-index: 2;
+    transform: skew(21deg);  
+    }
+    
+    .breadcrumb__title {
+    font-size: 16px;
+    text-overflow: ellipsis;  
+    overflow: hidden;
+    white-space: nowrap;  
+    }
+    
+    
+    @media all and (max-width: 1000px) {
+    .breadcrumb {
+    height: 35px;
+    }
+    
+    .breadcrumb__title{
+    font-size: 11px;
+    }
+    .breadcrumb__item {
+    padding: 0 30px;
+    }
+    }
+    
+    @media all and (max-width: 710px) {
+    .breadcrumb {
+    height: 30px;
+    }
+    .breadcrumb__item {
+    padding: 0 20px;
+    }
+    
+    }
 
 /* MODAL - MODO OSCURO */
 [data-theme="dark"] .modal-content {

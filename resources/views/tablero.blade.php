@@ -5,7 +5,7 @@
 @section('adminlte_css')
 
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
 
@@ -16,10 +16,10 @@
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 @stop
 
 @section('content')
-
         <!--El mensage de guradado con exito -->
 
         @if (session('success'))
@@ -30,8 +30,29 @@
         </div>
 
         @endif
+  
         <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.068);">
+        <!-- migajas de pan-->
+        <div class="container py-3 migajas" id="migajas">
+            <ul class="breadcrumb">
+                <li class="breadcrumb__item breadcrumb__item-firstChild">
+                    <span class="breadcrumb__inner">
+                        <a href="/HomeUser" class="breadcrumb__title">Home</a>
+                    </span>
+                </li>
+                <li class="breadcrumb__item breadcrumb__item-firstChild">
+                    <span class="breadcrumb__inner">
+                        <a href="/projects" class="breadcrumb__title">Proyectos</a>
+                    </span>
+                </li>
+                <li class="breadcrumb__item breadcrumb__item-firstChild">
+                    <span class="breadcrumb__inner">
+                        <span class="breadcrumb__title">Tableros</span>
+                    </span>
+                </li>
+            </ul>
+        </div>  
         <!-- <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen"> -->
             <h2 class="text-2xl font-bold mb-6">Tablero Scrum</h2>
 
@@ -263,13 +284,13 @@
 
 @section('adminlte_js')
     <!-- Bootstrap Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <!-- Sortable JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <!--Script personalizado para manejo del tema -->
-    <script src="{{ asset('color.js') }}"></script>
+    <script src="{{ asset('js/color.js') }}"></script>
     <!-- Código del Tablero Scrum -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
