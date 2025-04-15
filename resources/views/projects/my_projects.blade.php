@@ -1,5 +1,9 @@
 @extends('adminlte::page')
 
+@section('adminlte_css')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+@stop
+    
 @section('content')
     <div class="container mt-5">
         <h1 class="text-primary mb-4">Mis Proyectos</h1>
@@ -16,9 +20,8 @@
         <!-- Tarjeta para crear nuevo proyecto -->
         <div class="row mb-5">
             <div class="col-md-4">
-                <div class="card text-center create-project-card border-0 shadow-lg hover-effect">
+                <div class="card text-center create-project-card">
                     <div class="card-body p-4">
-                        
                         <h4 class="card-title font-weight-bold text-dark">Crear Nuevo Proyecto</h4>
                         <p class="card-text text-muted">Comienza un nuevo proyecto colaborativo</p>
                         <a href="{{ route('projects.create') }}" class="btn btn-primary btn-lg rounded-pill px-4">
@@ -34,7 +37,7 @@
             <div class="row">
                 @foreach($projects as $project)
                     <div class="col-md-4 mb-4">
-                        <div class="card project-card h-100 d-flex flex-column border-0 shadow-sm hover-effect">
+                        <div class="card project-card h-100 d-flex flex-column">
                             <div class="card-header bg-white border-0 pt-3">
                                 <h3 class="card-title font-weight-bold text-dark">
                                     <i class="fas fa-project-diagram text-primary mr-2"></i>
@@ -139,69 +142,72 @@
             </div>
         @endif
     </div>
+
+    <style>
+        /* Estilos personalizados */
+        .create-project-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border: 1px dashed #adb5bd;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+        
+        .create-project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: #4e73df;
+        }
+        
+        .project-card {
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .hover-effect {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-effect:hover {
+            transform: translateY(-3px);
+        }
+        
+        .empty-state {
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            padding: 40px;
+        }
+        
+        .btn-rounded {
+            border-radius: 50px;
+        }
+        
+        .team-section {
+            background-color: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        /* Estilos para los modales */
+        .modal-content {
+            border-radius: 15px;
+        }
+        
+        .modal-header {
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+    </style>
 @endsection
 
-@push('css')
-<style>
-    /* Estilos personalizados */
-    .create-project-card {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border-radius: 15px;
-        transition: all 0.3s ease;
-        border: 1px dashed #adb5bd;
-    }
-    
-    .create-project-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        border-color: #4e73df;
-    }
-    
-    .icon-circle {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
-    }
-    
-    .project-card {
-        border-radius: 12px;
-        transition: all 0.3s ease;
-        border: 1px solid rgba(0,0,0,0.05);
-    }
-    
-    .project-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-    
-    .hover-effect {
-        transition: all 0.3s ease;
-    }
-    
-    .hover-effect:hover {
-        transform: translateY(-3px);
-    }
-    
-    .empty-state {
-        background-color: #f8f9fa;
-        border-radius: 15px;
-        padding: 40px;
-    }
-    
-    .btn-rounded {
-        border-radius: 50px;
-    }
-    
-    .team-section {
-        background-color: #f8fafc;
-        padding: 15px;
-        border-radius: 10px;
-    }
-</style>
-@endpush
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+@section('adminlte_js')
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/color.js') }}"></script>
+@stop
