@@ -20,7 +20,14 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->intended('/HomeUser');
+            $request->session()->regenerate();
+            
+            // Redirigir según el tipo de usuario
+            if (Auth::user()->usertype == 'admin') {
+                return redirect()->route('homeadmin');
+            } else {
+                return redirect()->route('HomeUser');
+            }
         }
 
         return back()->withErrors([
@@ -28,9 +35,12 @@ class LoginController extends Controller
         ]);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
         return redirect('/login');
     }
 
@@ -46,17 +56,16 @@ class LoginController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
-
+    
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user', // Asignando valor por defecto  
-
+            'usertype' => 'user',
         ]);
-
+    
         Auth::login($user); 
-
-        return redirect('/HomeUser');
+    
+        return redirect()->route('HomeUser')->with('success', 'Registro exitoso. Bienvenido!');
     }
 }
