@@ -210,11 +210,11 @@ section {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 16px;
+    font-size: 10px;
     transform: skew(-21deg);
     box-shadow: 0 2px 5px rgba(0,0,0,0.26);
     margin: 5px;
-    padding: 0 40px;
+    padding: 0 20px;
     cursor: pointer;
     }
     
@@ -223,7 +223,6 @@ section {
     background: #490099;
     color: #FFF;
     }
-    
     
     .breadcrumb__inner {
     display: flex;
@@ -234,13 +233,19 @@ section {
     }
     
     .breadcrumb__title {
+    text-decoration: none;
+    color: inherit;
     font-size: 16px;
     text-overflow: ellipsis;  
     overflow: hidden;
     white-space: nowrap;  
     }
     
-    
+    .breadcrumb__item--active {
+        background-color: #8e00d4; 
+        color: #fff;
+        pointer-events: none; 
+      }
     @media all and (max-width: 1000px) {
     .breadcrumb {
     height: 35px;
@@ -250,7 +255,7 @@ section {
     font-size: 11px;
     }
     .breadcrumb__item {
-    padding: 0 30px;
+    padding: 0 20px;
     }
     }
     

@@ -31,8 +31,6 @@
 
         @endif
   
-        <!-- -->
-    <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.068);">
         <!-- migajas de pan-->
         <div class="container py-3 migajas" id="migajas">
             <ul class="breadcrumb">
@@ -46,13 +44,15 @@
                         <a href="/projects" class="breadcrumb__title">Proyectos</a>
                     </span>
                 </li>
-                <li class="breadcrumb__item breadcrumb__item-firstChild">
+                <li class="breadcrumb__item breadcrumb__item--active">
                     <span class="breadcrumb__inner">
                         <span class="breadcrumb__title">Tableros</span>
                     </span>
                 </li>
             </ul>
-        </div>  
+        </div>      
+        <!-- -->
+    <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.068);">
         <!-- <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen"> -->
             <h2 class="text-2xl font-bold mb-6">Tablero Scrum</h2>
 

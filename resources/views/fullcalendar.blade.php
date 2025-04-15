@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+<!-- migajas de pan-->
 <div class="container py-3 migajas" id="migajas">
     <ul class="breadcrumb">
         <li class="breadcrumb__item breadcrumb__item-firstChild">
@@ -14,13 +15,14 @@
                 <a href="/HomeUser" class="breadcrumb__title">Home</a>
             </span>
         </li>
-        <li class="breadcrumb__item breadcrumb__item-lastChild">
+        <li class="breadcrumb__item breadcrumb__item--active">
             <span class="breadcrumb__inner">
-                <span class="breadcrumb__title">Calendario</span>
+                <a href="#" class="breadcrumb__title">Calendario</a>
             </span>
         </li>
+    
     </ul>
-</div>
+</div>  
    
     <div class="container">
         <h2 class="mb-4">Calendario de Eventos</h2>

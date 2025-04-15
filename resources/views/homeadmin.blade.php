@@ -35,15 +35,6 @@
 @stop
 
 @section('content')
-    <div class="container py-3 migajas" id="migajas">
-        <ul class="breadcrumb">
-            <li class="breadcrumb__item breadcrumb__item-lastChild">
-                <span class="breadcrumb__inner">
-                    <span class="breadcrumb__title">Home</span>
-                </span>
-            </li>
-        </ul>
-    </div>
     <section>
         <img src="{{ asset('img/home/fondo.png') }}" alt="Fondo decorativo" id="fondo">
         <img src="{{ asset('img/home/software.png') }}" alt="Imagen de software" id="sobre">
