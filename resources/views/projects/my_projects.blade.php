@@ -2,7 +2,12 @@
 
 @section('content')
     <div class="container mt-5">
-        <h1 class="text-primary mb-4">Mis Proyectos</h1>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-secondary mb-0">Proyectos Recientes</h2>
+            <a href="{{ route('projects.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus mr-2"></i> Nuevo Proyecto
+            </a>
+        </div>
 
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show">
@@ -13,35 +18,18 @@
             </div>
         @endif
 
-        <!-- Tarjeta para crear nuevo proyecto -->
-        <div class="row mb-5">
-            <div class="col-md-4">
-                <div class="card text-center create-project-card border-0 shadow-lg hover-effect">
-                    <div class="card-body p-4">
-                        
-                        <h4 class="card-title font-weight-bold text-dark">Crear Nuevo Proyecto</h4>
-                        <p class="card-text text-muted">Comienza un nuevo proyecto colaborativo</p>
-                        <a href="{{ route('projects.create') }}" class="btn btn-primary btn-lg rounded-pill px-4">
-                            <i class="fas fa-plus mr-2"></i> Crear Proyecto
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         @if(count($projects) > 0)
-        <h2 class="text-secondary mb-4 border-bottom pb-2">Proyectos Recientes</h2>
-            <div class="row">
+            <div class="row mt-4">
                 @foreach($projects as $project)
                     <div class="col-md-4 mb-4">
-                        <div class="card project-card h-100 d-flex flex-column border-0 shadow-sm hover-effect">
-                            <div class="card-header bg-white border-0 pt-3">
+                        <div class="card project-card h-100 d-flex flex-column">
+                            <div class="card-header bg-white border-bottom pt-3">
                                 <h3 class="card-title font-weight-bold text-dark">
                                     <i class="fas fa-project-diagram text-primary mr-2"></i>
                                     {{ $project->name }}
                                 </h3>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body bg-white">
                                 <div class="project-meta mb-3">
                                     <p class="mb-1">
                                         <i class="far fa-calendar-alt text-muted mr-2"></i>
@@ -77,7 +65,7 @@
                                 </div>
                             </div>
                             
-                            <div class="card-footer bg-white border-0 pb-3">
+                            <div class="card-footer bg-white border-top pb-3">
                                 <div class="d-flex justify-content-between">
                                     <a href="" class="btn btn-outline-info btn-sm rounded-pill">
                                         <i class="fas fa-eye mr-1"></i> Ver
@@ -101,7 +89,7 @@
                     <div class="modal fade" id="confirmDeleteModal{{ $project->id }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel{{ $project->id }}" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content border-0 shadow">
-                                <div class="modal-header bg-light">
+                                <div class="modal-header bg-white">
                                     <h5 class="modal-title text-danger" id="confirmDeleteModalLabel{{ $project->id }}">
                                         <i class="fas fa-exclamation-triangle mr-2"></i> Confirmar Eliminación
                                     </h5>
@@ -113,7 +101,7 @@
                                     <p>¿Estás seguro de que deseas eliminar el proyecto <strong class="text-primary">{{ $project->name }}</strong>?</p>
                                     <p class="text-muted small">Esta acción no se puede deshacer.</p>
                                 </div>
-                                <div class="modal-footer border-0">
+                                <div class="modal-footer border-0 bg-white">
                                     <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
                                     <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display: inline;">
                                         @csrf
@@ -129,7 +117,7 @@
                 @endforeach
             </div>
         @else
-            <div class="empty-state text-center py-5">
+            <div class="empty-state text-center py-5 bg-white border rounded">
                 <i class="fas fa-folder-open fa-4x text-muted mb-3"></i>
                 <h3 class="text-secondary">No tienes proyectos aún</h3>
                 <p class="text-muted">Crea tu primer proyecto para comenzar a colaborar</p>
@@ -144,62 +132,39 @@
 @push('css')
 <style>
     /* Estilos personalizados */
-    .create-project-card {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border-radius: 15px;
-        transition: all 0.3s ease;
-        border: 1px dashed #adb5bd;
-    }
-    
-    .create-project-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        border-color: #4e73df;
-    }
-    
-    .icon-circle {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
-    }
-    
     .project-card {
-        border-radius: 12px;
+        border-radius: 10px;
         transition: all 0.3s ease;
-        border: 1px solid rgba(0,0,0,0.05);
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+        background-color: #ffffff;
     }
     
     .project-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-    
-    .hover-effect {
-        transition: all 0.3s ease;
-    }
-    
-    .hover-effect:hover {
-        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+        border-color: #d0d0d0;
     }
     
     .empty-state {
-        background-color: #f8f9fa;
-        border-radius: 15px;
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
         padding: 40px;
-    }
-    
-    .btn-rounded {
-        border-radius: 50px;
     }
     
     .team-section {
         background-color: #f8fafc;
         padding: 15px;
-        border-radius: 10px;
+        border-radius: 8px;
+    }
+    
+    body {
+        background-color: #ffffff !important;
+    }
+    
+    .container {
+        background-color: transparent !important;
     }
 </style>
 @endpush
