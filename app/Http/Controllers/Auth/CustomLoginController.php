@@ -14,6 +14,10 @@ class CustomLoginController extends Controller
     public function showLoginForm()
     {
         return view('auth.login');
+    } 
+    public function showRegisterForm()
+    {
+        return view('auth.register');
     }
 
     // Procesar el login personalizado
@@ -25,30 +29,51 @@ class CustomLoginController extends Controller
             'password' => 'required',
         ]);
 
-        // Buscar al usuario por su email
-        $user = User::where('email', $request->email)->first();
-
-        // Verificar si el usuario existe y si la contraseña es correcta
-        if ($user && Hash::check($request->password, $user->password)) {
-            // Iniciar sesión manualmente
-            Auth::login($user);
-
+        // Intentar iniciar sesión con las credenciales proporcionadas
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $request->session()->regenerate();
+            
             // Redirigir al usuario según su rol
-            if ($user->role == 'admin') {
+            if (Auth::user()->usertype == 'admin') {
                 return redirect()->route('homeadmin');
             } else {
-                return redirect()->route('homeuser');
+                return redirect()->route('HomeUser');
             }
         }
 
         // Si las credenciales son incorrectas, mostrar un mensaje de error
-        return redirect()->route('custom.login.form')->with('error', 'Credenciales incorrectas.');
+        return back()->withErrors([
+            'email' => 'Las credenciales proporcionadas no son válidas.',
+        ])->withInput($request->only('email'));
     }
 
     // Cerrar sesión
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect()->route('custom.login.form');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return redirect()->route('login');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+    
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'usertype' => 'user',
+        ]);
+    
+        Auth::login($user); 
+    
+        return redirect()->route('HomeUser')->with('success', 'Registro exitoso. Bienvenido!');
     }
 }

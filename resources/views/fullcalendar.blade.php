@@ -1,15 +1,29 @@
 @extends('adminlte::page')
 
 @section('adminlte_css')
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/main.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/common.min.css') }}">    
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 @stop
 
 @section('content')
+<!-- migajas de pan-->
+<div class="container py-3 migajas" id="migajas">
+    <ul class="breadcrumb">
+        <li class="breadcrumb__item breadcrumb__item-firstChild">
+            <span class="breadcrumb__inner">
+                <a href="/HomeUser" class="breadcrumb__title">Home</a>
+            </span>
+        </li>
+        <li class="breadcrumb__item breadcrumb__item--active">
+            <span class="breadcrumb__inner">
+                <a href="#" class="breadcrumb__title">Calendario</a>
+            </span>
+        </li>
+    
+    </ul>
+</div>  
+   
     <div class="container">
         <h2 class="mb-4">Calendario de Eventos</h2>
         <div class="mb-4">
@@ -99,10 +113,12 @@
 @stop
 
 @section('adminlte_js')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    
+    <script src="{{ asset('vendor/fullcalendar/core.global.min.js') }}"></script>
+    <script src="{{ asset('vendor/fullcalendar/daygrid.global.min.js') }}"></script>
+    <script src="{{ asset('vendor/fullcalendar/timegrid.global.min.js') }}"></script>
+    <script src="{{ asset('vendor/fullcalendar/list.global.min.js') }}"></script>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {

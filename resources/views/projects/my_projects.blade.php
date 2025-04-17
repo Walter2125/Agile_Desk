@@ -1,5 +1,9 @@
 @extends('adminlte::page')
 
+@section('adminlte_css')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+@stop
+    
 @section('content')
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -18,12 +22,28 @@
             </div>
         @endif
 
+        <!-- Tarjeta para crear nuevo proyecto -->
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <div class="card text-center create-project-card border-0 shadow-lg hover-effect">
+                    <div class="card-body p-4">
+                        
+                        <h4 class="card-title font-weight-bold text-dark">Crear Nuevo Proyecto</h4>
+                        <p class="card-text text-muted">Comienza un nuevo proyecto colaborativo</p>
+                        <a href="{{ route('projects.create') }}" class="btn btn-primary btn-lg rounded-pill px-4">
+                            <i class="fas fa-plus mr-2"></i> Crear Proyecto
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @if(count($projects) > 0)
             <div class="row mt-4">
                 @foreach($projects as $project)
                     <div class="col-md-4 mb-4">
-                        <div class="card project-card h-100 d-flex flex-column">
-                            <div class="card-header bg-white border-bottom pt-3">
+                        <div class="card project-card h-100 d-flex flex-column border-0 shadow-sm hover-effect">
+                            <div class="card-header bg-white border-0 pt-3">
                                 <h3 class="card-title font-weight-bold text-dark">
                                     <i class="fas fa-project-diagram text-primary mr-2"></i>
                                     {{ $project->name }}
@@ -127,44 +147,66 @@
             </div>
         @endif
     </div>
-@endsection
 
 @push('css')
 <style>
     /* Estilos personalizados */
-    .project-card {
-        border-radius: 10px;
+    .create-project-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
         transition: all 0.3s ease;
-        border: 1px solid #e0e0e0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
-        background-color: #ffffff;
+        border: 1px dashed #adb5bd;
+    }
+    
+    .create-project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        border-color: #4e73df;
+    }
+    
+    .icon-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+    }
+    
+    .project-card {
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
     }
     
     .project-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-        border-color: #d0d0d0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .hover-effect {
+        transition: all 0.3s ease;
+    }
+    
+    .hover-effect:hover {
+        transform: translateY(-3px);
     }
     
     .empty-state {
-        background-color: #ffffff;
-        border: 1px solid #e0e0e0;
-        border-radius: 10px;
+        background-color: #f8f9fa;
+        border-radius: 15px;
         padding: 40px;
+    }
+    
+    .btn-rounded {
+        border-radius: 50px;
     }
     
     .team-section {
         background-color: #f8fafc;
         padding: 15px;
-        border-radius: 8px;
-    }
-    
-    body {
-        background-color: #ffffff !important;
-    }
-    
-    .container {
-        background-color: transparent !important;
+        border-radius: 10px;
     }
 </style>
 @endpush

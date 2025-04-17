@@ -3,7 +3,7 @@
 @section("adminlte_css")
 
 @section('adminlte_css')
-    <link rel="stylesheet" href="{{ asset('style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 @stop
 
 @section('content')
@@ -96,5 +96,5 @@
 @stop
 
 @section('adminlte_js')
-    <script src="{{ asset('color.js') }}"></script>
+    <script src="{{ asset('js/color.js') }}"></script>
 @stop
