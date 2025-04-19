@@ -22,5 +22,9 @@ class Project extends Model
     {
         return $this->belongsTo(User::class, 'user_id'); // O el campo que uses para almacenar el creador
     }
-
+    
+    public function sprints()
+    {
+        return $this->hasMany(Sprint::class, 'proyecto_id');
+    }
 }

@@ -3,6 +3,7 @@
 @section('adminlte_css')
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/common.min.css') }}">    
+    <link rel="stylesheet" href="{{ asset('css/flatpickr.min.css') }}">    
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 @stop
 
@@ -40,7 +41,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Gestión de Evento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="eventForm">
@@ -114,13 +115,125 @@
 
 @section('adminlte_js')
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-    
+    <script src="{{ asset('js/sweetalert2@11.js') }}"></script> 
     <script src="{{ asset('vendor/fullcalendar/core.global.min.js') }}"></script>
     <script src="{{ asset('vendor/fullcalendar/daygrid.global.min.js') }}"></script>
     <script src="{{ asset('vendor/fullcalendar/timegrid.global.min.js') }}"></script>
     <script src="{{ asset('vendor/fullcalendar/list.global.min.js') }}"></script>
+    <script src="{{ asset('js/flatpickr.js') }}"></script> 
+<script>
+  // plantilla de URL con placeholder ":id"
+  const deleteProjectUrlTemplate = "{{ route('projects.destroy', ['project' => ':id']) }}";
+  window.calendar;
+</script>
 
     <script>
+        // Tomamos el elemento del modal
+        const eventModalEl = document.getElementById('eventModal');
+
+        // Cuando se vaya a ocultar el modal...
+        eventModalEl.addEventListener('hide.bs.modal', () => {
+        const focused = document.activeElement;
+        // si el elemento activo está dentro del modal, quitamos el foco
+        if (eventModalEl.contains(focused)) {
+            focused.blur();
+        }
+        });
+
+        // Opcional: una vez que se oculte por completo, retiramos aria-hidden
+        eventModalEl.addEventListener('hidden.bs.modal', () => {
+        eventModalEl.removeAttribute('aria-hidden');
+        });
+
+
+
+    function confirmDeleteProject(projectId) {
+    Swal.fire({
+        title: '¿Está seguro?',
+        text: "Esta acción eliminará el proyecto y todos sus datos relacionados. No podrá revertirse.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            deleteProject(projectId);
+        }
+    });
+}
+
+async function deleteProject(projectId) {
+  // 1) Validar que venga un ID
+  if (!projectId) {
+    return Swal.fire('Error','ID de proyecto inválido','error');
+  }
+
+  // 2) Leer CSRF token
+  const token = document.head.querySelector('meta[name="csrf-token"]').content;
+
+  try {
+    // 3) Lanzar DELETE y pedir JSON en error también
+    const response = await fetch(`/projects/${projectId}`, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'Accept': 'application/json'
+      }
+    });
+
+    // 4) Si status ≠ 2xx, leer cuerpo (texto o JSON) para mensaje
+    if (!response.ok) {
+      const text = await response.text();
+      let msg = `Error ${response.status}`;
+      try {
+        const json = JSON.parse(text);
+        msg = json.message || JSON.stringify(json);
+      } catch {}
+      throw new Error(msg);
+    }
+
+    // 5) Si todo bien, parsear JSON
+    const data = await response.json();
+
+    // 6) Ocultar el modal real
+    const modalEl = document.getElementById('eventModal');
+    const modalInst = bootstrap.Modal.getInstance(modalEl);
+    if (modalInst) {
+    modalInst.hide();
+    
+    // Dar tiempo a que el modal se oculte completamente antes de actualizar el calendario
+    setTimeout(() => {
+        // 7) Refrescar la pagina completa
+        window.location.reload();
+        
+    }, 400); 
+    } else {
+    // Si no hay modal que ocultar, actualizar el calendario inmediatamente
+    if (calendar && typeof calendar.refetchEvents === 'function') {
+        calendar.refetchEvents();
+    } else if (window.calendar && typeof window.calendar.refetchEvents === 'function') {
+        window.calendar.refetchEvents();
+    }
+    }
+
+    // 8) Mostrar confirmación
+    await Swal.fire(
+      '¡Eliminado!',
+      data.message || 'El proyecto ha sido eliminado correctamente.',
+      'success'
+    );
+
+  } catch (err) {
+    console.error('deleteProject error:', err);
+    Swal.fire('Error', err.message || 'No se pudo eliminar el proyecto','error');
+  }
+}
+
+
+
+
     document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
     const eventModal = new bootstrap.Modal('#eventModal');
@@ -211,21 +324,37 @@
         });
     }
     
-    initializeDatePickers();
+
 
     function showModal(event = null) {
         currentEvent = event;
         resetForm();
-        
+
+        // Limpiar los botones de acción de proyecto que pudieran existir de una visualización anterior
+        const modalFooter = document.querySelector('.modal-footer');
+        const btnsToRemove = modalFooter.querySelectorAll('.project-action-btn');
+        btnsToRemove.forEach(btn => btn.remove());
+
+        // Mostrar el botón guardar que podría estar oculto
+        document.getElementById('saveEventBtn').style.display = 'inline-block';
+
+        // Habilitar campos que podrían estar deshabilitados
+        document.getElementById('eventTitle').disabled = false;
+        document.getElementById('eventStart').disabled = false;
+        document.getElementById('eventEnd').disabled = false;
+        document.getElementById('eventDescription').disabled = false;
+        document.getElementById('allDayCheck').disabled = false;
+
         if (event) {
             document.getElementById('deleteEventBtn').style.display = 'inline-block';
             populateForm(event);
         } else {
             document.getElementById('deleteEventBtn').style.display = 'none';
         }
-        
+
         eventModal.show();
     }
+
 
     function handleDateSelect(info) {
         const startStr = formatDateTimeForInput(info.start);
@@ -241,8 +370,80 @@
     }
 
     function handleEventClick(info) {
+    const eventType = info.event.extendedProps?.tipo === 'proyecto' ? 'proyecto' : 'sprint';
+    
+    if (eventType === 'proyecto') {
+        // Opción 1: Mostrar detalles del proyecto en modal
+        showProjectDetails(info.event);
+        
+        // Opción 2: Redirigir a la página de edición del proyecto
+        // const projectId = info.event.extendedProps.proyecto_id;
+        // window.location.href = `/projects/${projectId}/edit`;
+    } else {
+        // Manejador existente para sprints
         showModal(info.event);
     }
+}
+
+function showProjectDetails(event) {
+    // Modal para proyectos
+    currentEvent = event;
+    resetForm();
+    
+    // Configurar campos como solo lectura
+    document.getElementById('eventTitle').value = event.title;
+    document.getElementById('eventTitle').disabled = true;
+    
+    if (event.start) {
+        document.getElementById('eventStart').value = formatDateTimeForInput(event.start);
+        document.getElementById('eventStart').disabled = true;
+    }
+    
+    if (event.end) {
+        document.getElementById('eventEnd').value = formatDateTimeForInput(event.end);
+        document.getElementById('eventEnd').disabled = true;
+    }
+    
+    document.getElementById('eventDescription').value = event.extendedProps.description || '';
+    document.getElementById('eventDescription').disabled = true;
+    document.getElementById('allDayCheck').checked = true;
+    document.getElementById('allDayCheck').disabled = true;
+    
+    // Ocultar botón de eliminar estándar
+    document.getElementById('deleteEventBtn').style.display = 'none';
+    
+    // Limpiar botones existentes en el footer
+    const modalFooter = document.querySelector('.modal-footer');
+    const btnsToRemove = modalFooter.querySelectorAll('.project-action-btn');
+    btnsToRemove.forEach(btn => btn.remove());
+    
+    // Ocultar botones estándar
+    document.getElementById('saveEventBtn').style.display = 'none';
+    
+    // Verificar si el usuario es administrador
+    const isAdmin = {{ Auth::user()->usertype == 'admin' ? 'true' : 'false' }};
+    
+    if (isAdmin) {
+        // Añadir botón para editar proyecto SOLO para administradores
+        const projectId = event.extendedProps.proyecto_id;
+        const editButton = `<button type="button" class="btn btn-primary project-action-btn" 
+            onclick="window.location.href='/projects/${projectId}/edit'">
+            <i class="fas fa-edit me-2"></i>Editar Proyecto
+        </button>`;
+        
+        modalFooter.insertAdjacentHTML('beforeend', editButton);
+        
+        // Mostrar botón de eliminar solo para administradores
+        const deleteButton = `<button type="button" class="btn btn-danger project-action-btn" 
+            onclick="confirmDeleteProject(${projectId})">
+            <i class="fas fa-trash me-2"></i>Eliminar Proyecto
+        </button>`;
+        modalFooter.insertAdjacentHTML('beforeend', deleteButton);
+    }
+    
+    eventModal.show();
+}
+
 
     async function handleSaveEvent() {
         const formData = getFormData();
@@ -364,31 +565,42 @@
     }
 
     async function handleDeleteEvent() {
-        if (!confirm('¿Está seguro de eliminar este evento?')) return;
+    const result = await Swal.fire({
+        title: '¿Está seguro?',
+        text: "Esta acción no se puede deshacer",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    });
 
-        try {
-            const response = await fetch(`{{ url('fullcalendar/destroy') }}/${currentEvent.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            });
+    if (!result.isConfirmed) return;
 
-            const result = await response.json();
-
-            if (result.success) {
-                calendar.refetchEvents();
-                eventModal.hide();
-                showAlert('success', result.message || 'Evento eliminado correctamente');
-            } else {
-                throw new Error(result.message || 'Error al eliminar el evento');
+    try {
+        const response = await fetch(`{{ url('fullcalendar/destroy') }}/${currentEvent.id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
+        });
 
-        } catch (error) {
-            showAlert('error', error.message || 'Error de conexión');
-            console.error('Error:', error);
+        const result = await response.json();
+
+        if (result.success) {
+            calendar.refetchEvents();
+            eventModal.hide();
+            showAlert('success', result.message || 'Evento eliminado correctamente');
+        } else {
+            throw new Error(result.message || 'Error al eliminar el evento');
         }
+
+    } catch (error) {
+        showAlert('error', error.message || 'Error de conexión');
+        console.error('Error:', error);
     }
+}
     
     function showAlert(type, message) {
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';

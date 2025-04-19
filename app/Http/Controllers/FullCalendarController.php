@@ -14,24 +14,53 @@ class FullCalendarController extends Controller
     }
 
     public function ajax(Request $request)
-    {
-        $sprints = Sprint::all()->map(function ($sprint) {
-            return [
-                'id' => $sprint->id,
-                'title' => $sprint->nombre,
-                'start' => $sprint->fecha_inicio,
-                'end' => $sprint->fecha_fin,
-                'allDay' => $sprint->todo_el_dia,
-                'color' => $sprint->color,
-                'extendedProps' => [
-                    'description' => $sprint->descripcion,
-                    'tipo' => $sprint->tipo
-                ]
-            ];
-        });
+{
+    // Obtener sprints
+    $sprints = Sprint::all()->map(function ($sprint) {
+        return [
+            'id' => $sprint->id,
+            'title' => $sprint->nombre,
+            'start' => $sprint->fecha_inicio,
+            'end' => $sprint->fecha_fin,
+            'allDay' => $sprint->todo_el_dia,
+            'color' => $sprint->color,
+            'tipo' => 'sprint',
+            'extendedProps' => [
+                'description' => $sprint->descripcion,
+                'tipo' => $sprint->tipo
+            ]
+        ];
+    });
 
-        return response()->json($sprints);
-    }
+    // Obtener proyectos con colores basados en hash del nombre o categoría
+    $projects = \App\Models\Project::all()->map(function ($project) {
+        // Generar color basado en el nombre del proyecto (consistente)
+        $hash = md5($project->name);
+        $color = '#' . substr($hash, 0, 6);
+        
+        return [
+            'id' => 'project_' . $project->id,
+            'title' => $project->name . ' (Proyecto)',
+            'start' => $project->fecha_inicio,
+            'end' => $project->fecha_fin,
+            'allDay' => true,
+            'color' => $color,
+            'tipo' => 'proyecto',
+            'extendedProps' => [
+                'description' => 'Proyecto: ' . $project->name,
+                'tipo' => 'proyecto',
+                'proyecto_id' => $project->id,
+                'creator_id' => $project->user_id, // Añadir el id del creador
+                'tag_color' => $color  // Añadir el color como etiqueta
+            ]
+        ];
+    });
+
+    // Combinar ambos arrays
+    $events = $sprints->concat($projects);
+
+    return response()->json($events);
+}
 
     public function store(Request $request)
     {

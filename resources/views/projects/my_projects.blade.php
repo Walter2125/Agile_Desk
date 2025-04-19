@@ -210,4 +210,38 @@
 @section('adminlte_js')
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/color.js') }}"></script>
+
+    <script>
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', async () => {
+                const projectId = button.dataset.projectId;
+        
+                if (!confirm('¿Estás seguro de eliminar este proyecto?')) return;
+        
+                try {
+                    const response = await fetch(`/projects/${projectId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Accept': 'application/json'
+                        }
+                    });
+        
+                    const result = await response.json();
+        
+                    if (response.ok && result.success) {
+                        alert(result.message);
+                        location.reload(); // o elimina el div desde el DOM
+                    } else {
+                        alert(result.error || 'Error al eliminar el proyecto.');
+                    }
+        
+                } catch (error) {
+                    console.error(error);
+                    alert('Ocurrió un error inesperado.');
+                }
+            });
+        });
+        </script>
+        
 @stop
