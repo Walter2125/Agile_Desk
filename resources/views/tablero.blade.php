@@ -5,7 +5,7 @@
 @section('adminlte_css')
 
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
 
@@ -16,10 +16,10 @@
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 @stop
 
 @section('content')
-
         <!--El mensage de guradado con exito -->
 
         @if (session('success'))
@@ -30,6 +30,27 @@
         </div>
 
         @endif
+  
+        <!-- migajas de pan-->
+        <div class="container py-3 migajas" id="migajas">
+            <ul class="breadcrumb">
+                <li class="breadcrumb__item breadcrumb__item-firstChild">
+                    <span class="breadcrumb__inner">
+                        <a href="/HomeUser" class="breadcrumb__title">Home</a>
+                    </span>
+                </li>
+                <li class="breadcrumb__item breadcrumb__item-firstChild">
+                    <span class="breadcrumb__inner">
+                        <a href="/projects" class="breadcrumb__title">Proyectos</a>
+                    </span>
+                </li>
+                <li class="breadcrumb__item breadcrumb__item--active">
+                    <span class="breadcrumb__inner">
+                        <span class="breadcrumb__title">Tableros</span>
+                    </span>
+                </li>
+            </ul>
+        </div>      
         <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.068);">
         <!-- <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen"> -->
@@ -147,19 +168,7 @@
                                             </button>
 
                                     </div>
-                                    <div class="flex space-x-1 shrink-0">
-                                        <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post" class="inline" >
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:text-red-700 transition-colors" data-bs-toggle="modal" data-bs-target="#confirmarBorrado{{ $historia->id }}">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                            
-                                        </form>
-                                    </div>
+                                   
                                 </div>
 
 
@@ -275,13 +284,13 @@
 
 @section('adminlte_js')
     <!-- Bootstrap Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <!-- Sortable JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <!--Script personalizado para manejo del tema -->
-    <script src="{{ asset('color.js') }}"></script>
+    <script src="{{ asset('js/color.js') }}"></script>
     <!-- Código del Tablero Scrum -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {

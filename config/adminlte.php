@@ -332,19 +332,9 @@ return [
             'icon' => 'fas fa-fw fa-folder',
         ],
         [
-            'text' => 'Miembros',
-            'url' => 'miembros',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
             'text' => 'Calendario',
             'url' => 'fullcalendar',
             'icon' => 'fas fa-fw fa-calendar',
-        ],
-        [
-            'text' => 'Crear historias',
-            'url' => 'create',
-            'icon' => 'fas fa-fw fa-table',
         ],
         
     ],

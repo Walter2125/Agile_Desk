@@ -1,124 +1,275 @@
+/* VARIABLES CSS - Definición por defecto (modo claro) */
 :root {
-    --background-color: #0a2a43; /* Valor por defecto */
-    --text-color: #ffffff;
+    --background-color: #ffffff;
+    --text-color: #121212;
     --gradient-color: transparent;
 }
 
+/* MODO OSCURO - Sobrescribe variables */
 [data-theme="dark"] {
-    background-color: #1a1a1a;
-    color: #fff;
+    --background-color: #1a1a1a;
+    --text-color: #ffffff;
 }
 
-[data-theme="light"] {
-    --background-color: #ffffff; /* Fondo para modo claro */
-    --text-color: #121212;
-    --gradient-color: #121212;
-}
-
+/* RESET BÁSICO */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-
+/* BODY - Cambia dinámicamente según el modo */
 body {
     color: var(--text-color);
     transition: background-color 0.3s, color 0.3s;
+    background-color: var(--background-color);
 }
 
-/* Forzar actualización de estilos en el menú superior */
-[data-theme="dark"] .main-header {
+/* WRAPPER y CONTENEDORES PRINCIPALES DE ADMINLTE */
+[data-theme="dark"] .wrapper,
+[data-theme="dark"] .main-header,
+[data-theme="dark"] .main-sidebar,
+[data-theme="dark"] .content-wrapper,
+[data-theme="dark"] .main-footer {
     background-color: var(--background-color) !important;
-    border-color: #2c3b4f !important;
-}
-
-[data-theme="dark"] .navbar-nav > li > a {
     color: var(--text-color) !important;
 }
 
-.content-wrapper {
-    background-color: var(--background-color) !important;
+/* NAVBAR Y LINKS PRINCIPALES */
+[data-theme="dark"] .main-header .nav-link,
+[data-theme="dark"] .main-header .brand-link,
+[data-theme="dark"] .main-sidebar .nav-link {
+    color: var(--text-color) !important;
 }
 
+/* FLEX-COLUMN */
+[data-theme="dark"] .flex-column {
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important;
+}
+
+/* ESTILOS PARA SECCIÓN GENERAL */
 section {
     position: relative;
     width: 100%;
-    height: 100vh;
+    min-height: 500px;
     overflow: hidden;
-    display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--background-color) !important;
     color: var(--text-color);
 }
 
-section img {
+/* ESTILO PARA CONTENEDORES DINÁMICOS */
+#fondo, #sobre, #persona, #notas {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none;
-    transition: opacity 0.3s;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
 }
 
+/* TEXTO CENTRAL */
 #text {
-    position: relative;
-    font-size: 10em;
-    z-index: 1;
-    color: var(--text-color);
-    transition: color 0.3s;
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12vw;
+    font-weight: bold;
+    color: #333557;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    z-index: 3;
+    text-align: center;
 }
 
+/* CONTENIDO DENTRO DEL BODY */
+#contenido {
+    margin-top: 20px;
+    padding: 0 15px;
+    text-align: center;
+}
+
+/* RESPONSIVE - Redefinir la altura mínima en dispositivos pequeños */
+@media (max-width: 768px) {
+    section {
+        min-height: 230px;
+    }
+}
+
+/* Z-INDEX PARA ELEMENTOS */
 #road {
     z-index: 2;
 }
 
-.card,
-button {
-    background-color: var(--background-color);
-    color: var(--text-color);
+/* CARD - CREAR PROYECTO (Modo Claro por Defecto) */
+.create-project-card {
+    background-color: #ffffff;
+    color: #212529;
+    border: 1px solid #dee2e6;
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* modo oscuro para el calendario*/
+/* BOTONES DENTRO DE LA CARD */
+.create-project-card .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
 
-[data-theme="dark"] .fc-theme-standard .fc-scrollgrid,
-[data-theme="dark"] .fc-theme-standard td,
-[data-theme="dark"] .fc-theme-standard th {
+/* CARD - MODO OSCURO */
+[data-theme="dark"] .create-project-card {
+    background-color: #2e2e2e;
+    color: #f8f9fa;
     border-color: #333;
 }
 
-[data-theme="dark"] .fc-col-header-cell-cushion,
-[data-theme="dark"] .fc-daygrid-day-number {
-    color: #fff;
+[data-theme="dark"] .carddelproy {
+    background-color: #2e2e2e;
+    color: #f8f9fa;
+    border-color: #333;
 }
+/* CSS DE AGUNAS FUNCIONES DEL TABLERO  */
+#filtrarEstado {
+    color: #333;              
+    background-color: #fff;   
+    border-color: #ccc;       
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  #filtrarEstado option {
+    color: #333;             
+    background-color: #fff;  
+  }
 
-[data-theme="dark"] .fc-button-primary {
-    background-color: #3c4b64;
-    border-color: #3c4b64;
-}
+  #filtrarFecha, #filtrarResponsable, #filtrarEtiqueta, #buscar, #comboboxColumna{
+    color: #333;              
+    background-color: #fff;   
+    border-color: #ccc;       
+    transition: background-color 0.3s, color 0.3s;
+  }
 
-[data-theme="dark"] .fc-button-primary:hover {
-    background-color: #515e78;
-    border-color: #515e78;
-}
+  .fas.fa-bell {
+    display: inline-block !important;
+    visibility: visible !important;
+  }
+  /* CSS de algunas funciones del formato Historias  */
+  #nombreHistoria, #numeroHistoria, #responsableHistoria, #prioridadHistoria, #descripcionHistoria, #listaTareas{
+    color: #333;              
+    background-color: #fff;   
+    border-color: #ccc;       
+    transition: background-color 0.3s, color 0.3s;
+  }
+   /* CSS de algunas funciones para el proyecto */
+  #fecha_inicio, #fecha_fin, #name{
+    color: #333;              
+    background-color: #fff;   
+    border-color: #ccc;       
+    transition: background-color 0.3s, color 0.3s;
+  }
+  /* CSS del fondo */
+  .content-wrapper{
+    background-color: #fff !important;
+    color: #333;
+  }
 
-[data-theme="dark"] .fc-event {
-    border-color: rgba(255, 255, 255, 0.1);
-}
+/* CSS de las migajas */
+  .migajas {
+    margin-top: 1rem;
+    display: flex;  
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    min-width: 480px;
+    padding: 0 40px;
+    }
+    
+    .breadcrumb {
+    display: flex;
+    border-radius: 10px;
+    margin: auto;
+    text-align: left;
+    top: 50%;
+    width: 100%;
+    height: 40px;
+    transform: translateY(-50%);
+    z-index: 1;
+    justify-content: left;
+    }
+    
+    
+    .breadcrumb__item {
+    height: 100%;
+    background-color: white;
+    color: #252525;
+    font-family: 'Oswald', sans-serif;
+    border-radius: 7px;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    transform: skew(-21deg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+    margin: 5px;
+    padding: 0 20px;
+    cursor: pointer;
+    }
+    
+    
+    .breadcrumb__item:hover {
+    background: #490099;
+    color: #FFF;
+    }
+    
+    .breadcrumb__inner {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    z-index: 2;
+    transform: skew(21deg);  
+    }
+    
+    .breadcrumb__title {
+    text-decoration: none;
+    color: inherit;
+    font-size: 16px;
+    text-overflow: ellipsis;  
+    overflow: hidden;
+    white-space: nowrap;  
+    }
+    
+    .breadcrumb__item--active {
+        background-color: #8e00d4; 
+        color: #fff;
+        pointer-events: none; 
+      }
+    @media all and (max-width: 1000px) {
+    .breadcrumb {
+    height: 35px;
+    }
+    
+    .breadcrumb__title{
+    font-size: 11px;
+    }
+    .breadcrumb__item {
+    padding: 0 20px;
+    }
+    }
+    
+    @media all and (max-width: 710px) {
+    .breadcrumb {
+    height: 30px;
+    }
+    .breadcrumb__item {
+    padding: 0 20px;
+    }
+    
+    }
 
-[data-theme="dark"] .fc-day-today {
-    background-color: rgba(81, 94, 120, 0.3) !important;
-}
-
-[data-theme="dark"] .fc-daygrid-day-frame {
-    background-color: #1a1a1a;
-}
-
-/* Dark mode styles for the modal */
+/* MODAL - MODO OSCURO */
 [data-theme="dark"] .modal-content {
     background-color: #2c3b4f;
     color: #fff;
@@ -129,6 +280,7 @@ button {
     border-color: #3c4b64;
 }
 
+/* FORMULARIOS EN MODO OSCURO */
 [data-theme="dark"] .form-control,
 [data-theme="dark"] .form-select {
     background-color: #1a1a1a;
@@ -143,60 +295,7 @@ button {
     border-color: #515e78;
 }
 
+/* ICONOS CLOSE EN MODALES (MODO OSCURO) */
 [data-theme="dark"] .btn-close {
     filter: invert(1) grayscale(100%) brightness(200%);
 }
-/* Estilos del Dropdown */
-.dropdown-toggle {
-    cursor: pointer;
-    background: none; /* Fondo transparente para que se adapte mejor al diseño */
-    border: none;
-}
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 100%; /* Ubica el menú justo debajo del botón */
-    background-color: #ffffff;
-    border: 1px solid #e2e8f0; /* Borde claro */
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 160px; /* Ancho fijo */
-    z-index: 50;
-}
-
-.dropdown-menu ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.dropdown-menu li {
-    margin: 0;
-    padding: 0;
-}
-
-.dropdown-menu li button,
-.dropdown-menu li a {
-    display: block;
-    width: 100%;
-    text-align: left;
-    padding: 8px 16px;
-    font-size: 14px;
-    color: #333;
-    text-decoration: none;
-    background: none;
-    border: none;
-}
-
-.dropdown-menu li button:hover,
-.dropdown-menu li a:hover {
-    background-color: #f3f4f6; /* Fondo al pasar el mouse */
-    color: #1f2937;
-}
-
-.dropdown-menu.visible {
-    display: block;
-}
-

@@ -36,4 +36,9 @@ class Sprint extends Model
     {
         return $this->hasMany(Etiqueta::class);
     }
+
+    public function project()
+{
+    return $this->belongsTo(Project::class, 'proyecto_id', 'id');
+}
 }
