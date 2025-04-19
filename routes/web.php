@@ -89,6 +89,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/tab',            [TableroController::class, 'index'])->name('tablero');
     Route::get('/tableros/{id}',  [TableroController::class, 'show'])->name('tableros.show');
 
+    //
+    Route::delete('/projects/{project}',                   [ProjectController::class, 'destroy'])->name('projects.destroy');
+
     // **Rutas de administrador** (solo usuarios con usertype = 'admin')
     Route::middleware('role:admin')->group(function () {
         // Home de admin
@@ -99,10 +102,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/projects/store',                         [ProjectController::class, 'store'])->name('projects.store');
         Route::get('/projects/{project}/edit',                 [ProjectController::class, 'edit'])->name('projects.edit');
         Route::put('/projects/{project}',                      [ProjectController::class, 'update'])->name('projects.update');
-        Route::delete('/projects/{project}',                   [ProjectController::class, 'destroy'])->name('projects.destroy');
+        
         Route::delete('/projects/{project}/remove-user/{user}',[ProjectController::class, 'removeUser'])->name('projects.removeUser');
         Route::get('/projects/search-users',                   [ProjectController::class, 'searchUsers'])->name('projects.searchUsers');
-
+      
         // Gestión de usuarios
         Route::get('/miembros',    [UserController::class, 'index'])->name('admin.users.index');
         Route::get('/users/search',[UserController::class, 'search'])->name('users.search');
