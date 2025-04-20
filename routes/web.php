@@ -24,6 +24,14 @@ Route::post('/login',   [CustomLoginController::class, 'login']);
 Route::get('/register', [CustomLoginController::class, 'showRegisterForm'])->name('register');
 Route::post('/register',[CustomLoginController::class, 'register']);
 
+// Recuperación de contraseña
+Route::get('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+// Restablecer contraseña
+Route::get('/reset-password/{token}', [App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
+
 // Rutas protegidas (requieren autenticación)
 Route::middleware('auth')->group(function () {
     // Logout
