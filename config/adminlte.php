@@ -336,7 +336,52 @@ return [
             'url' => 'fullcalendar',
             'icon' => 'fas fa-fw fa-calendar',
         ],
-        
+        // Elementos visibles solo para administradores
+        ['header' => 'ADMINISTRACIÓN',
+         'can'    => 'admin-access'  // Aquí definimos el permiso necesario
+        ],
+        [
+            'text'    => 'Usuarios',
+            'icon'    => 'fas fa-fw fa-users',
+            'can'     => 'admin-access',  // Permiso requerido
+            'submenu' => [
+                [
+                    'text' => 'Lista de Usuarios',
+                    'url'  => 'admin/users',
+                    'icon' => 'fas fa-fw fa-list',
+                ],
+                [
+                    'text' => 'Crear Usuario',
+                    'url'  => 'admin/users/create',
+                    'icon' => 'fas fa-fw fa-user-plus',
+                ],
+            ],
+        ],
+
+        [
+            'text'    => 'Informes',
+            'icon'    => 'fas fa-fw fa-chart-bar',
+            'can'     => 'admin-access',  // Permiso requerido
+            'submenu' => [
+                [
+                    'text' => 'Estadísticas',
+                    'url'  => 'admin/reports/stats',
+                    'icon' => 'fas fa-fw fa-chart-line',
+                ],
+                [
+                    'text' => 'Actividad',
+                    'url'  => 'admin/reports/activity',
+                    'icon' => 'fas fa-fw fa-history',
+                ],
+            ],
+        ],
+        [
+            'text' => 'Configuración',
+            'url'  => 'admin/settings',
+            'icon' => 'fas fa-fw fa-cogs',
+            'can'  => 'admin-access',  // Permiso requerido
+        ],
+    
     ],
 
     /*
