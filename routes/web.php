@@ -1,24 +1,24 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\CustomLoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\FormatohistoriaControler;
-use App\Http\Controllers\TareasController;
+use App\Http\Controllers\TareaController;
 use App\Http\Controllers\SprintController;
+use App\Http\Controllers\TareasController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\FullCalendarController;
-use App\Http\Controllers\HistoriaController;
+use App\Http\Controllers\TableroController;
 use App\Http\Controllers\ColumnasController;
+use App\Http\Controllers\HistoriaController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\FullCalendarController;
+use App\Http\Controllers\FormatohistoriaControler;
 use App\Http\Controllers\NotificacionesController;
+use App\Http\Controllers\Auth\CustomLoginController;
+
 use App\Http\Controllers\HistorialCambiosController;
 use App\Http\Controllers\ReasignarHistoriaController;
-use App\Http\Controllers\TableroController;
-
-use App\Http\Controllers\TareaController;
-use App\Http\Controllers\TareasController;
 
 // Redirección a login por defecto
 Route::get('/', function () {
@@ -33,21 +33,21 @@ Route::post('/form/store', [FormatohistoriaControler::class, 'store'])->name('fo
 Route::get('/form/{formulario}/edit',[FormatohistoriaControler::class,'edit'])->name('formulario.edit')->middleware('auth');
 Route::patch('/form/{formulario}/update',[FormatohistoriaControler::class,'update'])->name('formulario.update')->middleware('auth');
 Route::delete('/form/{formulario}/destroy',[FormatohistoriaControler::class,'destroy'])->name('formulario.destroy')->middleware('auth');
-Route::get('/form/{historia}/show', [FormatohistoriaControler::class, 'show'])->name('formulario.show');
+Route::get('/form/{historia}/show', [FormatohistoriaControler::class, 'show'])->name('formulario.show')->middleware('auth');
 
 
 //Rutas para tareas
-Route::get('/tareas',[TareasController::class,'index'])->name('tareas.index');
-Route::get('/tareas/create',[TareasController::class,'create'])->name('tareas.create');
-Route::POST('/tareas/store',[TareasController::class,'store'])->name('tareas.store');
-Route::get('/tareas/{id}/edit',[TareasController::class,'edit'])->name('tareas.edit');
-Route::patch('/tareas/{id}',[TareasController::class,'update'])->name('tareas.update');
-Route::delete('/tareas/{id}', [TareasController::class, 'destroy'])->name('tareas.destroy');
-Route::get('/tareas/{id}/ver', [TareasController::class, 'show'])->name('tareas.show');
+Route::get('/tareas',[TareasController::class,'index'])->name('tareas.index')->middleware('auth');
+Route::get('/tareas/create',[TareasController::class,'create'])->name('tareas.create')->middleware('auth');
+Route::POST('/tareas/store',[TareasController::class,'store'])->name('tareas.store')->middleware('auth');
+Route::get('/tareas/{id}/edit',[TareasController::class,'edit'])->name('tareas.edit')->middleware('auth');
+Route::patch('/tareas/{id}',[TareasController::class,'update'])->name('tareas.update')->middleware('auth');
+Route::delete('/tareas/{id}', [TareasController::class, 'destroy'])->name('tareas.destroy')->middleware('auth');
+Route::get('/tareas/{id}/ver', [TareasController::class, 'show'])->name('tareas.show')->middleware('auth');
 
 
 // tareas por historia 
-Route::get('/historias/{id}/tareas', [TareasController::class, 'indexPorHistoria'])->name('tareas.porHistoria');
+Route::get('/historias/{id}/tareas', [TareasController::class, 'indexPorHistoria'])->name('tareas.porHistoria')->middleware('auth');
 
 
 // Rutas de autenticación personalizadas
