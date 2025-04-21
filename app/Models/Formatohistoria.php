@@ -16,4 +16,9 @@ class Formatohistoria extends Model
         'prioridad',
         'descripcion',
     ];
+
+    public function archivo()
+    {
+        return $this->hasOne(ArchivoHistoria::class, 'historia_id');
+    }
 }

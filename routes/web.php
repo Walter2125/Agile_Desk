@@ -19,6 +19,8 @@ use App\Http\Controllers\Auth\CustomLoginController;
 
 use App\Http\Controllers\HistorialCambiosController;
 use App\Http\Controllers\ReasignarHistoriaController;
+use App\Http\Controllers\ArchivoHistoriaController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -142,5 +144,13 @@ Route::middleware('auth')->group(function () {
         // Gestión de usuarios
         Route::get('/miembros',    [UserController::class, 'index'])->name('admin.users.index');
         Route::get('/users/search',[UserController::class, 'search'])->name('users.search');
+
+        
     });
+
+    Route::get('/archivo/seleccionar', [ArchivoHistoriaController::class, 'mostrarHistoriasDisponibles'])->name('archivo.seleccionar');
+        Route::post('/archivo/archivar/{id}', [ArchivoHistoriaController::class, 'archivar'])->name('archivo.archivar');
+        Route::get('/archivo', [ArchivoHistoriaController::class, 'index'])->name('archivo.index');
+        Route::post('/archivo/desarchivar/{id}', [ArchivoHistoriaController::class, 'desarchivar'])->name('archivo.desarchivar');
+        
 });

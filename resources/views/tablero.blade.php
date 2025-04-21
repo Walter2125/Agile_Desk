@@ -98,6 +98,8 @@
     <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded w-auto sm:w-24">Limpiar</button>
 </div>
 
+<a href="{{ route('archivo.seleccionar') }}" class="btn btn-warning">📦 Archivar Historia</a>
+
 
             <div class="flex justify-between mb-4 items-center">
 
