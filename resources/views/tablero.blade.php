@@ -30,7 +30,7 @@
         </div>
 
         @endif
-  
+
         <!-- migajas de pan-->
         <div class="container py-3 migajas" id="migajas">
             <ul class="breadcrumb">
@@ -50,7 +50,7 @@
                     </span>
                 </li>
             </ul>
-        </div>      
+        </div>
         <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.068);">
         <!-- <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen"> -->
@@ -168,7 +168,7 @@
                                             </button>
 
                                     </div>
-                                   
+
                                 </div>
 
 
@@ -212,7 +212,7 @@
                                 <!-- Botón de agregar tarea -->
                                 <div class="mt-3">
                                 <a href="{{ route('tareas.create',['historia_id' => $historia ->id]) }}" class="btn btn-primary"> Crear</a>
-     
+
                                     <button><a href="{{ route('tareas.index') }}" class="btn btn-primary"> index</a></button>
                                    <!-- <button class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors" onclick="abrirModal()">
                                         <i class="bi bi-plus mr-1"></i>Tarea
@@ -508,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.card').forEach(card => {
         const idTarea = card.dataset.id;
         const etiquetaGuardada = localStorage.getItem(`etiqueta_${idTarea}`);
-        
+
         if (etiquetaGuardada) {
             card.dataset.etiquetas = etiquetaGuardada;
             mostrarEtiquetasEnTarea(card, etiquetaGuardada);
@@ -555,7 +555,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     guardarEtiquetas.addEventListener('click', () => {
-        if (!tarjetaSeleccionada) return; 
+        if (!tarjetaSeleccionada) return;
         const etiquetaSeleccionada = listaEtiquetas.querySelector('input[name="etiquetaSeleccionada"]:checked').value;
         tarjetaSeleccionada.dataset.etiquetas = etiquetaSeleccionada;
         mostrarEtiquetasEnTarea(tarjetaSeleccionada, etiquetaSeleccionada);
