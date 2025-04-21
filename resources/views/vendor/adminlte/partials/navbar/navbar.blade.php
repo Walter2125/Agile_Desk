@@ -6,6 +6,7 @@
 
     {{-- Navbar left links --}}
     <ul class="navbar-nav">
+   
         {{-- Left sidebar toggler link --}}
         @include('adminlte::partials.navbar.menu-item-left-sidebar-toggler')
 
@@ -14,6 +15,9 @@
 
         {{-- Custom left links --}}
         @yield('content_top_nav_left')
+    </ul>
+    <ul>
+       @yield('Mensaje')
     </ul>
 
     {{-- Navbar right links --}}

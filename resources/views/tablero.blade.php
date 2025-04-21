@@ -20,6 +20,14 @@
 @stop
 
 @section('content')
+            @if(session('fromCreate') || session('fromEdit'))
+                <script>
+                    window.history.pushState(null, "", window.location.href);
+                    window.addEventListener("popstate", function () {
+                        window.location.href = "{{ route('tablero') }}";
+                    });
+                </script>
+            @endif
         <!--El mensage de guradado con exito -->
 
         @if (session('success'))
@@ -152,9 +160,10 @@
                     <!-- Para ordenarlos según la prioridad -->
                     <div class="min-h-[200px] space-y-4 sortable">
                         @foreach ($historias as $historia)
+                        <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
                             <div class="card bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer">
-                                <div class="flex justify-between items-start mb-2 gap-6">
-                                    <div class="font-bold text-lg text-black truncate max-w-[90%]" title="{{ $historia->nombre }}">
+                                <div class="flex justify-start items-start mb-1 gap-1">
+                                    <div class="font-bold text-lg text-black truncate max-w-[200%]" title="{{ $historia->nombre }}">
                                         {{ $historia->nombre }}
 
                                         <div class="flex space-x-1 shrink-0">
@@ -168,8 +177,15 @@
                                             </button>
 
                                     </div>
-                                   
-                                </div>
+
+                                    <div class="flex space-x-1 shrink-0">
+                                        
+                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post" class="inline" >
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </div>
+
 
 
                                             <!-- Modal de confirmación -->
@@ -209,16 +225,9 @@
                                     </div>
                                 </div>
 
-                                <!-- Botón de agregar tarea -->
-                                <div class="mt-3">
-                                <a href="{{ route('tareas.create',['historia_id' => $historia ->id]) }}" class="btn btn-primary"> Crear</a>
-     
-                                    <button><a href="{{ route('tareas.index') }}" class="btn btn-primary"> index</a></button>
-                                   <!-- <button class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors" onclick="abrirModal()">
-                                        <i class="bi bi-plus mr-1"></i>Tarea
---></button>
-                                </div>
+                               
                             </div>
+                        </a>
                         @endforeach
                     </div>
                 </div>

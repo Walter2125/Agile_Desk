@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('historial')->nullable();
             $table->enum('actividad',['Configuracion','Desarrollo','Prueba','Diseño']);
             $table->string('asignado')->nullable();
-            $table->foreignId('historia_id')->constrained()->onDelete('cascade');
+            $table->foreignId('historia_id')->constrained('formatohistorias')->onDelete('cascade');
             $table->timestamps();
         });
     }

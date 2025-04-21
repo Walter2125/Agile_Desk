@@ -47,5 +47,12 @@
     src: url(https://fonts.bunny.net/nunito/files/nunito-cyrillic-ext-400-normal.woff2) format('woff2'), url(https://fonts.bunny.net/nunito/files/nunito-cyrillic-ext-400-normal.woff) format('woff');
     unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
   }
+  .mi-alerta {
+    background-color: #ffcccc; /* Color de fondo rojo claro */
+    color: #e6df13; /* Texto rojo oscuro */
+    border: 1px solid #e6df13;
+    padding: 10px;
+    border-radius: 5px;
+}
 
 

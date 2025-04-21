@@ -299,3 +299,67 @@ section {
 [data-theme="dark"] .btn-close {
     filter: invert(1) grayscale(100%) brightness(200%);
 }
+/* Estilos del Dropdown */
+.dropdown-toggle {
+    cursor: pointer;
+    background: none; /* Fondo transparente para que se adapte mejor al diseño */
+    border: none;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%; /* Ubica el menú justo debajo del botón */
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0; /* Borde claro */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 160px; /* Ancho fijo */
+    z-index: 50;
+}
+
+.dropdown-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-menu li {
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-menu li button,
+.dropdown-menu li a {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+    background: none;
+    border: none;
+}
+
+.dropdown-menu li button:hover,
+.dropdown-menu li a:hover {
+    background-color: #f3f4f6; /* Fondo al pasar el mouse */
+    color: #1f2937;
+}
+
+.dropdown-menu.visible {
+    display: block;
+}
+
+
+.alert-warning {
+    background-color: #fffae6; /* Color de fondo más suave */
+    border-left: 5px solid #e7543d; /* Borde lateral amarillo */
+    color: #e7543d; /* Color del texto */
+    font-weight: bold;
+    padding: 15px;
+    border-radius: 8px;
+}
+
