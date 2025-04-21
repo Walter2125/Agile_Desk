@@ -99,6 +99,12 @@
 </div>
 
 <a href="{{ route('archivo.seleccionar') }}" class="btn btn-warning">📦 Archivar Historia</a>
+<a href="{{ route('archivo.index') }}" class="btn btn-sm btn-light me-2">
+                <i class="fas fa-archive me-1"></i> Ver Archivadas
+            </a>
+        </div>
+    </div>
+</div>
 
 
             <div class="flex justify-between mb-4 items-center">
