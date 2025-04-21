@@ -129,7 +129,7 @@ class FormatohistoriaControler extends Controller
 
     // Determinar cambios
     $datosAnteriores = $historia->getOriginal(); // Obtener los datos originales antes de la actualización
-    $detalles = "Historia actualizada: " . $historia->nombre . ".\n"
+    $detalles = "Historia actualizada: " . $historia->nombre . ".\n";
     foreach ($historia->toArray() as $campo => $valorNuevo) {
         if ($datosAnteriores[$campo] != $valorNuevo) {
             $detalles .= ucfirst($campo) . " cambiado de '" . ($datosAnteriores[$campo] ?? 'N/A') . "' a '" . $valorNuevo . "'.\n";
