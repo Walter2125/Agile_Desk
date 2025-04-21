@@ -17,12 +17,124 @@ use App\Http\Controllers\HistorialCambiosController;
 use App\Http\Controllers\ReasignarHistoriaController;
 use App\Http\Controllers\TableroController;
 
+use App\Http\Controllers\TareaController;
+use App\Http\Controllers\TareasController;
+
+// Redirección a login por defecto
+Route::get('/', function () {
+    return redirect('/login');
+
+});
+
+// Rutas para formulario de historias
+//Route::get('/form',[FormatohistoriaControler::class,'index'])->name('form.index');
+Route::get('/create', [FormatohistoriaControler::class, 'create'])->name('formulario.create')->middleware('auth');
+Route::post('/form/store', [FormatohistoriaControler::class, 'store'])->name('formulario.store')->middleware('auth');
+Route::get('/form/{formulario}/edit',[FormatohistoriaControler::class,'edit'])->name('formulario.edit')->middleware('auth');
+Route::patch('/form/{formulario}/update',[FormatohistoriaControler::class,'update'])->name('formulario.update')->middleware('auth');
+Route::delete('/form/{formulario}/destroy',[FormatohistoriaControler::class,'destroy'])->name('formulario.destroy')->middleware('auth');
+Route::get('/form/{historia}/show', [FormatohistoriaControler::class, 'show'])->name('formulario.show');
+
+
+//Rutas para tareas
+Route::get('/tareas',[TareasController::class,'index'])->name('tareas.index');
+Route::get('/tareas/create',[TareasController::class,'create'])->name('tareas.create');
+Route::POST('/tareas/store',[TareasController::class,'store'])->name('tareas.store');
+Route::get('/tareas/{id}/edit',[TareasController::class,'edit'])->name('tareas.edit');
+Route::patch('/tareas/{id}',[TareasController::class,'update'])->name('tareas.update');
+Route::delete('/tareas/{id}', [TareasController::class, 'destroy'])->name('tareas.destroy');
+Route::get('/tareas/{id}/ver', [TareasController::class, 'show'])->name('tareas.show');
+
+
+// tareas por historia 
+Route::get('/historias/{id}/tareas', [TareasController::class, 'indexPorHistoria'])->name('tareas.porHistoria');
+
+
+// Rutas de autenticación personalizadas
+Route::get('/login', [CustomLoginController::class, 'showLoginForm'])->name('custom.login.form');
+Route::post('/login', [CustomLoginController::class, 'login'])->name('custom.login');
+Route::post('/logout', [CustomLoginController::class, 'logout'])->name('custom.logout');
+
+
+
+// Rutas protegidas para Sprints
+Route::get('/sprints/create', function () {
+    return view('sprints.create');
+})->name('sprints.create')->middleware('auth');
+Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index')->middleware('auth');
+Route::get('/sprints/detalle', [SprintController::class, 'detalleSprint'])->name('sprints.detalle')->middleware('auth');
+
+
+// btn para regresar
+//<!--<a href="{{ route('/tab')}}" class="btn btn-secundary" class="bi bi-arrow left">Atras </a>-->
+
+
+// Ruta para el tablero
+Route::get('/tab', [TableroController::class, 'index'])->name('tablero')->middleware('auth');
+/*Route::get('/tab', function () {
+    return view('tablero');
+})->name('tablero')->middleware('auth');*/
+
+
+//listas de sprint
+Route::get('/sprints', [SprintController::class, 'index'])->name('sprints.index');
+Route::get('/sprints/detalle', [SprintController::class, 'detalleSprint'])->name('sprints.detalle');
+
+//ruta para calendario
+// Buscar usuarios (protegido por autenticación)
+Route::get('/users/search', [UserController::class, 'search'])->name('users.search')->middleware('auth');
+
+// Rutas para proyectos
+Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create')->middleware('auth');
+Route::post('/projects/store', [ProjectController::class, 'store'])->name('projects.store')->middleware('auth');
+Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+Route::get('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
+Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
+Route::get('/projects', [ProjectController::class, 'myProjects'])->name('projects.my')->middleware('auth');
+Route::delete('/projects/{project}/remove-user/{user}', [ProjectController::class, 'removeUser'])->name('projects.removeUser');
+Route::get('/projects/search-users', [ProjectController::class, 'searchUsers'])->name('projects.searchUsers');
+
+// Rutas para calendario
+Route::controller(FullCalendarController::class)->group(function () {
+    Route::get('fullcalendar', 'index');
+    Route::get('fullcalendar/ajax', 'ajax');
+    Route::post('fullcalendar/store', 'store');
+    Route::delete('fullcalendar/destroy/{id}', 'destroy');
+    Route::put('fullcalendar/update/{id}', 'update');
+});
+
+//ruta para miembros
+Route::get('/miembros', [UserController::class, 'index'])->name('admin.users.index');
+
+//ruta de las vistas
+Route::get('/homeadmin', [AdminController::class, 'index'])->name('homeadmin')->middleware('auth');
+Route::get('/HomeUser', [HomeController::class, 'index'])->name('HomeUser')->middleware('auth');
+
+
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/register', [LoginController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [LoginController::class, 'register']);
+
+Route::post('/actualizar-estado', [HistoriaController::class, 'actualizarEstado'])->name('actualizar.estado');
+Route::post('/actualizar-nombre-columna', [ColumnasController::class, 'actualizarNombre']);
+Route::get('/tableros/{id}', [TableroController::class, 'show'])->name('tableros.show');
+
 // Rutas públicas
 Route::get('/', fn() => redirect('/login'));
 Route::get('/login',    [CustomLoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login',   [CustomLoginController::class, 'login']);
 Route::get('/register', [CustomLoginController::class, 'showRegisterForm'])->name('register');
 Route::post('/register',[CustomLoginController::class, 'register']);
+
+// Recuperación de contraseña
+Route::get('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+// Restablecer contraseña
+Route::get('/reset-password/{token}', [App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
 
 // Rutas protegidas (requieren autenticación)
 Route::middleware('auth')->group(function () {
