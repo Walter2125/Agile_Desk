@@ -20,6 +20,14 @@
 @stop
 
 @section('content')
+            @if(session('fromCreate') || session('fromEdit'))
+                <script>
+                    window.history.pushState(null, "", window.location.href);
+                    window.addEventListener("popstate", function () {
+                        window.location.href = "{{ route('tablero') }}";
+                    });
+                </script>
+            @endif
         <!--El mensage de guradado con exito -->
 
         @if (session('success'))
@@ -30,7 +38,7 @@
         </div>
 
         @endif
-
+  
         <!-- migajas de pan-->
         <div class="container py-3 migajas" id="migajas">
             <ul class="breadcrumb">
@@ -50,7 +58,7 @@
                     </span>
                 </li>
             </ul>
-        </div>
+        </div>      
         <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.068);">
         <!-- <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen"> -->
@@ -152,73 +160,75 @@
                     <!-- Para ordenarlos según la prioridad -->
                     <div class="min-h-[200px] space-y-4 sortable">
                         @foreach ($historias as $historia)
-                            <div class="card bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer">
-                                <div class="flex justify-between items-start mb-2 gap-6">
-                                    <div class="font-bold text-lg text-black truncate max-w-[90%]" title="{{ $historia->nombre }}">
-                                        {{ $historia->nombre }}
+                            <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
+                              <div class="card bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+                                    <div class="flex justify-start items-start mb-1 gap-1">
+                                     <div class="font-bold text-lg text-black truncate max-w-[200%]" title="{{ $historia->nombre }}">
+                                            {{ $historia->nombre }}
 
-                                        <div class="flex space-x-1 shrink-0">
-                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
+                                                        <div class="flex space-x-1 shrink-0">
+                                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </a>
 
-                                            <!-- Botón para abrir el modal -->
-                                            <button type="button" class="text-red-500 hover:text-red-700 transition-colors" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
+                                                            <!-- Botón para abrir el modal -->
+                                                            <button type="button" class="text-red-500 hover:text-red-700 transition-colors" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
 
-                                    </div>
+                                                        </div>
 
-                                </div>
+                                                        <div class="flex space-x-1 shrink-0">
+                                                            
+                                                            <form action="{{ route('formulario.destroy', $historia->id) }}" method="post" class="inline" >
+                                                                @csrf
+                                                                @method('DELETE')
+                                                            </form>
+                                                        </div>
+
 
 
                                             <!-- Modal de confirmación -->
-                                            <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="modalLabel-{{ $historia->id }}">Confirmar Eliminación</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            ¿Estás seguro de que deseas eliminar este registro?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                            <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                                                            </form>
+                                                    <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="modalLabel-{{ $historia->id }}">Confirmar Eliminación</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    ¿Estás seguro de que deseas eliminar este registro?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                    <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                        
+
+
+                                                <!-- Información de la historia -->
+                                                <div class="mb-3">
+                                                            <div class="flex items-center mb-1">
+                                                                <span class="text-gray-600 mr-2 shrink-0">Id:</span>
+                                                                <span class="font-semibold text-gray-800">{{ $historia->id }}</span>
+                                                            </div>
+                                                            <div class="flex items-center">
+                                                                <span class="text-gray-600 mr-2 shrink-0">Prioridad:</span>
+                                                                <span class="font-semibold text-gray-800">{{ $historia->prioridad }}</span>
+                                                            </div>
+                                        
                                                 </div>
-                                            </div>
                                         </div>
-
-
-                                        <!-- Información de la historia -->
-                                <div class="mb-3">
-                                    <div class="flex items-center mb-1">
-                                        <span class="text-gray-600 mr-2 shrink-0">Id:</span>
-                                        <span class="font-semibold text-gray-800">{{ $historia->id }}</span>
                                     </div>
-                                    <div class="flex items-center">
-                                        <span class="text-gray-600 mr-2 shrink-0">Prioridad:</span>
-                                        <span class="font-semibold text-gray-800">{{ $historia->prioridad }}</span>
-                                    </div>
-                                </div>
-
-                                <!-- Botón de agregar tarea -->
-                                <div class="mt-3">
-                                <a href="{{ route('tareas.create',['historia_id' => $historia ->id]) }}" class="btn btn-primary"> Crear</a>
-
-                                    <button><a href="{{ route('tareas.index') }}" class="btn btn-primary"> index</a></button>
-                                   <!-- <button class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1.5 rounded flex items-center text-sm transition-colors" onclick="abrirModal()">
-                                        <i class="bi bi-plus mr-1"></i>Tarea
---></button>
-                                </div>
-                            </div>
+                               </div>
+                            </a>
                         @endforeach
                     </div>
                 </div>
@@ -508,7 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.card').forEach(card => {
         const idTarea = card.dataset.id;
         const etiquetaGuardada = localStorage.getItem(`etiqueta_${idTarea}`);
-
+        
         if (etiquetaGuardada) {
             card.dataset.etiquetas = etiquetaGuardada;
             mostrarEtiquetasEnTarea(card, etiquetaGuardada);
@@ -555,7 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     guardarEtiquetas.addEventListener('click', () => {
-        if (!tarjetaSeleccionada) return;
+        if (!tarjetaSeleccionada) return; 
         const etiquetaSeleccionada = listaEtiquetas.querySelector('input[name="etiquetaSeleccionada"]:checked').value;
         tarjetaSeleccionada.dataset.etiquetas = etiquetaSeleccionada;
         mostrarEtiquetasEnTarea(tarjetaSeleccionada, etiquetaSeleccionada);

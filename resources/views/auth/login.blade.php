@@ -142,6 +142,12 @@
 
             <button type="submit" class="btn btn-primary mb-3">Ingresar</button>
 
+            <p class="mt-3">
+                <a href="{{ route('password.request') }}" class="text-decoration-none text-primary">
+                ¿Olvidaste tu contraseña?
+                </a>
+            </p>
+
             <p class="mt-3">¿No tienes cuenta? <a href="{{ route('register') }}" class="text-decoration-none text-primary">Regístrate aquí</a></p>
         </form>
     </div>

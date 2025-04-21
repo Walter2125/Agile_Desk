@@ -24,6 +24,6 @@ class SprintModel extends Model
 
     public function tareas()
     {
-        return $this->hasMany(TareaModel::class, 'historia_id');
+        return $this->hasMany(Tareas::class, 'historia_id');
     }
 }
