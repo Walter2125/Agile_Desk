@@ -33,13 +33,22 @@ Route::post('/form/store', [FormatohistoriaControler::class, 'store'])->name('fo
 Route::get('/form/{formulario}/edit',[FormatohistoriaControler::class,'edit'])->name('formulario.edit')->middleware('auth');
 Route::patch('/form/{formulario}/update',[FormatohistoriaControler::class,'update'])->name('formulario.update')->middleware('auth');
 Route::delete('/form/{formulario}/destroy',[FormatohistoriaControler::class,'destroy'])->name('formulario.destroy')->middleware('auth');
+Route::get('/form/{historia}/show', [FormatohistoriaControler::class, 'show'])->name('formulario.show');
+
 
 //Rutas para tareas
 Route::get('/tareas',[TareasController::class,'index'])->name('tareas.index');
 Route::get('/tareas/create',[TareasController::class,'create'])->name('tareas.create');
 Route::POST('/tareas/store',[TareasController::class,'store'])->name('tareas.store');
 Route::get('/tareas/{id}/edit',[TareasController::class,'edit'])->name('tareas.edit');
-Route::patch('/tareas/{id}',[TareaController::class,'update'])->name('tareas.update');
+Route::patch('/tareas/{id}',[TareasController::class,'update'])->name('tareas.update');
+Route::delete('/tareas/{id}', [TareasController::class, 'destroy'])->name('tareas.destroy');
+Route::get('/tareas/{id}/ver', [TareasController::class, 'show'])->name('tareas.show');
+
+
+// tareas por historia 
+Route::get('/historias/{id}/tareas', [TareasController::class, 'indexPorHistoria'])->name('tareas.porHistoria');
+
 
 // Rutas de autenticación personalizadas
 Route::get('/login', [CustomLoginController::class, 'showLoginForm'])->name('custom.login.form');

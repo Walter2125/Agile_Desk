@@ -74,18 +74,19 @@ class FormatohistoriaControler extends Controller
             'detalles' => 'Se creó una nueva historia: ' . $historia->nombre,
         ]);
 
-        session()->flash('success','Historia Creada correctamente');
-        return redirect()->route('tablero');//aqui devera devolver al tablero donde se haga la conexion 
-        
+        return redirect()->route('tablero')->with([
+            'success' => 'Historia Creada correctamente',
+            'fromCreate' => true, ]);
 
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Formatohistoria $historia)
     {
         //
+        return view('formato.show', compact('historia'));
     }
 
     /**
@@ -112,6 +113,7 @@ class FormatohistoriaControler extends Controller
             'prioridad' => 'required|in:Alta,Media,Baja',
             'descripcion' => 'nullable|string',
         ], [
+            'nombre.required'=> 'El nombre es requerido',
             'nombre.unique' => 'El nombre ya existe, intente con otro.',
             'prioridad.required' => 'La prioridad es requerida.'
         ]);
@@ -143,8 +145,10 @@ class FormatohistoriaControler extends Controller
         'detalles' => $detalles,
     ]);
 
-    session()->flash('success','Historia Actualizada correctamente');
-    return redirect()->route('tablero');
+    return redirect()->route('tablero')->with([
+        'success' => 'Historia Actualizada correctamente',
+        'fromEdit' => true, // <- identificador de edición
+    ]);
 
     }
 

@@ -1,5 +1,12 @@
 @extends('adminlte::page')
 @section('title', 'Agile Desk')
+            @section('Mensaje')
+            <li class="nav-item d-flex align-items-center ps-3" style="padding-top: 0.4rem; padding-bottom: 0.4rem;">
+                <span class="fw-bold" style="font-size: 2rem;">
+                    Crear nueva historia
+                </span>
+            </li>
+            @endsection
         @section("adminlte_css")
         <link rel="stylesheet" href="{{ asset('css/cust.css') }}">
         @endsection
@@ -10,7 +17,7 @@
 
 
     @if ($errors->any())
-        <div role="alert" id="mi_alerta" class="w-100">
+        <div role="alert" id="mi_alerta" class="container-fluid w-100">
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -22,22 +29,20 @@
 
     <form action="{{ route('formulario.store') }}" method="post">
     @csrf
-    <br>
-    <div class="container-fluid contenedor-con-borde">
+    <div class="container-fluid contenedor-con-borde ">
         
-        <div class="mb-3">
-            <div class="form-group d-flex align-items-center">
-                <div class="col-md-6">
-                    <br>
-                    <label for="nombreHistoria" class="label-custom">Nombre de la historia:</label>
-                    <input type="text" class="form-control input-custom" id="nombreHistoria" name="nombre" placeholder="Ingrese el nombre" value="{{ old('nombre') }}">
-                </div>
-                <div class="col-md-3">
-                    <br>
+        <div class="row g-2">
+            
+            <div class="col-md-3">
                     <label for="numeroHistoria" class="label-custom"># Historia:</label>
                     <input type="text" class="form-control input-custom" id="numeroHistoria" readonly>
                 </div>
-            </div>
+                <div class="col-md">
+                    <label for="nombreHistoria" class="label-custom">Nombre de la historia:</label>
+                    <input type="text" class="form-control input-custom" id="nombreHistoria" name="nombre" placeholder="Ingrese el nombre" value="{{ old('nombre') }}">
+                </div>
+               
+            
         </div>
 
         <div class="row mb-3">
@@ -71,22 +76,21 @@
         </div>
 
         <div class="row mb-3">
-            <div class="col-md-12">
+            <div class="col-md">
                 <label for="descripcionHistoria" class="label-custom">Descripción:</label>
                 <textarea class="form-control input-custom" id="descripcionHistoria" name="descripcion" rows="3" placeholder="Ingrese la descripción"></textarea>
             </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label for="tareas" class="label-custom">Tareas:</label>
-                <div id="listaTareas" class="tareas"></div>
-            </div>
-        </div>
-
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <button type="submit" class="btn btn-custom"><i class="bi bi-save"></i> Guardar</button>
-        </div>
+                <div class="row mb-3">
+                <div class="col-md">
+                <a href="{{ route('tablero') }}" class="btn btn-secondary me-2">Volver</a>
+                <button class="btn btn-primary" type="submit">Guardar</button>
+                
+                </div>
+                </div>
+            </div>
     </div>
 </form>
 

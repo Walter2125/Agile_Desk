@@ -1,13 +1,13 @@
 #mi_alerta {
-    background-color: #fff3cd; 
-    color: #856404;            
-    padding: 15px 20px;
-    border-radius: 8px;        
-    margin-bottom: 20px;
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 10px 10px;
+    border-radius: 10px;
+    margin: 20px 0;                  
     font-weight: 500;
     width: 100%;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    border: 1px solid #ffeeba;
+    border: 2px solid #ffeeba;  
 }
 
 #mi_alerta ul {
@@ -29,7 +29,7 @@
 /*estilo para las etiqueta*/
 .label-custom {
     font-weight: bold;
-    color: #4A4A4A;
+    color: #4a4a4a;
     margin-bottom: 5px;
     display: block;
 }
@@ -39,7 +39,7 @@
     border-radius: 8px;
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid #ffffff;
     transition: all 0.3s ease;
 }
 
@@ -116,8 +116,13 @@ input[type="number"]::-webkit-inner-spin-button {
 
 
 .contenedor-con-borde {
-    border: 2px solid #ccc;
-    border-radius: 10px;    
-    padding: 20px;
-    background-color: #adb5bd; 
+    background-color: #7ea7d0;
+    border: 2px solid #ccc;          /* Borde completo */
+    border-radius: 10px;             /* Esquinas redondeadas */
+    padding: 15px 20px;              /* Espaciado interno más cómodo */
+    margin: 20px auto;               /* Margen superior e inferior, centrado horizontal */
+    box-sizing: border-box;
+    display: block;
+    width: 100%;                     /* Asegura que ocupe todo el ancho disponible */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Sombra sutil para que resalte */
 }

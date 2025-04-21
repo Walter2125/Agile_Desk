@@ -1,0 +1,55 @@
+#mi_alerta {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 10px 10px;
+    border-radius: 10px;
+    margin: 20px 0;
+    font-weight: 500;
+    width: 100%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border: 2px solid #ffeeba;
+}
+/* Contenedor de fondo azul con bordes */
+.contenedor-formulario {
+    background-color: #7ea7d0;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 30px 40px;
+    margin: 20px auto;
+    box-sizing: border-box;
+    width: 100%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Caja interna blanca para que el formulario resalte sobre el fondo */
+.formulario-tarjeta {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Estilo del título del formulario */
+.titulo-formulario {
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+/* Título centrado verticalmente */
+.mensaje-titulo {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+/* Estilo de los inputs */
+.form-control,
+.form-select {
+    border-radius: 0.5rem;
+}
+
+/* Botón estilizado */
+.boton-guardar {
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+}
