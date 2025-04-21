@@ -12,6 +12,10 @@
         @endsection
 
 
+@section('adminlte_css')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+@stop
+
 @section('content')
 
 
@@ -96,4 +100,7 @@
 
 @endsection
 
+@section('adminlte_js')
+    <script src="{{ asset('js/color.js') }}"></script>
+@stop
 

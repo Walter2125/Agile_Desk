@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\User;
 use App\Models\Notificaciones;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -42,6 +43,7 @@ class ProjectController extends Controller
         ]);
         
         $project->users()->attach(auth()->id());
+        
         $usuarios = User::all();
         
         foreach ($usuarios as $usuario) {
@@ -56,24 +58,21 @@ class ProjectController extends Controller
         if ($request->has('users')) {
             $project->users()->attach($request->users);
         }
-
-        //return redirect()->route('projects.my')->with('success', 'Proyecto creado exitosamente.');
+        return redirect()->route('projects.my')->with('success', 'Proyecto creado exitosamente.');
     }
-
-
 
 
     public function index()
     {
-        $nuevo_proyecto = Project::with('users')->get();
+        $nuevo_proyecto = Project::with('users')->orderBy('created_at', 'desc')->get();
+    
         return view('projects.create', compact('nuevo_proyecto'));
     }
 
     public function myProjects()
     {
         $user = auth()->user();
-        $projects = $user->projects;
-
+        $projects = $user->projects->sortByDesc('created_at');
         return view('projects.my_projects', compact('projects'));
     }
 
@@ -146,18 +145,38 @@ class ProjectController extends Controller
         return response()->json(['error' => 'El usuario no está asociado a este proyecto'], 404);
     }
 
-    public function destroy($id)
-    {
-        $project = Project::findOrFail($id);
 
-        if (auth()->id() !== $project->user_id) {
-            return redirect()->route('projects.my')->with('error', 'No tienes permiso para eliminar este proyecto.');
-        }
+    public function destroy(Request $request, $id)
+{
+    $project = Project::find($id);
 
+    if (!$project) {
+        return $request->expectsJson()
+            ? response()->json(['error' => 'Proyecto no encontrado.'], 404)
+            : redirect()->route('projects.my')->with('error', 'Proyecto no encontrado.');
+    }
+
+    if (Auth::user()->usertype != 'admin') {
+        return $request->expectsJson()
+            ? response()->json(['error' => 'No tienes permiso para eliminar este proyecto.'], 403)
+            : redirect()->route('projects.my')->with('error', 'No tienes permiso.');
+    }
+
+    try {
         $project->delete();
 
-        return redirect()->route('projects.my')->with('success', 'Proyecto eliminado exitosamente.');
+        return $request->expectsJson()
+            ? response()->json(['message' => 'Proyecto eliminado exitosamente.'])
+            : redirect()->route('projects.my')->with('success', 'Proyecto eliminado exitosamente.');
+    } catch (\Exception $e) {
+        return $request->expectsJson()
+            ? response()->json(['error' => 'Error al eliminar el proyecto: ' . $e->getMessage()], 500)
+            : redirect()->route('projects.my')->with('error', 'Error al eliminar el proyecto.');
     }
+}
+
+
+    
 
     public function searchUsers(Request $request)
     {
@@ -171,6 +190,4 @@ class ProjectController extends Controller
         // Retornar los usuarios como JSON
         return response()->json($users);
     }
-
-
 }
