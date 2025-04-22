@@ -42,7 +42,7 @@
         <script>
                 setTimeout(function() {
                     document.getElementById('mi_alerta').style.display = 'none';
-                }, 5000); 
+                }, 3000); 
             </script>
     @endif
 

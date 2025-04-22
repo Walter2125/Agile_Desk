@@ -37,8 +37,19 @@ class TareasController extends Controller
     public function create(Request $request)
     {
         // Recuperar la historia correspondiente al `historia_id` enviado en el request
+       
+
+        if (session('fromCreateTarea')) {
+            return redirect()->route('tablero')->with('warning', 'No puedes volver al formulario de creación de tareas.');
+        }
+    
         $historia = Formatohistoria::find($request->historia_id);
-        return view('tareas.create', compact('historia'));
+    
+        return response()
+            ->view('tareas.create', compact('historia'))
+            ->header('Cache-Control','no-cache, no-store, must-revalidate')
+            ->header('Pragma','no-cache')
+            ->header('Expires','0');
     }
 
     /**
@@ -92,12 +103,21 @@ class TareasController extends Controller
      */
     public function edit(string $id)
     {
+
+        if (session('fromEditTarea')) {
+            return redirect()->route('tablero')->with('warning', 'No puedes volver al formulario de edición de tareas.');
+        }
+    
         // Obtener la tarea a editar
         $tarea = Tareas::findOrFail($id);
         // Obtener todas las historias para permitir la selección
         $historias = Formatohistoria::all();
     
-        return view('tareas.edit', compact('tarea', 'historias'));
+        return response()
+            ->view('tareas.edit', compact('tarea', 'historias'))
+            ->header('Cache-Control','no-cache, no-store, must-revalidate')
+            ->header('Pragma','no-cache')
+            ->header('Expires','0');
     }
 
     /**
@@ -131,8 +151,10 @@ class TareasController extends Controller
         ]);
     
         // Redirigir con un mensaje de éxito a la ruta del tablero
-        return redirect()->route('tareas.index')->with('success', 'Tarea actualizada correctamente.');
-
+        return redirect()->route('tareas.index')->with([
+            'success' => 'Tarea actualizada correctamente',
+            'fromEditTarea' => true, // <- Esto activa el bloqueo
+        ]);
     
     }
     
