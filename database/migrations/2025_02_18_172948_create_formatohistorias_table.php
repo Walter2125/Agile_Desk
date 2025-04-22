@@ -22,8 +22,7 @@ return new class extends Migration
             $table->enum('prioridad', ['Alta', 'Media', 'Baja'])->default('Media');
             $table->text('descripcion')->nullable();
             $table->timestamps();
-            $table->foreignId('proyecto_id')->nullable()->constrained('proyectos')->onDelete('set null');
-            $table->foreignId('columna_id')->nullable()->constrained('columnas')->onDelete('set null');
+
         });
     }
 
@@ -34,8 +33,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('formatohistorias');
         Schema::table('formatohistorias', function (Blueprint $table) {
-            $table->dropForeign(['proyecto_id']);
-            $table->dropForeign(['columna_id']);
+
         });
     }
 };

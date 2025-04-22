@@ -38,7 +38,7 @@
         </div>
 
         @endif
-  
+
         <!-- migajas de pan-->
         <div class="container py-3 migajas" id="migajas">
             <ul class="breadcrumb">
@@ -58,7 +58,7 @@
                     </span>
                 </li>
             </ul>
-        </div>      
+        </div>
         <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.068);">
         <!-- <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen"> -->
@@ -187,7 +187,7 @@
                                                         </div>
 
                                                         <div class="flex space-x-1 shrink-0">
-                                                            
+
                                                             <form action="{{ route('formulario.destroy', $historia->id) }}" method="post" class="inline" >
                                                                 @csrf
                                                                 @method('DELETE')
@@ -218,7 +218,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                        
+
 
 
                                                 <!-- Información de la historia -->
@@ -231,7 +231,7 @@
                                                                 <span class="text-gray-600 mr-2 shrink-0">Prioridad:</span>
                                                                 <span class="font-semibold text-gray-800">{{ $historia->prioridad }}</span>
                                                             </div>
-                                        
+
                                                 </div>
                                         </div>
                                     </div>
@@ -526,7 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.card').forEach(card => {
         const idTarea = card.dataset.id;
         const etiquetaGuardada = localStorage.getItem(`etiqueta_${idTarea}`);
-        
+
         if (etiquetaGuardada) {
             card.dataset.etiquetas = etiquetaGuardada;
             mostrarEtiquetasEnTarea(card, etiquetaGuardada);
@@ -573,7 +573,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     guardarEtiquetas.addEventListener('click', () => {
-        if (!tarjetaSeleccionada) return; 
+        if (!tarjetaSeleccionada) return;
         const etiquetaSeleccionada = listaEtiquetas.querySelector('input[name="etiquetaSeleccionada"]:checked').value;
         tarjetaSeleccionada.dataset.etiquetas = etiquetaSeleccionada;
         mostrarEtiquetasEnTarea(tarjetaSeleccionada, etiquetaSeleccionada);
