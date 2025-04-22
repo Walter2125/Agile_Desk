@@ -332,6 +332,11 @@ return [
             'icon' => 'fas fa-fw fa-folder',
         ],
         [
+            'text' => 'Sprints',
+            'url' => 'sprints',
+            'icon' => 'fas fa-fw fa-folder',
+        ],
+        [
             'text' => 'Calendario',
             'url' => 'fullcalendar',
             'icon' => 'fas fa-fw fa-calendar',

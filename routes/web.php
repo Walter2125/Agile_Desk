@@ -97,11 +97,11 @@ Route::middleware('auth')->group(function () {
 */
     // Rutas para Sprints
     Route::get('sprints', [SprintController::class, 'index'])->name('sprints.index');
-    Route::get('sprints/create', [SprintController::class, 'create'])->name('sprints.create');
-    Route::post('sprints', [SprintController::class, 'store'])->name('sprints.store');
-    Route::get('sprints/{sprint}/edit', [SprintController::class, 'edit'])->name('sprints.edit');
-    Route::put('sprints/{sprint}', [SprintController::class, 'update'])->name('sprints.update');
-    Route::delete('sprints/{sprint}', [SprintController::class, 'destroy'])->name('sprints.destroy');
+    Route::get('sprints/create', [SprintController::class, 'create'])->name('sprints.create')->middleware('role:admin');
+    Route::post('sprints', [SprintController::class, 'store'])->name('sprints.store')->middleware('role:admin');;
+    Route::get('sprints/{sprint}/edit', [SprintController::class, 'edit'])->name('sprints.edit')->middleware('role:admin');;
+    Route::put('sprints/{sprint}', [SprintController::class, 'update'])->name('sprints.update')->middleware('role:admin');;
+    Route::delete('sprints/{sprint}', [SprintController::class, 'destroy'])->name('sprints.destroy')->middleware('role:admin');;
     Route::get('tableros/{sprint}', [TableroController::class, 'show'])->name('tableros.show');
 
     // Proyectos (solo mis proyectos)

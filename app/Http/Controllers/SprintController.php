@@ -11,12 +11,25 @@ class SprintController extends Controller
     /**
      * Muestra una lista de los sprints.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sprints = Sprint::with('project')->get();
-        $projects = Project::all();
+        $proyectoId = $request->query('proyecto_id');
+        
+        // Query base
+        $sprintsQuery = Sprint::with('project');
+        
+        // Si hay un proyecto seleccionado, filtrar por ese proyecto
+        if ($proyectoId && $proyectoId != 'all') {
+            $sprintsQuery->where('project_id', $proyectoId);
+        }
+        
+        // Obtener los sprints ordenados por proyecto_id
+        $sprints = $sprintsQuery->orderBy('project_id')->get();
+        
+        // Obtener todos los proyectos para el filtro
+        $proyectos = Project::all();
 
-        return view('ListaSprint', compact('sprints', 'projects'));
+        return view('Sprint.ListaSprint', compact('sprints', 'proyectos', 'proyectoId'));
     }
 
     /**
@@ -26,7 +39,7 @@ class SprintController extends Controller
     {
         $projects = Project::all();
 
-        return view('CrearSprints', compact('projects'));
+        return view('Sprint.CrearSprints', compact('projects'));
     }
 
     /**
@@ -62,7 +75,7 @@ class SprintController extends Controller
     {
         $projects = Project::all();
 
-        return view('sprints.edit', compact('sprint', 'projects'));
+        return view('Sprint.EditarSprint', compact('sprint', 'projects'));
     }
 
     /**
@@ -75,7 +88,7 @@ class SprintController extends Controller
             'fecha_inicio' => 'required|date',
             'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
             'estado'       => 'required|in:PLANEADO,EN_CURSO,FINALIZADO',
-            'project_id'   => 'required|exists:nuevo_proyecto,id',
+            'project_id'   => 'required|exists:nuevo_proyecto,id', 
             'color'        => 'required|string',
             'tipo'         => 'required|in:NORMAL,URGENTE,BLOQUEADO',
             'descripcion'  => 'nullable|string',
