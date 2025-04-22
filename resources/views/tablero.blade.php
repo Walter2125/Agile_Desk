@@ -147,7 +147,7 @@
                                     <!-- Opción: Editar Nombre de la Columna -->
                                     <li>
                                         <button class="dropdown-item editar-columna">
-                                            Editar Nombre de la Columna
+                                            Editar Nombre
                                         </button>
                                     </li>
                                 </ul>
