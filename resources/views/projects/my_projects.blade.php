@@ -78,6 +78,16 @@
                                         </ul>
                                     </div>
                                 </div>
+                                <div><div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">Titulo sprint</h5>
+    <p class="card-text">Resumen breve de sprint.</p>
+   
+ 
+      <a href="#" class="btn btn-sm btn-info">Ver detalles de sprint</a>
+    
+  </div>
+</div></div>
                             </div>
                             
                             <div class="card-footer bg-white border-0 pb-3">

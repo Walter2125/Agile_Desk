@@ -47,53 +47,69 @@
     @endif
 
 
-    @if (isset($historia))
-        <!-- Si estamos dentro de una historia, mostramos el botón de "Ver todas las tareas" -->
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a href="{{ route('tablero') }}" class="btn btn-secondary mt-4 mb-4">Atras</a>
+   @if (isset($historia))
+    <!-- Si estamos dentro de una historia, mostramos el botón de "Ver todas las tareas" -->
+    <div class="row mb-3">
+        <div class="d-flex justify-content-md-end">
+            <a href="{{ route('tablero') }}" class="btn btn-secondary mt-4 mb-4 me-2 ">Atras</a>
             <a href="{{ route('tareas.index') }}" class="btn btn-secondary mt-4 mb-4">Ver todas las tareas</a>
         </div>
-    @else
-        <!-- Si estamos en la vista de "Todas las tareas", mostramos un botón para regresar -->
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    </div>
+@else
+    <!-- Si estamos en la vista de "Todas las tareas", mostramos un botón para regresar -->
+    <div class="row md-3">
+        <div class="d-flex justify-content-md-end">
             <a href="{{ route('tablero') }}" class="btn btn-secondary mt-4 mb-4">Atras</a>
         </div>
-    @endif
-   <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Nombre</th>
-      <th scope="col">Descripcion</th>
-      <th scope="col">Historial</th>
-      <th scope="col">Actividad</th>
-      <th scope="col">Asignado</th> 
-      <th scope="col">Historia</th>
-      <th scope="col">Botones</th>
-    </tr>
-  </thead>
-  <tbody>
-    @foreach ( $tareas as $tarea )
-    <tr>
-      <th scope="row">{{ $tarea->nombre }}</th>
-      <td>{{ $tarea->descripcion }}</td>
-      <td>{{ $tarea->historial }}</td>
-      <td>{{ $tarea->actividad }}</td>
-      <td>{{ $tarea->asignado }}</td>
-      <td>{{ $tarea->historia ? $tarea->historia->nombre : 'Sin historia' }}</td>
-      <td><a href="{{ route('tareas.edit',$tarea->id) }}" class="btn btn-primary">Edit</a>
-            <button type="button" 
-                class="btn btn-danger" 
-                data-bs-toggle="modal" 
-                data-bs-target="#modalEliminar" 
-                data-id="{{ $tarea->id }}" 
-                data-nombre="{{ $tarea->nombre }}">Eliminar
-            </button>
-          <a href="{{ route('tareas.show', $tarea->id) }}" class="btn btn-info">Ver</a>
+    </div>
+@endif
 
-    </td>
+<!-- Tabla responsiva -->
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Historial</th>
+                <th scope="col">Actividad</th>
+                <th scope="col">Asignado</th> 
+                <th scope="col">Historia</th>
+                <th scope="col">Botones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ( $tareas as $tarea )
+            <tr>
+                <th scope="row">{{ $tarea->nombre }}</th>
+                <td>{{ $tarea->descripcion }}</td>
+                <td>{{ $tarea->historial }}</td>
+                <td>{{ $tarea->actividad }}</td>
+                <td>{{ $tarea->asignado }}</td>
+                <td>{{ $tarea->historia ? $tarea->historia->nombre : 'Sin historia' }}</td>
+                <td>
+                    <!-- Botones ajustados a tamaño pequeño -->
+                          <div class="row mb-3">
+                          <div class="d-flex justify-content-md-end">
+                                <a href="{{ route('tareas.edit', $tarea->id) }}" class="btn btn-primary w-100 mb-2 me-2">Edit</a>
+                                <button type="button" 
+                                        class="btn btn-danger w-100 mb-2 me-2" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#modalEliminar" 
+                                        data-id="{{ $tarea->id }}" 
+                                        data-nombre="{{ $tarea->nombre }}">
+                                    Eliminar
+                                </button>
+                                <a href="{{ route('tareas.show', $tarea->id) }}" class="btn btn-info w-100 mb-2">Ver</a>
+                          </div>
+                          </div>
+                  </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 
-    </tr>
-    @endforeach
 
 
 
