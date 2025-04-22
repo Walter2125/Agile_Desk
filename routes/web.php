@@ -84,10 +84,21 @@ Route::middleware('auth')->group(function () {
 
 
     
-    // Sprints
-    Route::get('sprints/create', fn() => view('sprints.create'))->name('sprints.create');
+    /*
+    Route::get('sprints/create', [SprintController::class, 'create'])->name('sprints.create');
+    Route::post('sprints', [SprintController::class, 'store'])->name('sprints.store');
+    //Route::get('sprints/create', fn() => view('sprints.create'))->name('sprints.create');
     Route::get('sprints', [SprintController::class, 'index'])->name('sprints.index');
     Route::get('sprints/detalle', [SprintController::class, 'detalleSprint'])->name('sprints.detalle');
+*/
+    // Rutas para Sprints
+    Route::get('sprints', [SprintController::class, 'index'])->name('sprints.index');
+    Route::get('sprints/create', [SprintController::class, 'create'])->name('sprints.create');
+    Route::post('sprints', [SprintController::class, 'store'])->name('sprints.store');
+    Route::get('sprints/{sprint}/edit', [SprintController::class, 'edit'])->name('sprints.edit');
+    Route::put('sprints/{sprint}', [SprintController::class, 'update'])->name('sprints.update');
+    Route::delete('sprints/{sprint}', [SprintController::class, 'destroy'])->name('sprints.destroy');
+    Route::get('tableros/{sprint}', [TableroController::class, 'show'])->name('tableros.show');
 
     // Proyectos (solo mis proyectos)
     Route::get('projects', [ProjectController::class, 'myProjects'])->name('projects.my');
