@@ -72,6 +72,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/form/{formulario}/destroy',[FormatohistoriaControler::class,'destroy'])->name('formulario.destroy');
     Route::get('/form/{historia}/show', [FormatohistoriaControler::class, 'show'])->name('formulario.show');
 
+    //Lista de historias por cada usuarios
+    Route::get('/mis-historias', [FormatohistoriaControler::class, 'index'])->name('mis_historias');
 
     // tareas por historia 
     Route::get('/historias/{id}/tareas', [TareasController::class, 'indexPorHistoria'])->name('tareas.porHistoria');
@@ -175,5 +177,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/archivo', [ArchivoHistoriaController::class, 'index'])->name('archivo.index');
         Route::post('/archivo/desarchivar/{id}', [ArchivoHistoriaController::class, 'desarchivar'])->name('archivo.desarchivar');
         
+    //Lista de historias por cada usuarios
+    Route::get('/mis-historias', [FormatohistoriaControler::class, 'misHistorias'])->name('mis_historias');
 });
 
