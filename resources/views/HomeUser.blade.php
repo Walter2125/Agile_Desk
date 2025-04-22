@@ -68,7 +68,6 @@
 
     <!-- Botón alineado a la derecha -->
     <div class="detalle-btn-container">
-        <a href="{{ route('sprints.detalle') }}" class="btn detalle-btn">Ver Detalles de Sprint</a>
         <a href="{{ route('mis_historias') }}" class="btn detalle-btn">Ver Mis Historias</a>
     </div>
 
