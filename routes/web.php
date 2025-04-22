@@ -18,7 +18,6 @@ use App\Http\Controllers\NotificacionesController;
 use App\Http\Controllers\Auth\CustomLoginController;
 use App\Http\Controllers\HistorialCambiosController;
 use App\Http\Controllers\ReasignarHistoriaController;
-use App\Http\Controllers\TableroController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ArchivoHistoriaController;
 
@@ -133,7 +132,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/projects/{project}',                   [ProjectController::class, 'destroy'])->name('projects.destroy');
 
     // **Rutas de administrador** (solo usuarios con usertype = 'admin')
-   // Route::middleware('role:admin')->group(function () {
+   Route::middleware('role:admin')->group(function () {
         // Home de admin
         Route::get('/homeadmin', [AdminController::class, 'index'])->name('homeadmin');
 
@@ -162,5 +161,5 @@ Route::middleware('auth')->group(function () {
         Route::get('/archivo', [ArchivoHistoriaController::class, 'index'])->name('archivo.index');
         Route::post('/archivo/desarchivar/{id}', [ArchivoHistoriaController::class, 'desarchivar'])->name('archivo.desarchivar');
         
-//});
+});
 
