@@ -129,7 +129,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/projects/{project}',                   [ProjectController::class, 'destroy'])->name('projects.destroy');
 
     // **Rutas de administrador** (solo usuarios con usertype = 'admin')
-   Route::middleware('role:admin')->group(function () {
+   //Route::middleware('role:admin')->group(function () {
         // Home de admin
         Route::get('/homeadmin', [AdminController::class, 'index'])->name('homeadmin');
 
@@ -163,4 +163,4 @@ Route::middleware('auth')->group(function () {
             Route::get('/lista-historias', [ListaHistoriaController::class, 'index'])->name('lista_historias.index');
             Route::post('/lista-historias', [ListaHistoriaController::class, 'store'])->name('lista_historias.store');
         });
-});
+//});

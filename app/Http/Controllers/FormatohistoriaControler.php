@@ -27,8 +27,8 @@ class FormatohistoriaControler extends Controller
     public function misHistorias()
 {
     $historias = Formatohistoria::where('user_id', auth()->id())
-        ->select(['id', 'nombre', 'sprint', 'responsable', 'created_at'])
-        ->get();
+    ->select(['id', 'nombre', 'sprint', 'responsable', 'estado', 'created_at'])
+    ->get();
 
     return view('ListaHistorias', compact('historias'));
 }
