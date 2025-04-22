@@ -46,22 +46,28 @@ class HistorialCambiosController extends Controller
      * Almacena un nuevo registro de historial de cambios.
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'usuario' => 'required|string',
-            'accion' => 'required|string',
-            'detalles' => 'required|string',
-        ]);
+{
+    // Validar los datos si es necesario
+    $request->validate([
+        'usuario' => 'required|string|max:255',
+        'accion' => 'required|string|max:255',
+        'detalles' => 'required|string|max:1000',
+        'sprint' => 'required|integer',  // Asegúrate de validar sprint como número
+        'fecha' => 'required|date',
+    ]);
 
-        HistorialCambios::create([
-            'fecha' => now(),
-            'usuario' => $request->usuario,
-            'accion' => $request->accion,
-            'detalles' => $request->detalles,
-        ]);
+    // Crear una nueva entrada en la base de datos
+    HistorialCambio::create([
+        'usuario' => $request->usuario,
+        'accion' => $request->accion,
+        'detalles' => $request->detalles,
+        'sprint' => $request->sprint,  // Guardar el valor de sprint
+        'fecha' => $request->fecha,
+    ]);
 
-        return redirect()->route('historialcambios.index')->with('exito', 'Cambio registrado exitosamente');
-    }
+    // Redirigir o mostrar mensaje
+    return redirect()->route('historialcambios.index')->with('success', 'Cambio registrado con éxito');
+}
 
     /**
      * Revertir un cambio específico.

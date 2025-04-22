@@ -5,20 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Formatohistoria extends Model
+class ListaHistoria extends Model
 {
     use HasFactory;
     protected $fillable = [
         'nombre',
-        'sprint',
-        'trabajo_estimado',
         'responsable',
-        'prioridad',
-        'descripcion',
+        'sprint',
+        'user_id',
     ];
 
-    public function archivo()
+    public function user()
     {
-        return $this->hasOne(ArchivoHistoria::class, 'historia_id');
+        return $this->belongsTo(User::class);
     }
 }

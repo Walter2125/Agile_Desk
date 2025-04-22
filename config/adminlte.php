@@ -220,7 +220,7 @@ return [
     'sidebar_scrollbar_theme' => 'os-theme-light',
     'sidebar_scrollbar_auto_hide' => 'l',
     'sidebar_nav_accordion' => true,
-    'sidebar_nav_animation_speed' => 300,
+    'sidebar_nav_animation_speed' => 250,
 
     /*
     |--------------------------------------------------------------------------
@@ -255,7 +255,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'HomeUser',
+    'dashboard_url' => 'dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -336,7 +336,42 @@ return [
             'url' => 'fullcalendar',
             'icon' => 'fas fa-fw fa-calendar',
         ],
+        // Elementos visibles solo para administradores
+        ['header' => 'ADMINISTRACIÓN',
+         'can'    => 'admin-access'  // Aquí definimos el permiso necesario
+        ],
+        [
+            'text'    => 'Usuarios',
+            'icon'    => 'fas fa-fw fa-users',
+            'can'     => 'admin-access',  // Permiso requerido
+            'submenu' => [
+                [
+                    'text' => 'Lista de Usuarios',
+                    'url'  => 'admin/users',
+                    'icon' => 'fas fa-fw fa-list',
+                ],
+                [
+                    'text' => 'Crear Usuario',
+                    'url'  => 'admin/users/create',
+                    'icon' => 'fas fa-fw fa-user-plus',
+                ],
+            ],
+        ],
+
+        [
+            'text'    => 'Informes',
+            'icon'    => 'fas fa-fw fa-chart-bar',
+            'can'     => 'admin-access',  // Permiso requerido
+            'submenu' => [
+                [
+                    'text' => 'Actividad',
+                    'url'  => '/historialcambios',
+                    'icon' => 'fas fa-fw fa-history',
+                ],
+            ],
+        ],
         
+    
     ],
 
     /*

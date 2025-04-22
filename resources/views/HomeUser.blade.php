@@ -69,6 +69,7 @@
     <!-- Botón alineado a la derecha -->
     <div class="detalle-btn-container">
         <a href="{{ route('sprints.detalle') }}" class="btn detalle-btn">Ver Detalles de Sprint</a>
+        <a href="{{ route('mis_historias') }}" class="btn detalle-btn">Ver Mis Historias</a>
     </div>
 
     <div class="container-fluid text-center mt-5">
@@ -94,28 +95,6 @@
         </div>
 
         <p class="lead mt-3">Tu tablero digital para organizar Sprints de manera eficiente y colaborativa.</p>
-
-        <div class="row mt-5">
-            <div class="col-12 col-md-4">
-                <h3 class="mt-3">Tablero Visual</h3>
-                <p>Organiza tareas con un tablero intuitivo basado en metodologías ágiles.</p>
-                <img src="{{ asset('img/imagen2.jpg') }}" alt="Imagen 2" class="rounded shadow img-fluid w-100">
-            </div>
-
-            <div class="col-12 col-md-4">
-                <h3 class="mt-3">Colaboración en Tiempo Real</h3>
-                <p>Comparte avances con tu equipo y gestiona tareas de forma efectiva.</p>
-                <img src="{{ asset('img/imagen4.jpg') }}" alt="Imagen 4" class="rounded shadow img-fluid w-100">
-            </div>
-
-            <div class="col-12 col-md-4">
-                <h3 class="mt-3">Seguimiento de Sprints</h3>
-                <p>Monitorea el progreso de cada Sprint y ajusta tareas según sea necesario.</p>
-                <img src="{{ asset('img/imagen5.jpg') }}" alt="Imagen 5" class="rounded shadow img-fluid w-100">
-            </div>
-        </div>
-
-    </div> 
 
 @stop
 
