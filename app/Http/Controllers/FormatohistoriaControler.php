@@ -146,7 +146,7 @@ class FormatohistoriaControler extends Controller
 
     return redirect()->route('tablero')->with([
         'success' => 'Historia Actualizada correctamente',
-        'fromEdit' => true, // <- identificador de edición
+        'fromEdit' => true,
     ]);
 
     }

@@ -98,6 +98,14 @@
     <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded w-auto sm:w-24">Limpiar</button>
 </div>
 
+<a href="{{ route('archivo.seleccionar') }}" class="btn btn-warning">📦 Archivar Historia</a>
+<a href="{{ route('archivo.index') }}" class="btn btn-sm btn-light me-2">
+                <i class="fas fa-archive me-1"></i> Ver Archivadas
+            </a>
+        </div>
+    </div>
+</div>
+
 
             <div class="flex justify-between mb-4 items-center">
 
@@ -160,74 +168,75 @@
                     <!-- Para ordenarlos según la prioridad -->
                     <div class="min-h-[200px] space-y-4 sortable">
                         @foreach ($historias as $historia)
-                        <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
-                            <div class="card bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer">
-                                <div class="flex justify-start items-start mb-1 gap-1">
-                                    <div class="font-bold text-lg text-black truncate max-w-[200%]" title="{{ $historia->nombre }}">
-                                        {{ $historia->nombre }}
+                            <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
+                              <div class="card bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+                                    <div class="flex justify-start items-start mb-1 gap-1">
+                                     <div class="font-bold text-lg text-black truncate max-w-[200%]" title="{{ $historia->nombre }}">
+                                            {{ $historia->nombre }}
 
-                                        <div class="flex space-x-1 shrink-0">
-                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
+                                                        <div class="flex space-x-1 shrink-0">
+                                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </a>
 
-                                            <!-- Botón para abrir el modal -->
-                                            <button type="button" class="text-red-500 hover:text-red-700 transition-colors" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
+                                                            <!-- Botón para abrir el modal -->
+                                                            <button type="button" class="text-red-500 hover:text-red-700 transition-colors" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
 
-                                    </div>
+                                                        </div>
 
-                                    <div class="flex space-x-1 shrink-0">
-                                        
-                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post" class="inline" >
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
-                                    </div>
+                                                        <div class="flex space-x-1 shrink-0">
+                                                            
+                                                            <form action="{{ route('formulario.destroy', $historia->id) }}" method="post" class="inline" >
+                                                                @csrf
+                                                                @method('DELETE')
+                                                            </form>
+                                                        </div>
 
 
 
                                             <!-- Modal de confirmación -->
-                                            <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="modalLabel-{{ $historia->id }}">Confirmar Eliminación</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            ¿Estás seguro de que deseas eliminar este registro?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                            <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                                                            </form>
+                                                    <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="modalLabel-{{ $historia->id }}">Confirmar Eliminación</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    ¿Estás seguro de que deseas eliminar este registro?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                    <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                        
+
+
+                                                <!-- Información de la historia -->
+                                                <div class="mb-3">
+                                                            <div class="flex items-center mb-1">
+                                                                <span class="text-gray-600 mr-2 shrink-0">Id:</span>
+                                                                <span class="font-semibold text-gray-800">{{ $historia->id }}</span>
+                                                            </div>
+                                                            <div class="flex items-center">
+                                                                <span class="text-gray-600 mr-2 shrink-0">Prioridad:</span>
+                                                                <span class="font-semibold text-gray-800">{{ $historia->prioridad }}</span>
+                                                            </div>
+                                        
                                                 </div>
-                                            </div>
                                         </div>
-
-
-                                        <!-- Información de la historia -->
-                                <div class="mb-3">
-                                    <div class="flex items-center mb-1">
-                                        <span class="text-gray-600 mr-2 shrink-0">Id:</span>
-                                        <span class="font-semibold text-gray-800">{{ $historia->id }}</span>
                                     </div>
-                                    <div class="flex items-center">
-                                        <span class="text-gray-600 mr-2 shrink-0">Prioridad:</span>
-                                        <span class="font-semibold text-gray-800">{{ $historia->prioridad }}</span>
-                                    </div>
-                                </div>
-
-                               
-                            </div>
-                        </a>
+                               </div>
+                            </a>
                         @endforeach
                     </div>
                 </div>

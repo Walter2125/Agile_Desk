@@ -1,22 +1,26 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\CustomLoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\FormatohistoriaControler;
-use App\Http\Controllers\TareasController;
+use App\Http\Controllers\TareaController;
 use App\Http\Controllers\SprintController;
+use App\Http\Controllers\TareasController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\FullCalendarController;
-use App\Http\Controllers\HistoriaController;
+use App\Http\Controllers\TableroController;
 use App\Http\Controllers\ColumnasController;
+use App\Http\Controllers\HistoriaController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\FullCalendarController;
+use App\Http\Controllers\FormatohistoriaControler;
 use App\Http\Controllers\NotificacionesController;
+use App\Http\Controllers\Auth\CustomLoginController;
 use App\Http\Controllers\HistorialCambiosController;
 use App\Http\Controllers\ReasignarHistoriaController;
 use App\Http\Controllers\TableroController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ArchivoHistoriaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,14 +30,13 @@ use Illuminate\Support\Facades\Auth;
 */
 
 // --------------------- Rutas Públicas ---------------------
-Route::get('/', fn() => redirect()->route('login')); 
-
-Route::get('login',    [CustomLoginController::class, 'showLoginForm'])->name('login');
-Route::post('login',   [CustomLoginController::class, 'login']);
+Route::get('/', fn() => redirect('/login'));
+Route::get('/login',    [CustomLoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login',   [CustomLoginController::class, 'login']);
 Route::post('logout',  [CustomLoginController::class, 'logout'])->name('logout');
+Route::get('/register', [CustomLoginController::class, 'showRegisterForm'])->name('register');
+Route::post('/register',[CustomLoginController::class, 'register']);
 
-Route::get('register', [CustomLoginController::class, 'showRegisterForm'])->name('register');
-Route::post('register',[CustomLoginController::class, 'register']);
 
 // Recuperación de contraseña
 Route::get('forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
@@ -53,6 +56,7 @@ Route::middleware('auth')->group(function () {
     
     // Home de usuario normal
     Route::get('/HomeUser', [HomeController::class, 'index'])->name('HomeUser');
+
 
     // Logout
     Route::post('logout', [CustomLoginController::class, 'logout'])->name('logout');
@@ -79,6 +83,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/tareas/{id}', [TareasController::class, 'destroy'])->name('tareas.destroy');
     Route::get('/tareas/{id}/ver', [TareasController::class, 'show'])->name('tareas.show');
 
+
+    
     // Sprints
     Route::get('sprints/create', fn() => view('sprints.create'))->name('sprints.create');
     Route::get('sprints', [SprintController::class, 'index'])->name('sprints.index');
@@ -108,39 +114,53 @@ Route::middleware('auth')->group(function () {
     Route::delete('notificaciones/{id}', [NotificacionesController::class, 'destroy'])->name('notificaciones.destroy');
 
     // Historial de cambios
-    Route::get('historialcambios', [HistorialCambiosController::class, 'index'])->name('historialcambios.index');
-    Route::get('historialcambios/{id}', [HistorialCambiosController::class, 'show'])->name('historialcambios.show');
-    Route::post('historialcambios', [HistorialCambiosController::class, 'store'])->name('historialcambios.store');
-    Route::post('historialcambios/revertir/{id}', [HistorialCambiosController::class, 'revertir'])->name('historialcambios.revertir');
+    Route::get('/historialcambios',                  [HistorialCambiosController::class, 'index'])->name('historialcambios.index');
+    Route::get('/historialcambios/{id}',             [HistorialCambiosController::class, 'show'])->name('historialcambios.show');
+    Route::post('/historialcambios',                 [HistorialCambiosController::class, 'store'])->name('historialcambios.store');
+    Route::match(['post','delete'], '/historialcambios/revertir/{id}',
+         [HistorialCambiosController::class, 'revertir'])->name('historialcambios.revertir');
 
-   // Reasignación de historias
-     Route::get('/reasignacion-historias',           [ReasignarHistoriaController::class, 'index'])->name('reasinarhistoria.index');
-     Route::post('/reasignacion-historias/reasignar',[ReasignarHistoriaController::class, 'reasignar']);
-    
-     //ruta para miembros
+    // Reasignación de historias
+    Route::get('/reasignacion-historias',           [ReasignarHistoriaController::class, 'index'])->name('reasinarhistoria.index');
+    Route::post('/reasignacion-historias/reasignar',[ReasignarHistoriaController::class, 'reasignar']);
+
+    //ruta para miembros
     Route::get('/miembros', [UserController::class, 'index'])->name('admin.users.index');
 
-    // Tablero 
-    Route::get('tab', [TableroController::class, 'index'])->name('tablero.index');
-    Route::get('tableros/{id}', [TableroController::class, 'show'])->name('tableros.show');
+    // Tablero Kanban
+    Route::get('/tab',            [TableroController::class, 'index'])->name('tablero');
+    Route::get('/tableros/{id}',  [TableroController::class, 'show'])->name('tableros.show');
+    Route::delete('/projects/{project}',                   [ProjectController::class, 'destroy'])->name('projects.destroy');
 
-    // --------------------- Rutas de Administrador ---------------------
-    Route::middleware('role:admin')->group(function () {
-        // Home de administrador
-        Route::get('homeadmin', [AdminController::class, 'index'])->name('homeadmin');
+    // **Rutas de administrador** (solo usuarios con usertype = 'admin')
+   // Route::middleware('role:admin')->group(function () {
+        // Home de admin
+        Route::get('/homeadmin', [AdminController::class, 'index'])->name('homeadmin');
 
-        // Gestión de usuarios
-        Route::get('admin/users', [UserController::class, 'index'])->name('admin.users.index');
-        Route::get('admin/users/search', [UserController::class, 'search'])->name('admin.users.search');
+            // Gestión de usuarios
+            Route::get('admin/users', [UserController::class, 'index'])->name('admin.users.index');
+            Route::get('admin/users/search', [UserController::class, 'search'])->name('admin.users.search');
 
         // CRUD de proyectos
-        Route::get('projects/create', [ProjectController::class, 'create'])->name('projects.create');
-        Route::post('projects', [ProjectController::class, 'store'])->name('projects.store');
-        Route::get('projects/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
-        Route::put('projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
-        Route::delete('projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
-        Route::delete('projects/{project}/remove-user/{user}', [ProjectController::class, 'removeUser'])->name('projects.removeUser');
-        Route::get('projects/search-users', [ProjectController::class, 'searchUsers'])->name('projects.searchUsers');
+        Route::get('/projects/create',                         [ProjectController::class, 'create'])->name('projects.create');
+        Route::post('/projects/store',                         [ProjectController::class, 'store'])->name('projects.store');
+        Route::get('/projects/{project}/edit',                 [ProjectController::class, 'edit'])->name('projects.edit');
+        Route::put('/projects/{project}',                      [ProjectController::class, 'update'])->name('projects.update');
+        
+        Route::delete('/projects/{project}/remove-user/{user}',[ProjectController::class, 'removeUser'])->name('projects.removeUser');
+        Route::get('/projects/search-users',                   [ProjectController::class, 'searchUsers'])->name('projects.searchUsers');
+      
+        // Gestión de usuarios
+        Route::get('/miembros',    [UserController::class, 'index'])->name('admin.users.index');
+        Route::get('/users/search',[UserController::class, 'search'])->name('users.search');
+
+        
     });
 
-});
+    Route::get('/archivo/seleccionar', [ArchivoHistoriaController::class, 'mostrarHistoriasDisponibles'])->name('archivo.seleccionar');
+        Route::post('/archivo/archivar/{id}', [ArchivoHistoriaController::class, 'archivar'])->name('archivo.archivar');
+        Route::get('/archivo', [ArchivoHistoriaController::class, 'index'])->name('archivo.index');
+        Route::post('/archivo/desarchivar/{id}', [ArchivoHistoriaController::class, 'desarchivar'])->name('archivo.desarchivar');
+        
+//});
+

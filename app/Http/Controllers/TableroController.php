@@ -14,9 +14,14 @@ class TableroController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        // Obtener las historias y ordenarlas según prioridad
-        $historias = Formatohistoria::all()->sortBy(function ($historia) {
+{
+    // Obtener los IDs de las historias archivadas
+    $historiasArchivadasIds = \App\Models\ArchivoHistoria::pluck('historia_id');
+
+    // Filtrar solo las historias NO archivadas
+    $historias = Formatohistoria::whereNotIn('id', $historiasArchivadasIds)
+        ->get()
+        ->sortBy(function ($historia) {
             switch ($historia->prioridad) {
                 case 'Alta':
                     return 1;
@@ -29,8 +34,8 @@ class TableroController extends Controller
             }
         });
 
-        return view('tablero',compact('historias'));
-    }
+    return view('tablero', compact('historias'));
+}
 
     /**
      * Show the form for creating a new resource.
