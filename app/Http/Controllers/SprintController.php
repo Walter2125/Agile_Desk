@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SprintModel;
+use App\Models\Project;
+use App\Models\Sprint;
 use Illuminate\Http\Request;
 
 class SprintController extends Controller
@@ -12,19 +13,20 @@ class SprintController extends Controller
      */
     public function index()
     {
-        $sprints = SprintModel::all();
-        return view('ListaSprint', compact('sprints'));
+        $sprints = Sprint::with('project')->get();
+        $projects = Project::all();
+
+        return view('ListaSprint', compact('sprints', 'projects'));
     }
 
     /**
-     * Muestra los detalles de todos los sprints con sus historias y tareas.
+     * Muestra el formulario para crear un nuevo sprint.
      */
-    public function detalleSprint()
+    public function create()
     {
-        // Obtener todos los sprints con sus historias y tareas asociadas.
-        $sprints = SprintModel::with('historias.tareas')->get();
+        $projects = Project::all();
 
-        return view('DetallesSprint', compact('sprints'));
+        return view('CrearSprints', compact('projects'));
     }
 
     /**
@@ -33,67 +35,70 @@ class SprintController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255',
+            'nombre'       => 'required|string|max:255',
             'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
-            'estado' => 'required|in:PLANEADO,EN CURSO,FINALIZADO',
-            'proyecto_id' => 'required|exists:proyectos,id',
-            'responsable' => 'required|string|max:255',
+            'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
+            'estado'       => 'required|in:PLANEADO,EN_CURSO,FINALIZADO',
+            'project_id'   => 'required|exists:nuevo_proyecto,id',
+            'color'        => 'required|string',
+            'tipo'         => 'required|in:NORMAL,URGENTE,BLOQUEADO',
+            'descripcion'  => 'nullable|string',
+            'todo_el_dia'  => 'boolean',
         ]);
 
-        $sprint = SprintModel::create($request->all());
+        $data = $request->all();
+        $data['todo_el_dia'] = $request->has('todo_el_dia');
 
-        return response()->json($sprint, 201);
+        Sprint::create($data);
+
+        return redirect()->route('sprints.index')
+                         ->with('success', 'Sprint creado correctamente');
     }
 
     /**
-     * Muestra un sprint en formato JSON.
+     * Muestra el formulario para editar un sprint existente.
      */
-    public function show($id)
+    public function edit(Sprint $sprint)
     {
-        $sprint = SprintModel::find($id);
-        if (!$sprint) {
-            return response()->json(['message' => 'Sprint no encontrado'], 404);
-        }
-        return response()->json($sprint);
+        $projects = Project::all();
+
+        return view('sprints.edit', compact('sprint', 'projects'));
     }
 
     /**
      * Actualiza un sprint en la base de datos.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Sprint $sprint)
     {
-        $sprint = SprintModel::find($id);
-        if (!$sprint) {
-            return response()->json(['message' => 'Sprint no encontrado'], 404);
-        }
-
         $request->validate([
-            'nombre' => 'sometimes|string|max:255',
-            'fecha_inicio' => 'sometimes|date',
-            'fecha_fin' => 'sometimes|date|after_or_equal:fecha_inicio',
-            'estado' => 'sometimes|in:PLANEADO,EN CURSO,FINALIZADO',
-            'proyecto_id' => 'sometimes|exists:proyectos,id',
-            'responsable' => 'sometimes|string|max:255',
+            'nombre'       => 'required|string|max:255',
+            'fecha_inicio' => 'required|date',
+            'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
+            'estado'       => 'required|in:PLANEADO,EN_CURSO,FINALIZADO',
+            'project_id'   => 'required|exists:nuevo_proyecto,id',
+            'color'        => 'required|string',
+            'tipo'         => 'required|in:NORMAL,URGENTE,BLOQUEADO',
+            'descripcion'  => 'nullable|string',
+            'todo_el_dia'  => 'boolean',
         ]);
 
-        $sprint->update($request->all());
+        $data = $request->all();
+        $data['todo_el_dia'] = $request->has('todo_el_dia');
 
-        return response()->json($sprint);
+        $sprint->update($data);
+
+        return redirect()->route('sprints.index')
+                         ->with('success', 'Sprint actualizado correctamente');
     }
 
     /**
      * Elimina un sprint de la base de datos.
      */
-    public function destroy($id)
+    public function destroy(Sprint $sprint)
     {
-        $sprint = SprintModel::find($id);
-        if (!$sprint) {
-            return response()->json(['message' => 'Sprint no encontrado'], 404);
-        }
-        
         $sprint->delete();
-        return response()->json(['message' => 'Sprint eliminado correctamente'], 200);
-    }
 
+        return redirect()->route('sprints.index')
+                         ->with('success', 'Sprint eliminado correctamente');
+    }
 }
