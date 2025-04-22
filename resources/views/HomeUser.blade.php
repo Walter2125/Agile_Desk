@@ -66,7 +66,10 @@
         });
     </script>
 
-    
+    <!-- Botón alineado a la derecha -->
+    <div class="detalle-btn-container">
+        <a href="{{ route('mis_historias') }}" class="btn detalle-btn">Ver Mis Historias</a>
+    </div>
 
     <div class="container-fluid text-center mt-5">
         <h1 class="mb-4">Agile Desk Para Usuarios</h1>

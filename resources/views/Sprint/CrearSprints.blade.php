@@ -269,7 +269,7 @@
   pointer-events: none;
 }
     </style>
-@stop
+@endsection
 
 @section('content')
 <!-- migajas de pan-->
@@ -404,7 +404,7 @@
                 </div>
 
                 <div class="btn-container">
-                    <a href="{{ route('sprints.index') }}" class="btn btn-secondary">Cancelar</a>
+                    <a href="{{ route('projects.my') }}" class="btn btn-secondary">Cancelar</a>
                     <button type="submit" class="btn btn-primary">Crear Sprint</button>
                 </div>
             </form>

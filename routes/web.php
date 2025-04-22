@@ -20,6 +20,8 @@ use App\Http\Controllers\HistorialCambiosController;
 use App\Http\Controllers\ReasignarHistoriaController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ArchivoHistoriaController;
+use App\Http\Controllers\ListaHistoriaController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +72,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/form/{formulario}/destroy',[FormatohistoriaControler::class,'destroy'])->name('formulario.destroy');
     Route::get('/form/{historia}/show', [FormatohistoriaControler::class, 'show'])->name('formulario.show');
 
+    //Lista de historias por cada usuarios
+    Route::get('/mis-historias', [FormatohistoriaControler::class, 'index'])->name('mis_historias');
 
     // tareas por historia 
     Route::get('/historias/{id}/tareas', [TareasController::class, 'indexPorHistoria'])->name('tareas.porHistoria');
@@ -167,10 +171,13 @@ Route::middleware('auth')->group(function () {
         
     });
 
+    //Rutas de aarchivar historias
     Route::get('/archivo/seleccionar', [ArchivoHistoriaController::class, 'mostrarHistoriasDisponibles'])->name('archivo.seleccionar');
         Route::post('/archivo/archivar/{id}', [ArchivoHistoriaController::class, 'archivar'])->name('archivo.archivar');
         Route::get('/archivo', [ArchivoHistoriaController::class, 'index'])->name('archivo.index');
         Route::post('/archivo/desarchivar/{id}', [ArchivoHistoriaController::class, 'desarchivar'])->name('archivo.desarchivar');
         
+    //Lista de historias por cada usuarios
+    Route::get('/mis-historias', [FormatohistoriaControler::class, 'misHistorias'])->name('mis_historias');
 });
 
