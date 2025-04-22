@@ -58,7 +58,7 @@
             </a>
             
             @forelse($sprints as $sprint)
-                <a href="{{ route('tableros.show', $sprint->id) }}" class="sprint-card" 
+                <a href="{{ route('tablero', $sprint->id) }}" class="sprint-card" 
                    data-start="{{ $sprint->fecha_inicio }}" 
                    data-end="{{ $sprint->fecha_fin }}" 
                    data-id="{{ $sprint->id }}"
