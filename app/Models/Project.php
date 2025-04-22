@@ -25,6 +25,6 @@ class Project extends Model
     
     public function sprints()
     {
-        return $this->hasMany(Sprint::class, 'proyecto_id');
+        return $this->hasMany(Sprint::class, 'project_id');
     }
 }

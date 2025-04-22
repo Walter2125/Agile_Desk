@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('tipo')->default('meeting');
             $table->text('descripcion')->nullable();
             $table->boolean('todo_el_dia')->default(false);
-            $table->foreignId('proyecto_id')->nullable()->constrained('proyectos')->onDelete('cascade');
+            $table->unsignedBigInteger('project_id');
+            $table->foreign('project_id')->references('id')->on('nuevo_proyecto')->onDelete('cascade');
             $table->timestamps();
         });
     }
