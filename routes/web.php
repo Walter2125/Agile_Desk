@@ -16,6 +16,7 @@ use App\Http\Controllers\NotificacionesController;
 use App\Http\Controllers\HistorialCambiosController;
 use App\Http\Controllers\ReasignarHistoriaController;
 use App\Http\Controllers\TableroController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,14 +45,18 @@ Route::post('reset-password', [App\Http\Controllers\Auth\ResetPasswordController
 
 // --------------------- Rutas Protegidas (Auth) ---------------------
 Route::middleware('auth')->group(function () {
+    Route::get('dashboard', function () {
+        return Auth::user()->usertype === 'admin'
+            ? redirect()->route('homeadmin')
+            : redirect()->route('HomeUser');
+    })->name('dashboard');
+    
     // Home de usuario normal
     Route::get('/HomeUser', [HomeController::class, 'index'])->name('HomeUser');
 
     // Logout
     Route::post('logout', [CustomLoginController::class, 'logout'])->name('logout');
 
-    // Dashboard principal (Usuario)
-    Route::get('dashboard', [HomeController::class, 'index'])->name('user.dashboard');
 
     // Rutas para formulario de historias
     //Route::get('/form',[FormatohistoriaControler::class,'index'])->name('form.index');
@@ -137,4 +142,5 @@ Route::middleware('auth')->group(function () {
         Route::delete('projects/{project}/remove-user/{user}', [ProjectController::class, 'removeUser'])->name('projects.removeUser');
         Route::get('projects/search-users', [ProjectController::class, 'searchUsers'])->name('projects.searchUsers');
     });
+
 });
