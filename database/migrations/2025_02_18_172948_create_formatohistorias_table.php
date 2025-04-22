@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('formatohistorias', function (Blueprint $table) {
-    
+
             $table->id();
             $table->string('nombre')->unique();
             $table->string('estado')->default('Pendiente');
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->enum('prioridad', ['Alta', 'Media', 'Baja'])->default('Media');
             $table->text('descripcion')->nullable();
             $table->timestamps();
+
         });
     }
 
@@ -31,5 +32,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('formatohistorias');
+        Schema::table('formatohistorias', function (Blueprint $table) {
+
+        });
     }
 };

@@ -31,6 +31,12 @@ class HistoriaModel extends Model
     {
         return $this->hasMany(TareaModel::class, 'historia_id');
     }
+    // Relación con Tablero (opcional, si usas otra tabla para tableros)
+
+    public function columna()
+    {
+        return $this->belongsTo(Columna::class);
+    }
 }
 
 /*

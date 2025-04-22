@@ -62,6 +62,17 @@ class HistoriaController extends Controller
 
         $historia->update($request->all());
 
+        $datos = $request->validate([
+            'columna_id' => 'nullable|exists:columnas,id'
+        ]);
+
+        $historia->update($datos);
+
+        return response()->json([
+            'exito'   => true,
+            'historia'=> $historia
+        ]);
+
         return response()->json($historia);
     }
 
@@ -88,7 +99,7 @@ class HistoriaController extends Controller
 
         // Encuentra la historia y actualiza el estado
         $historia = HistoriaModel::find($request->id);
-        $historia->estado = $request->estado; 
+        $historia->estado = $request->estado;
         $historia->save();
 
         return response()->json(['success' => true, 'message' => 'Estado actualizado correctamente.']);

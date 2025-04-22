@@ -107,6 +107,15 @@ Route::middleware('auth')->group(function () {
     // Proyectos (solo mis proyectos)
     Route::get('projects', [ProjectController::class, 'myProjects'])->name('projects.my');
 
+    Route::get('proyectos/{proyecto}/tableros/create', [TableroController::class, 'create'])->name('tableros.create');
+    Route::post('proyectos/{proyecto}/tableros', [TableroController::class, 'store'])->name('tableros.store');
+    Route::get('tableros/{tablero}', [TableroController::class, 'show'])->name('tableros.show');
+
+// Rutas para columnas (para uso vía AJAX)
+    Route::post('columnas', [ColumnaController::class, 'store'])->name('columnas.store');
+    Route::put('columnas/{columna}', [ColumnaController::class, 'update'])->name('columnas.update');
+    Route::delete('columnas/{columna}', [ColumnaController::class, 'destroy'])->name('columnas.destroy');
+
     // Calendario
     Route::controller(FullCalendarController::class)->prefix('fullcalendar')->group(function () {
         Route::get('/', 'index')->name('fullcalendar.index');
@@ -160,10 +169,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/projects/store',                         [ProjectController::class, 'store'])->name('projects.store');
         Route::get('/projects/{project}/edit',                 [ProjectController::class, 'edit'])->name('projects.edit');
         Route::put('/projects/{project}',                      [ProjectController::class, 'update'])->name('projects.update');
-        
+
         Route::delete('/projects/{project}/remove-user/{user}',[ProjectController::class, 'removeUser'])->name('projects.removeUser');
         Route::get('/projects/search-users',                   [ProjectController::class, 'searchUsers'])->name('projects.searchUsers');
-      
+
         // Gestión de usuarios
         Route::get('/miembros',    [UserController::class, 'index'])->name('admin.users.index');
         Route::get('/users/search',[UserController::class, 'search'])->name('users.search');
