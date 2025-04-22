@@ -66,10 +66,7 @@
         });
     </script>
 
-    <!-- Botón alineado a la derecha -->
-    <div class="detalle-btn-container">
-        <a href="{{ route('sprints.detalle') }}" class="btn detalle-btn">Ver Detalles de Sprint</a>
-    </div>
+    
 
     <div class="container-fluid text-center mt-5">
         <h1 class="mb-4">Agile Desk Para Usuarios</h1>

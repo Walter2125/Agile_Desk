@@ -18,7 +18,7 @@ class Sprint extends Model
         'tipo',
         'descripcion',
         'todo_el_dia',
-        'proyecto_id'
+        'project_id'
     ];
     
     protected $casts = [
@@ -27,10 +27,6 @@ class Sprint extends Model
         'todo_el_dia' => 'boolean',
     ];
     
-    public function proyecto()
-    {
-        return $this->belongsTo(Proyecto::class);
-    }
     
     public function etiquetas()
     {
@@ -39,8 +35,9 @@ class Sprint extends Model
 
     public function project()
     {
-        return $this->belongsTo(Project::class, 'proyecto_id', 'id');
+        return $this->belongsTo(Project::class, 'project_id');
     }
+
     
     public function tareas()
     {

@@ -330,7 +330,7 @@
             </div>
             <div class="col-6 col-md-3">
                 <div class="quick-stats">
-                    <div class="stat-number">{{ \App\Models\Sprint::where('estado', 'activo')->count() }}</div>
+                    <div class="stat-number">{{ \App\Models\Sprint::where('estado', 'Nuevo')->count() }}</div>
                     <div class="stat-label">Sprints Activos</div>
                 </div>
             </div>
@@ -471,7 +471,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    @foreach(\App\Models\Sprint::with('proyecto')->orderBy('fecha_inicio', 'desc')->limit(3)->get() as $sprint)
+                    @foreach(\App\Models\Sprint::with('project')->orderBy('fecha_inicio', 'desc')->limit(3)->get() as $sprint)
                     <div class="col-12 col-md-4 mb-3">
                         <div class="card h-100">
                             <div class="card-header" style="background-color: {{ $sprint->color ?? '#f8f9fa' }}">
