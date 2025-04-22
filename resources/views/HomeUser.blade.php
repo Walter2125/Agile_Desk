@@ -71,6 +71,9 @@
         <a href="{{ route('sprints.detalle') }}" class="btn detalle-btn">Ver Detalles de Sprint</a>
     </div>
 
+   <a href="{{ route('mis_historias') }}" class="btn btn-primary">Ver Mis Historias</a>
+
+
     <div class="container-fluid text-center mt-5">
         <h1 class="mb-4">Agile Desk Para Usuarios</h1>
 

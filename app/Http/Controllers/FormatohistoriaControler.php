@@ -7,6 +7,8 @@ use App\Models\HistoriaModel;
 use App\Models\Notificaciones;
 use App\Models\HistorialCambios;
 use App\Models\ReasinarHistorias;
+use App\Models\ListaHistoria;
+
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth; // Para obtener el usuario autenticado
@@ -22,6 +24,14 @@ class FormatohistoriaControler extends Controller
         return view('formato.index', compact('historias'));
     }
 
+    public function misHistorias()
+{
+    $historias = Formatohistoria::where('user_id', auth()->id())
+        ->select(['id', 'nombre', 'sprint', 'responsable', 'created_at'])
+        ->get();
+
+    return view('ListaHistorias', compact('historias'));
+}
     /**
      * Show the form for creating a new resource.
      */
@@ -56,6 +66,7 @@ class FormatohistoriaControler extends Controller
         $historia->responsable = $request->responsable;
         $historia->prioridad = $request->prioridad;
         $historia->descripcion = $request->descripcion;
+        $historia->user_id = auth()->id(); // ✅ ESTO ES FUNDAMENTAL
         $historia->save();
 
         // Enviar notificación al usuario autenticado
