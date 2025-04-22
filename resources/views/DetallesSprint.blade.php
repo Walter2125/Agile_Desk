@@ -1,89 +1,316 @@
 @extends('adminlte::page')
 
-@section('title', 'Agile Desk')
-
-@section('content_header')
-    <h1>Detalles de Sprints</h1>
-@stop
+@section('title', 'Historial de Cambios')
 
 @section('adminlte_css')
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('ccs/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: rgb(135, 168, 224);
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgb(120, 136, 163);
+            color: #333;
         }
-        .sprint-item {
-            border: 1px solid #ddd;
-            padding: 15px;
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 2rem;
             margin-bottom: 20px;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.9);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .sprint-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
-        .status-activo { color: #3498db; }
-        .status-completado { color: #2ecc71; }
-        .status-pendiente { color: #f39c12; }
-        .details-button {
+
+        .filters input,
+        .filters select,
+        .filters button {
+            padding: 10px 12px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            max-width: 220px;
+        }
+
+        .filters button {
             background-color: #007bff;
             color: white;
-            border: none;
-            padding: 8px 15px;
             cursor: pointer;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
+            border: none;
+            transition: 0.3s;
         }
-        .details-button:hover {
+
+        .filters button:hover {
             background-color: #0056b3;
+        }
+
+        .filters .clear-btn {
+            background-color: #dc3545;
+        }
+
+        .filters .clear-btn:hover {
+            background-color: #c82333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            font-size: 1rem;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .btn-revert {
+            background-color: #dc3545;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-revert:hover {
+            background-color: #c82333;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 20px;
+            font-size: 14px;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            padding: 6px 12px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .pagination button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .pagination span {
+            align-self: center;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .empty-msg {
+            text-align: center;
+            font-size: 1rem;
+            color: #777;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        /* Estilo para el botón de volver */
+        .btn-cancel {
+            display: inline-block;
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            transition: 0.3s;
+            margin: 30px auto 0;
+        }
+
+        .btn-cancel:hover {
+            background-color: #5a6268;
+        }
+
+        .volver-wrapper {
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .filters input,
+            .filters select,
+            .filters button {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            table {
+                width: 100%;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .pagination button {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filters input,
+            .filters select,
+            .filters button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
         }
     </style>
 @stop
 
 @section('content')
+    <div class="container">
+        <h2>Historial de Cambios</h2>
 
-    @if(isset($sprints) && count($sprints) > 0)
-        <div id="sprint-list" class="container">
-            @foreach($sprints as $sprint)
-                <div class="sprint-item">
-                    <div class="sprint-title" style="font-size: 20px; font-weight: bold; color: #34495e;">
-                        {{ $sprint->nombre }}
-                    </div>
-                    <div><strong>Inicio:</strong> {{ $sprint->fecha_inicio }}</div>
-                    <div><strong>Fin:</strong> {{ $sprint->fecha_fin }}</div>
-                    @php
-                        $statusClass = ($sprint->estado === 'EN CURSO') ? 'status-activo' :
-                                       (($sprint->estado === 'FINALIZADO') ? 'status-completado' : 'status-pendiente');
-                    @endphp
-                    <div class="sprint-status {{ $statusClass }}">
-                        <strong>Estado:</strong> {{ $sprint->estado }}
-                    </div>
-                    <button class="details-button" onclick="showDetails('{{ $sprint->nombre }}', 'Responsable: {{ $sprint->responsable }}')">Detalles</button>
-                    
-                    <h3>Historias:</h3>
-                    @foreach($sprint->historias as $historia)
-                        <p><strong>{{ $historia->nombre }}</strong></p>
-                        <h4>Tareas:</h4>
-                        @foreach($historia->tareas as $tarea)
-                            <p>- {{ $tarea->nombre }}</p>
-                        @endforeach
-                    @endforeach
-                </div>
-            @endforeach
+        <div class="filters">
+            <input type="text" id="usuarioFiltro" placeholder="Usuario">
+            <select id="accionFiltro">
+                <option value="">Todas las acciones</option>
+                <option value="Creación">Creación</option>
+                <option value="Edición">Edición</option>
+                <option value="Eliminación">Eliminación</option>
+            </select>
+            <input type="date" id="fechaFiltro">
+            <button onclick="fetchHistorial()">Filtrar</button>
+            <button class="clear-btn" onclick="limpiarFiltros()">Limpiar</button>
         </div>
-    @else
-        <p class="text-center text-danger">No hay sprints disponibles</p>
-    @endif
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Acción</th>
+                    <th>Detalles</th>
+                    <th>Revertir</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($historial as $item)
+                    <tr>
+                        <td>{{ $item->fecha }}</td>
+                        <td>{{ $item->usuario }}</td>
+                        <td>{{ $item->accion }}</td>
+                        <td>{{ $item->detalles }}</td>
+                        <td>
+                            <form action="{{ route('historialcambios.revertir', $item->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-revert">Revertir</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="empty-msg">No hay resultados para mostrar.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        <div class="pagination pagination-sm">
+            {{ $historial->links() }}
+        </div>
+
+        {{-- Botón "Volver al inicio" después de la paginación --}}
+        <div class="volver-wrapper">
+            <a href="{{ route('homeadmin') }}" class="btn-cancel">Volver al inicio</a>
+        </div>
+    </div>
 @stop
 
 @section('adminlte_js')
     <script>
-        function showDetails(title, body) {
-            alert(title + "\n" + body);
+        function fetchHistorial() {
+            let usuario = document.getElementById("usuarioFiltro").value;
+            let accion = document.getElementById("accionFiltro").value;
+            let fecha = document.getElementById("fechaFiltro").value;
+
+            let url = new URL(window.location.href);
+            if (usuario) url.searchParams.set("usuario", usuario);
+            else url.searchParams.delete("usuario");
+
+            if (accion) url.searchParams.set("accion", accion);
+            else url.searchParams.delete("accion");
+
+            if (fecha) url.searchParams.set("fecha", fecha);
+            else url.searchParams.delete("fecha");
+
+            window.location.href = url.toString();
         }
+
+        function limpiarFiltros() {
+            document.getElementById("usuarioFiltro").value = "";
+            document.getElementById("accionFiltro").value = "";
+            document.getElementById("fechaFiltro").value = "";
+
+            let url = new URL(window.location.href);
+            url.searchParams.delete("usuario");
+            url.searchParams.delete("accion");
+            url.searchParams.delete("fecha");
+
+            window.location.href = url.toString();
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has("usuario")) document.getElementById("usuarioFiltro").value = urlParams.get("usuario");
+            if (urlParams.has("accion")) document.getElementById("accionFiltro").value = urlParams.get("accion");
+            if (urlParams.has("fecha")) document.getElementById("fechaFiltro").value = urlParams.get("fecha");
+        });
     </script>
 @stop

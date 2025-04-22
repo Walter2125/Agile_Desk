@@ -8,84 +8,74 @@
 
 @section('adminlte_css')
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('ccs/style.css') }}">
     <style>
-        body {
-            background-color: rgb(135, 168, 224);
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+            transform: translateX(2px);
+            transition: all 0.2s ease;
         }
 
-        .container-box {
-            max-width: 700px;
-            margin: auto;
-            background: white;
-            padding: 25px;
+        .card {
             border-radius: 10px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.15);
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            background-color: #e9ecef;
-            margin: 10px 0;
-            padding: 15px 20px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .archive-button {
-            padding: 8px 14px;
-            background-color: #007bff;
             border: none;
-            border-radius: 5px;
+        }
+
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
             color: white;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
         }
 
-        .archive-button:hover {
-            background-color: #0056b3;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-top: 15px;
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
+        .btn-light:hover {
+            background-color: #e2e6ea;
         }
     </style>
 @stop
 
 @section('content')
-    <div class="container-box">
-        <h2 class="text-center mb-4">Selecciona una Historia para Archivar</h2>
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="h5 mb-0">
+                    <i class="fas fa-tasks me-2"></i>Seleccionar Historia para Archivar
+                </h2>
+                <a href="{{ route('archivo.index') }}" class="btn btn-sm btn-light">
+                    <i class="fas fa-archive me-1"></i> Ver Archivadas
+                </a>
+            </div>
+        </div>
 
-        @if(count($historias) > 0)
-            <ul>
-                @foreach($historias as $historia)
-                    <li>
-                        <strong>{{ $historia->nombre }}</strong>
-                        <form method="POST" action="{{ route('archivo.archivar', $historia->id) }}">
-                            @csrf
-                            <button type="submit" class="archive-button">Archivar</button>
-                        </form>
-                    </li>
-                @endforeach
-            </ul>
-        @else
-            <p class="text-center text-danger">No hay historias disponibles para archivar.</p>
-        @endif
-
-        <a href="{{ route('tablero') }}" class="back-link">← Volver al Tablero</a>
+        <div class="card-body">
+            @if($historias->isEmpty())
+                <div class="text-center py-5">
+                    <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No hay historias activas</h4>
+                    <p class="text-muted">Todas las historias han sido archivadas.</p>
+                </div>
+            @else
+                <div class="list-group list-group-flush">
+                    @foreach($historias as $historia)
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-1">{{ $historia->nombre }}</h5>
+                                </div>
+                                <form method="POST" action="{{ route('archivo.archivar', $historia->id) }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-outline-primary" title="Archivar historia">
+                                        <i class="fas fa-box-archive me-1"></i> Archivar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
     </div>
+</div>
 @stop
