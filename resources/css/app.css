@@ -54,5 +54,22 @@
     padding: 10px;
     border-radius: 5px;
 }
+/* Contenedor de las columnas */
+#tablero {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto; /* Habilita el scroll horizontal */
+    padding: 1rem;
+}
+
+.columna {
+    flex: 1; /* Las columnas ocupan el espacio disponible */
+    min-width: 200px; /* Ancho mínimo para cada columna */
+    max-width: 300px; /* Ancho máximo para limitar el tamaño */
+}
+
+#tablero.muchas-columnas .columna {
+    flex: 0 0 auto; /* Las columnas no se expanden cuando hay muchas */
+}
 
 
