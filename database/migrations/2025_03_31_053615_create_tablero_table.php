@@ -13,15 +13,9 @@ return new class extends Migration
     {
         Schema::create('tableros', function (Blueprint $table) {
             $table->id();
-            // Cada tablero se relaciona con un sprint
-            $table->foreignId('sprint_id')
-                ->constrained('sprints')
-                ->cascadeOnDelete();
-            $table->string('nombre'); // Ejemplo: "Tablero de Sprint 1"
+            $table->foreignId('proyecto_id')->constrained('proyectos')->onDelete('cascade');
+            $table->string('nombre');  // nombre del tablero
             $table->timestamps();
-
-            // Se asegura que un sprint tenga únicamente un tablero
-            $table->unique('sprint_id');
         });
     }
 
@@ -30,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tablero');
+        Schema::dropIfExists('tableros');
     }
 };

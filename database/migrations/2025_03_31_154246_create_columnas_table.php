@@ -9,25 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('columnas', function (Blueprint $table) {
             $table->id();
-            // Relación con el tablero del sprint
-            $table->foreignId('tablero_id')
-                ->constrained('tableros')
-                ->cascadeOnDelete();
-            $table->string('nombre'); // Ejemplo: "Backlog", "En Progreso", "Terminado"
-            $table->integer('position')->default(0); // Para ordenar las columnas
+            $table->foreignId('tablero_id')->constrained('tableros')->onDelete('cascade');
+            $table->string('nombre'); // nombre de la columna
+            $table->integer('orden')->default(0); // campo para el orden de columnas
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('columnas');
     }
+
 };
