@@ -38,12 +38,20 @@
                 @foreach($projects as $project)
                     <div class="col-md-4 mb-4">
                         <div class="card project-card h-100 d-flex flex-column">
-                            <div class="card-header bg-white border-0 pt-3">
-                                <h3 class="card-title font-weight-bold text-dark">
-                                    <i class="fas fa-project-diagram text-primary mr-2"></i>
-                                    {{ $project->name }}
-                                </h3>
-                            </div>
+                                <div class="row mb-3">
+                                    <div class="col-md">       
+                                        <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
+                                            <h3 class="card-title font-weight-bold text-dark m-0 d-flex align-items-center">
+                                                <i class="fas fa-project-diagram text-primary mr-2"></i>
+                                                {{ $project->name }}
+                                            </h3>
+                                            <a href="{{ route('sprints.create') }}" class="btn btn-primary btn-lg rounded-pill px-4">
+                                                <i class="fas fa-plus mr-2"></i> Crear Sprint
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
                             <div class="card-body">
                                 <div class="project-meta mb-3">
                                     <p class="mb-1">
@@ -78,23 +86,13 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div><div class="card mb-3">
-  <div class="card-body">
-    <h5 class="card-title">Titulo sprint</h5>
-    <p class="card-text">Resumen breve de sprint.</p>
-   
- 
-      <a href="#" class="btn btn-sm btn-info">Ver detalles de sprint</a>
-    
-  </div>
-</div></div>
+                                
                             </div>
                             
                             <div class="card-footer bg-white border-0 pb-3">
                                 <div class="d-flex justify-content-between">
-                                    <a href="" class="btn btn-outline-info btn-sm rounded-pill">
-                                        <i class="fas fa-eye mr-1"></i> Ver
-                                    </a>
+                                <a href="{{ route('sprints.index') }}" class="btn btn-outline-info btn-sm rounded-pill" aria-label="Crear nuevo sprint"> <i class="fas fa-eye mr-1"></i>ver</a>
+                                    
 
                                     @if(auth()->id() === $project->user_id)
                                         <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-outline-warning btn-sm rounded-pill">
