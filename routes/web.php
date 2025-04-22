@@ -20,6 +20,7 @@ use App\Http\Controllers\HistorialCambiosController;
 use App\Http\Controllers\ReasignarHistoriaController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ArchivoHistoriaController;
+use App\Http\Controllers\ColumnaController;
 use App\Http\Controllers\ListaHistoriaController;
 
 
