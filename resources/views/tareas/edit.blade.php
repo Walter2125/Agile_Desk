@@ -89,5 +89,10 @@
 
     </form>
 </div>
+<script>
+        if (performance.navigation.type === 2 || performance.getEntriesByType("navigation")[0]?.type === "back_forward") {
+            window.location.href = "{{ route('tareas.index') }}";
+        }
+    </script>
 @endsection
 

@@ -93,6 +93,12 @@
 
         </div>
     </form>
+
+    <script>
+        if (performance.navigation.type === 2 || performance.getEntriesByType("navigation")[0]?.type === "back_forward") {
+            window.location.href = "{{ route('tablero') }}";
+        }
+    </script>
 @endsection
 
 

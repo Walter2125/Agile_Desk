@@ -106,8 +106,16 @@ class FormatohistoriaControler extends Controller
     public function edit($id)
     {
         //
+        if (session('fromEdit')) {
+            return redirect()->route('tablero')->with('warning', 'No puedes volver al formulario de edición.');
+        }
         $historia = Formatohistoria::findOrFail($id);
-        return view('formato.edit',compact('historia'));
+      
+        return response()
+        ->view('formato.edit', compact('historia'))
+        ->header('Cache-Control','no-cache, no-store, must-revalidate')
+        ->header('Pragma','no-cache')
+        ->header('Expires','0');
     }
 
     /**
