@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up()
 {
-    Schema::table('historial_cambios', function (Blueprint $table) {
+    Schema::table('historialcambios', function (Blueprint $table) {
         $table->integer('sprint')->nullable()->after('detalles');
     });
 }
 
 public function down()
 {
-    Schema::table('historial_cambios', function (Blueprint $table) {
+    Schema::table('historialcambios', function (Blueprint $table) {
         $table->dropColumn('sprint');
     });
     }
