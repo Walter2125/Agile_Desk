@@ -14,15 +14,22 @@ return new class extends Migration
         Schema::create('formatohistorias', function (Blueprint $table) {
 
             $table->id();
-            $table->string('nombre')->unique();
+            $table->string('nombre');
             $table->string('estado')->default('Pendiente');
             $table->integer('sprint')->nullable();
             $table->integer('trabajo_estimado')->nullable();
             $table->string('responsable')->nullable();
             $table->enum('prioridad', ['Alta', 'Media', 'Baja'])->default('Media');
             $table->text('descripcion')->nullable();
+            $table->unsignedBigInteger('columna_id')->nullable();
+            $table->foreign('columna_id')->references('id')->on('columnas')->onDelete('cascade');
+            $table->unsignedBigInteger('tablero_id'); // Nueva columna
+            $table->foreign('tablero_id')->references('id')->on('tablero')->onDelete('cascade'); 
             $table->timestamps();
-
+            
+            // Agregar un índice único compuesto para 'nombre' y 'tablero_id'
+            $table->unique(['nombre', 'tablero_id'], 'formatohistorias_nombre_tablero_unique');
+    
         });
     }
 

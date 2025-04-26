@@ -181,7 +181,7 @@
 
                         <!-- 🔽 Botones DENTRO del card, todos válidos -->
                         <div class="card-overlay d-flex flex-column align-items-center">
-                            <a href="{{ route('tableros.show', $sprint->id) }}" class="view-details mb-2">Ver tablero</a>
+                            <a href="{{ route('projects.tablero', $sprint->id) }}" class="view-details mb-2">Ver tablero</a>
                             <a href="{{ route('sprints.edit', $sprint->id) }}" class="view-details mb-2">Editar</a>
                             
                             <!-- Formulario válido, no está dentro de <a> -->
