@@ -83,6 +83,7 @@ class FormatohistoriaControler extends Controller
             'usuario' => Auth::user()->name ?? 'Desconocido', // Usuario autenticado o "Desconocido"
             'accion' => 'Creación',
             'detalles' => 'Se creó una nueva historia: ' . $historia->nombre,
+            'sprint' => $historia->sprint, // ✅ AÑADIR ESTO
         ]);
 
         return redirect()->route('tablero')->with([
@@ -153,6 +154,7 @@ class FormatohistoriaControler extends Controller
         'usuario' => Auth::user()->name ?? 'Desconocido',
         'accion' => 'Edición',
         'detalles' => $detalles,
+        'sprint' => $historia->sprint, // ✅ AÑADIR ESTO
     ]);
 
     return redirect()->route('tablero')->with([
@@ -187,6 +189,7 @@ class FormatohistoriaControler extends Controller
         'usuario' => Auth::user()->name ?? 'Desconocido',
         'accion' => 'Eliminación',
         'detalles' => "Se eliminó la historia: " . $nombreHistoria,
+        'sprint' => $historia->sprint, // ✅ AÑADIR ESTO
     ]);
 
     session()->flash('success', 'Historia eliminada correctamente');

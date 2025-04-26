@@ -10,6 +10,6 @@ class HistorialCambios extends Model
     use HasFactory;
 
     protected $table = 'historialcambios';
-    protected $fillable = ['fecha', 'usuario', 'accion', 'detalles', 'sprint'];
+    protected $fillable = ['fecha', 'usuario', 'accion', 'detalles', 'sprint',];
     public $timestamps = false; // Ya tienes `fecha` en la migración
 }

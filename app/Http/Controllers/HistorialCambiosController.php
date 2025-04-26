@@ -14,21 +14,25 @@ class HistorialCambiosController extends Controller
     {
         $query = HistorialCambios::query();
 
+        // Filtros
         if ($request->filled('usuario')) {
-            $query->where('usuario', 'LIKE', '%' . $request->usuario . '%');
+            $query->where('usuario', 'like', '%' . $request->usuario . '%');
         }
+
         if ($request->filled('accion')) {
             $query->where('accion', $request->accion);
         }
+
         if ($request->filled('fecha')) {
             $query->whereDate('fecha', $request->fecha);
         }
 
-        $historial = $query->orderBy('fecha', 'desc')->paginate(5);
-
-        if ($request->ajax()) {
-            return response()->json($historial);
+        if ($request->filled('sprint')) {
+            $query->where('sprint', $request->sprint);
         }
+
+        $historial = $query->orderBy('fecha', 'desc')->paginate(10);
+
 
         return view('HistorialCambios')->with('historial', $historial);
     }

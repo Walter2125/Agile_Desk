@@ -215,7 +215,6 @@
                 <th>Acción</th>
                 <th>Detalles</th>
                 <th>Sprint</th> <!-- Añadí la columna Sprint aquí -->
-                <th>Revertir</th>
             </tr>
         </thead>
         <tbody>
@@ -227,11 +226,7 @@
                     <td>{{ $item->detalles }}</td>
                     <td>{{ $item->sprint ?? 'N/A' }}</td> <!-- Aquí se muestra el sprint o N/A si está vacío -->
                     <td>
-                        <form action="{{ route('historialcambios.revertir', $item->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-revert">Revertir</button>
-                        </form>
+                        
                     </td>
                 </tr>
             @empty
