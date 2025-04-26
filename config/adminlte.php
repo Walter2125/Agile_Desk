@@ -327,11 +327,6 @@ return [
             'icon' => 'fas fa-fw fa-folder',
         ],
         [
-            'text' => 'Tableros',
-            'url' => 'tab',
-            'icon' => 'fas fa-fw fa-folder',
-        ],
-        [
             'text' => 'Sprints',
             'url' => 'sprints',
             'icon' => 'fas fa-fw fa-folder',

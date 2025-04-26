@@ -21,4 +21,15 @@ class Formatohistoria extends Model
     {
         return $this->hasOne(ArchivoHistoria::class, 'historia_id');
     }
+
+     // Pertenece a una columna
+     public function columna()
+     {
+         return $this->belongsTo(Columna::class, 'columna_id');
+     }
+    // Pertenece a un tablero
+    public function tablero()
+    {
+        return $this->belongsTo(Tablero::class, 'tablero_id');
+    }
 }
