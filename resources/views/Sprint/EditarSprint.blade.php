@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'Crear Nuevo Sprint')
+@section('title', 'Editar Sprint')
 
 @section('adminlte_css')
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/css2.css') }}">
     <link rel="stylesheet" href="{{ asset('css/sprints.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="{{ asset('css/flatpickr.min.css') }}"> 
     <style>
-        /* Estilos específicos para el formulario de creación */
+        /* Estilos específicos para el formulario de edición - mismos que en create */
         .create-sprint-form {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 16px;
@@ -63,7 +63,7 @@
         }
 
         textarea.form-control {
-            min-height: 120px;
+            min-height: 100px;
             resize: vertical;
         }
 
@@ -212,23 +212,104 @@
             font-weight: 500;
             color: #455A64;
         }
+        .migajas {
+  margin: 1rem 0;
+  padding: 0 1rem;
+  /* ¡QUITAR height y min-width! */
+  /* height: 100%; */
+  /* min-width: 480px; */
+  overflow: visible;                 /* Asegura que no se corten los skew */
+}
+
+/* --- Listado de migajas --- */
+.migajas .breadcrumb {
+    background-color: linear-gradient(120deg, #1E3C72, #2A5298);
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* Quitar translateY */
+  /* transform: translateY(-50%); */
+  position: relative;
+  z-index: 2;
+}
+
+/* Ítems de migajas */
+.migajas .breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  background-color: #fff !important;  /* Asegura el fondo blanco */
+  color: #252525;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  border-radius: 7px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  
+}
+
+.migajas .breadcrumb__item:hover {
+  background-color: #490099;
+  color: #fff;
+}
+
+/* Contenido interior para “des-skewear” */
+.migajas .breadcrumb__inner {
+  transform: skew(21deg);
+}
+
+/* Ítem activo */
+.migajas .breadcrumb__item--active {
+  background-color: #8e00d4 !important;
+  color: #fff !important;
+  pointer-events: none;
+}
     </style>
-@endsection
+@stop
 
 @section('content')
+<!-- migajas de pan-->
+<div class="container py-3 migajas" id="migajas">
+    <ul class="breadcrumb">
+        <li class="breadcrumb__item breadcrumb__item-firstChild">
+            <span class="breadcrumb__inner">
+                <a href="/dashboard" class="breadcrumb__title">Home</a>
+            </span>
+        </li>
+        <li class="breadcrumb__item breadcrumb__item-firstChild">
+            <span class="breadcrumb__inner">
+                <a href="/projects" class="breadcrumb__title">Proyectos</a>
+            </span>
+        </li>
+        <li class="breadcrumb__item breadcrumb__item-firstChild">
+            <span class="breadcrumb__inner">
+                <a href="/sprints" class="breadcrumb__title">Sprints</a>
+            </span>
+        </li>
+        <li class="breadcrumb__item breadcrumb__item--active">
+            <span class="breadcrumb__inner">
+                <a href="#" class="breadcrumb__title">Editar Sprint</a>
+            </span>
+        </li>
+    </ul>
+</div>  
     <div class="sprint-dashboard">
         <div class="create-sprint-form">
             <div class="form-header">
-                <h1>🚀 Crear Nuevo Sprint</h1>
-                <p>Completa el formulario para añadir un nuevo sprint a tu proyecto</p>
+                <h1>🔄 Editar Sprint</h1>
+                <p>Actualiza la información del sprint</p>
             </div>
 
-            <form action="{{ route('sprints.store') }}" method="POST">
+            <form action="{{ route('sprints.update', $sprint->id) }}" method="POST">
                 @csrf
+                @method('PUT')
                 
                 <div class="form-group">
                     <label for="nombre">Nombre del Sprint <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre') }}" required autofocus>
+                    <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre', $sprint->nombre) }}" required autofocus>
                     @error('nombre')
                         <div class="error-message">{{ $message }}</div>
                     @enderror
@@ -236,7 +317,7 @@
 
                 <div class="form-group">
                     <label for="descripcion">Descripción</label>
-                    <textarea class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" name="descripcion">{{ old('descripcion') }}</textarea>
+                    <textarea class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" name="descripcion">{{ old('descripcion', $sprint->descripcion) }}</textarea>
                     @error('descripcion')
                         <div class="error-message">{{ $message }}</div>
                     @enderror
@@ -245,7 +326,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="fecha_inicio">Fecha de inicio <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control datepicker @error('fecha_inicio') is-invalid @enderror" id="fecha_inicio" name="fecha_inicio" value="{{ old('fecha_inicio') }}" required>
+                        <input type="text" class="form-control datepicker @error('fecha_inicio') is-invalid @enderror" id="fecha_inicio" name="fecha_inicio" value="{{ old('fecha_inicio', $sprint->fecha_inicio->format('Y-m-d')) }}" required>
                         @error('fecha_inicio')
                             <div class="error-message">{{ $message }}</div>
                         @enderror
@@ -253,7 +334,7 @@
 
                     <div class="form-group">
                         <label for="fecha_fin">Fecha de fin <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control datepicker @error('fecha_fin') is-invalid @enderror" id="fecha_fin" name="fecha_fin" value="{{ old('fecha_fin') }}" required>
+                        <input type="text" class="form-control datepicker @error('fecha_fin') is-invalid @enderror" id="fecha_fin" name="fecha_fin" value="{{ old('fecha_fin', $sprint->fecha_fin->format('Y-m-d')) }}" required>
                         @error('fecha_fin')
                             <div class="error-message">{{ $message }}</div>
                         @enderror
@@ -262,7 +343,7 @@
 
                 <div class="switch-container">
                     <label class="switch" for="todo_el_dia">
-                        <input type="checkbox" id="todo_el_dia" name="todo_el_dia" value="1" {{ old('todo_el_dia') ? 'checked' : '' }}>
+                        <input type="checkbox" id="todo_el_dia" name="todo_el_dia" value="1" {{ old('todo_el_dia', $sprint->todo_el_dia) ? 'checked' : '' }}>
                         <span class="slider"></span>
                     </label>
                     <span class="toggle-label">Todo el día</span>
@@ -271,22 +352,25 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="estado">Estado <span class="text-danger">*</span></label>
-                        <select class="form-control @error('estado') is-invalid @enderror" id="estado" name="estado" required>
-                            <option value="PLANEADO" {{ old('estado') == 'PLANEADO' ? 'selected' : '' }}>Planeado</option>
-                            <option value="EN_CURSO" {{ old('estado') == 'EN_CURSO' ? 'selected' : '' }}>En Curso</option>
-                            <option value="FINALIZADO" {{ old('estado') == 'FINALIZADO' ? 'selected' : '' }}>Finalizado</option>
+                        <select class="form-control form-control-lg @error('estado') is-invalid @enderror" id="estado" name="estado" required>
+                            <option value="PLANEADO" {{ old('estado', $sprint->estado ?? '') == 'PLANEADO' ? 'selected' : '' }}>Planeado</option>
+                            <option value="EN_CURSO" {{ old('estado', $sprint->estado ?? '') == 'EN_CURSO' ? 'selected' : '' }}>En Curso</option>
+                            <option value="FINALIZADO" {{ old('estado', $sprint->estado ?? '') == 'FINALIZADO' ? 'selected' : '' }}>Finalizado</option>
                         </select>
+                        
+                    
                         @error('estado')
-                            <div class="error-message">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    
 
                     <div class="form-group">
                         <label for="tipo">Tipo</label>
-                        <select class="form-control @error('tipo') is-invalid @enderror" id="tipo" name="tipo">
-                            <option value="NORMAL" {{ old('tipo') == 'NORMAL' ? 'selected' : '' }}>Normal</option>
-                            <option value="URGENTE" {{ old('tipo') == 'URGENTE' ? 'selected' : '' }}>Urgente</option>
-                            <option value="BLOQUEADO" {{ old('tipo') == 'BLOQUEADO' ? 'selected' : '' }}>Bloqueado</option>
+                        <select class="form-control @error('tipo') is-invalid @enderror" id="tipo" name="tipo" required>
+                            <option value="NORMAL" {{ old('tipo', $sprint->tipo) == 'NORMAL' ? 'selected' : '' }}>Normal</option>
+                            <option value="URGENTE" {{ old('tipo', $sprint->tipo) == 'URGENTE' ? 'selected' : '' }}>Urgente</option>
+                            <option value="BLOQUEADO" {{ old('tipo', $sprint->tipo) == 'BLOQUEADO' ? 'selected' : '' }}>Bloqueado</option>
                         </select>
                         @error('tipo')
                             <div class="error-message">{{ $message }}</div>
@@ -295,23 +379,25 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="project_id">Proyecto <span class="text-danger">*</span></label>
-                    <select class="form-control @error('project_id') is-invalid @enderror" id="project_id" name="project_id" required>
+                    <label for="proyecto_id">Proyecto <span class="text-danger">*</span></label>
+                    <select class="form-control @error('proyecto_id') is-invalid @enderror" id="proyecto_id" name="proyecto_id" required>
                         <option value="">Seleccionar proyecto</option>
                         @foreach($projects as $project)
-                            <option value="{{ $project->id }}" {{ old('project_id')==$project->id?'selected':'' }}>
+                            <option value="{{ $project->id }}" {{ old('proyecto_id', $sprint->proyecto_id) == $project->id ? 'selected' : '' }}>
                                 {{ $project->name }}
                             </option>
                         @endforeach
                     </select>
-                    @error('project_id')<div class="error-message">{{ $message }}</div>@enderror
+                    @error('proyecto_id')
+                        <div class="error-message">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label>Color del Sprint</label>
-                    <input type="hidden" name="color" id="color" value="{{ old('color', '#42A5F5') }}">
+                    <input type="hidden" name="color" id="color" value="{{ old('color', $sprint->color) }}">
                     <div class="color-picker-container">
-                        <div class="color-option selected" style="background-color: #42A5F5;" data-color="#42A5F5"></div>
+                        <div class="color-option" style="background-color: #42A5F5;" data-color="#42A5F5"></div>
                         <div class="color-option" style="background-color: #66BB6A;" data-color="#66BB6A"></div>
                         <div class="color-option" style="background-color: #FFA726;" data-color="#FFA726"></div>
                         <div class="color-option" style="background-color: #EF5350;" data-color="#EF5350"></div>
@@ -323,8 +409,8 @@
                 </div>
 
                 <div class="btn-container">
-                    <a href="{{ route('projects.my') }}" class="btn btn-secondary">Cancelar</a>
-                    <button type="submit" class="btn btn-primary">Crear Sprint</button>
+                    <a href="{{ route('sprints.index') }}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Actualizar Sprint</button>
                 </div>
             </form>
         </div>
@@ -332,8 +418,8 @@
 @stop
 
 @section('adminlte_js')
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+    <script src="{{ asset('js/flatpickr.js') }}"></script> 
+    <script src="{{ asset('js/es.js') }}"></script> 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Inicializar datepicker para las fechas
@@ -347,7 +433,13 @@
             const colorOptions = document.querySelectorAll('.color-option');
             const colorInput = document.getElementById('color');
 
+            // Seleccionar el color guardado
+            const savedColor = colorInput.value;
             colorOptions.forEach(option => {
+                if (option.dataset.color === savedColor) {
+                    option.classList.add('selected');
+                }
+                
                 option.addEventListener('click', function() {
                     // Quitar la clase selected de todos los colores
                     colorOptions.forEach(opt => opt.classList.remove('selected'));
@@ -359,16 +451,6 @@
                     colorInput.value = this.dataset.color;
                 });
             });
-
-            // Seleccionar el color guardado en el formulario (para cuando hay errores de validación)
-            const savedColor = colorInput.value;
-            if (savedColor) {
-                const savedOption = document.querySelector(`.color-option[data-color="${savedColor}"]`);
-                if (savedOption) {
-                    colorOptions.forEach(opt => opt.classList.remove('selected'));
-                    savedOption.classList.add('selected');
-                }
-            }
         });
     </script>
 @stop

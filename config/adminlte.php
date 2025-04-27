@@ -327,8 +327,8 @@ return [
             'icon' => 'fas fa-fw fa-folder',
         ],
         [
-            'text' => 'Tableros',
-            'url' => 'tab',
+            'text' => 'Sprints',
+            'url' => 'sprints',
             'icon' => 'fas fa-fw fa-folder',
         ],
         [
@@ -350,11 +350,7 @@ return [
                     'url'  => 'admin/users',
                     'icon' => 'fas fa-fw fa-list',
                 ],
-                [
-                    'text' => 'Crear Usuario',
-                    'url'  => 'admin/users/create',
-                    'icon' => 'fas fa-fw fa-user-plus',
-                ],
+                
             ],
         ],
 

@@ -1,25 +1,153 @@
+:root {
+    --background-color: linear-gradient(120deg, #1E3C72, #2A5298);
+    --text-color: #333;
+    --create-card-bg: rgba(255, 255, 255, 0.5);
+    --create-card-bg-hover: rgba(255, 255, 255, 0.7);
+    --create-card-border: #4CAF50;
+    --create-icon-bg: #4CAF50;
+    --create-title-color: #2E7D32;
+    --create-desc-color: #558B2F;
+    --sprint-card-bg: rgba(255, 255, 255, 0.85);
+    --sprint-card-border: #42A5F5;
+    --sprint-title-color: #2c3e50;
+    --sprint-desc-color: #546E7A;
+}
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #f1f1f1;
+    --create-card-bg: rgba(30, 30, 30, 0.6);
+    --create-card-bg-hover: rgba(45, 45, 45, 0.8);
+    --create-card-border: #81C784;
+    --create-icon-bg: #81C784;
+    --create-title-color: #A5D6A7;
+    --create-desc-color: #C8E6C9;
+    --sprint-card-bg: rgba(30, 30, 30, 0.85);
+    --sprint-card-border: #64B5F6;
+    --sprint-title-color: #ECEFF1;
+    --sprint-desc-color: #B0BEC5;
+  }
+
+  [data-theme="dark"] .main-header {
+    background-color: rgba(45, 45, 45, 0.8);
+    }
+
+    [data-theme="dark"] .main-header .nav-link,
+    [data-theme="dark"] .main-header .brand-link,
+    [data-theme="dark"] .main-sidebar .nav-link {
+        color: var(--text-color) !important;
+    }
+/* CSS de las migajas */
+.migajas {
+    margin-top: 1rem;
+    display: flex;  
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    min-width: 480px;
+    padding: 0 40px;
+    }
+    
+    .breadcrumb {
+    display: flex;
+    border-radius: 10px;
+    margin: auto;
+    text-align: left;
+    top: 50%;
+    width: 100%;
+    height: 40px;
+    transform: translateY(-50%);
+    z-index: 1;
+    justify-content: left;
+    }
+    
+    
+    .breadcrumb__item {
+    height: 100%;
+    background-color: white;
+    color: #252525;
+    font-family: 'Oswald', sans-serif;
+    border-radius: 7px;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    transform: skew(-21deg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+    margin: 5px;
+    padding: 0 20px;
+    cursor: pointer;
+    }
+    
+    
+    .breadcrumb__item:hover {
+    background: #490099;
+    color: #FFF;
+    }
+    
+    .breadcrumb__inner {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    z-index: 2;
+    transform: skew(21deg);  
+    }
+    
+    .breadcrumb__title {
+    text-decoration: none;
+    color: inherit;
+    font-size: 16px;
+    text-overflow: ellipsis;  
+    overflow: hidden;
+    white-space: nowrap;  
+    }
+    
+    .breadcrumb__item--active {
+        background-color: #8e00d4; 
+        color: #fff;
+        pointer-events: none; 
+      }
+    @media all and (max-width: 1000px) {
+    .breadcrumb {
+    height: 35px;
+    }
+    
+    .breadcrumb__title{
+    font-size: 11px;
+    }
+    .breadcrumb__item {
+    padding: 0 20px;
+    }
+    }
+    
+    @media all and (max-width: 710px) {
+    .breadcrumb {
+    height: 30px;
+    }
+    .breadcrumb__item {
+    padding: 0 20px;
+    }
+    
+    }
 /* Sprint Dashboard - Main Styles */
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(120deg, #1E3C72, #2A5298);
+    background: var( --background-color);
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    color: #333;
+    color: var(--text-color);
 }
 
 /* AdminLTE Override Styles */
-.wrapper, .content-wrapper, .content, .main-header, .main-footer {
+.wrapper, .content-wrapper {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    margin: 0 !important;
     padding: 0 !important;
-}
-
-.content-wrapper {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
 }
 
 /* Dashboard Container */
@@ -34,7 +162,22 @@ body {
     text-align: center;
     margin-bottom: 40px;
 }
+/* Agrega esto a tu CSS existente (css/sprints.css) */
+.project-header {
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    background-color: #f5f7f9;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
 
+.project-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
 .dashboard-header h1 {
     color: #fff;
     font-size: 2.5rem;
@@ -101,7 +244,7 @@ body {
 /* Sprint Card Design */
 .sprint-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.85);
+    background: var(--sprint-card-bg);
     backdrop-filter: blur(10px);
     border-radius: 16px;
     padding: 25px;
@@ -131,13 +274,13 @@ body {
 .sprint-title {
     font-size: 1.3rem;
     font-weight: 600;
-    color: #2c3e50;
+    color: var(--sprint-title-color);
     margin: 0 0 15px 0;
 }
 
 .sprint-description {
     font-size: 0.95rem;
-    color: #546E7A;
+    color: var(--sprint-desc-color);
     margin-bottom: 20px;
     line-height: 1.5;
 }
@@ -161,8 +304,8 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    background: rgba(255, 255, 255, 0.5);
-    border-left: 5px solid #4CAF50;
+    background: var(--create-card-bg);
+    border-left: 5px solid var(--create-card-border);
     position: relative;
     overflow: hidden;
 }
@@ -212,7 +355,10 @@ body {
     color: #558B2F;
     font-size: 0.95rem;
 }
-
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #f1f1f1;
+  }
 /* Status Styles */
 .sprint-status {
     display: inline-flex;

@@ -7,23 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tablero extends Model
 {
-    use HasFactory;
+    protected $table = 'tablero';
+    protected $fillable = ['nombre', 'tablero_id'];
 
-    protected $fillable = ['nombre', 'sprint_id'];
-
-    /**
-     * Relación: Un tablero pertenece a un sprint.
-     */
-    public function sprint()
+    public function project()
     {
-        return $this->belongsTo(Sprint::class);
+        return $this->belongsTo(Project::class);
     }
 
-    /**
-     * Relación: Un tablero tiene muchas columnas.
-     */
-    public function columnas()
+    // Cada tablero tiene muchas columnas
+    public function columna()
     {
         return $this->hasMany(Columna::class);
+    }
+    // Cada tablero tiene muchas historias
+    public function historias()
+    {
+        return $this->hasMany(Formatohistoria::class, 'tablero_id');
     }
 }

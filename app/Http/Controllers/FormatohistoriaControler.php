@@ -8,7 +8,7 @@ use App\Models\Notificaciones;
 use App\Models\HistorialCambios;
 use App\Models\ReasinarHistorias;
 use App\Models\ListaHistoria;
-
+use App\Models\Tablero;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth; // Para obtener el usuario autenticado
@@ -35,28 +35,35 @@ class FormatohistoriaControler extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Tablero $tablero)
     {
-        return view('formato.create');
+        return view('formato.create', compact('tablero'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request,Tablero $tablero)
     {
         $request->validate([
-            'nombre' => 'required|unique:formatohistorias,nombre|max:255', 
+            'nombre' => [
+                'required',
+                'max:255',
+                // Validar que el nombre sea único dentro del tablero actual
+                \Illuminate\Validation\Rule::unique('formatohistorias')->where(function ($query) use ($tablero) {
+                    return $query->where('tablero_id', $tablero->id);
+                }),
+            ],
             'sprint' => 'nullable|integer|min:1',
             'trabajo_estimado' => 'nullable|integer|min:1',
             'responsable' => 'nullable|string|max:255',
             'prioridad' => 'required|in:Alta,Media,Baja',
-            'descripcion' => 'nullable|string',],
-            [
+            'descripcion' => 'nullable|string',
+        ], [
             'nombre.required' => 'El nombre es obligatorio.',
-            'nombre.unique' =>'El nombre ya existe, intente con otro.',//personalizacion de alertas.
-            'trabajo_estimado.min' =>'El Trabajo Estimado debe ser mayor a cero.',
-            'prioridad.required'=> 'La prioridad es requerida.'
+            'nombre.unique' => 'El nombre ya existe en este tablero, intente con otro.',
+            'trabajo_estimado.min' => 'El Trabajo Estimado debe ser mayor a cero.',
+            'prioridad.required' => 'La prioridad es requerida.',
         ]);
        
         $historia = new Formatohistoria();
@@ -67,6 +74,7 @@ class FormatohistoriaControler extends Controller
         $historia->prioridad = $request->prioridad;
         $historia->descripcion = $request->descripcion;
         $historia->user_id = auth()->id(); // ✅ ESTO ES FUNDAMENTAL
+        $historia->tablero_id = $tablero->id; // Asociar la historia al tablero
         $historia->save();
 
         // Enviar notificación al usuario autenticado
@@ -86,7 +94,9 @@ class FormatohistoriaControler extends Controller
             'sprint' => $historia->sprint, // ✅ AÑADIR ESTO
         ]);
 
-        return redirect()->route('tablero')->with([
+        return redirect()
+        ->route('tableros.show', $tablero->id)
+        ->with([
             'success' => 'Historia Creada correctamente',
             'fromCreate' => true, ]);
 
@@ -105,48 +115,80 @@ class FormatohistoriaControler extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit($id)
-    {
-        //
-        $historia = Formatohistoria::findOrFail($id);
-        return view('formato.edit',compact('historia'));
+{
+    $historia = Formatohistoria::findOrFail($id);
+
+    if (session('fromEdit')) {
+        return redirect()->route('tableros.show', $historia->tablero_id)->with('warning', 'No puedes volver al formulario de edición.');
     }
+
+    return response()
+        ->view('formato.edit', compact('historia'))
+        ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        ->header('Pragma', 'no-cache')
+        ->header('Expires', '0');
+}
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $historia = Formatohistoria::findOrFail($id);
+    
         $request->validate([
-            'nombre' => 'required|max:255|unique:formatohistorias,nombre,' . $id, 
+            'nombre' => [
+                'required',
+                'max:255',
+                // Validar que el nombre sea único dentro del tablero actual, excluyendo el registro actual
+                \Illuminate\Validation\Rule::unique('formatohistorias')->where(function ($query) use ($historia) {
+                    return $query->where('tablero_id', $historia->tablero_id);
+                })->ignore($historia->id),
+            ],
             'sprint' => 'nullable|integer|min:1',
             'trabajo_estimado' => 'nullable|integer|min:1',
             'responsable' => 'nullable|string|max:255',
             'prioridad' => 'required|in:Alta,Media,Baja',
             'descripcion' => 'nullable|string',
         ], [
-            'nombre.required'=> 'El nombre es requerido',
-            'nombre.unique' => 'El nombre ya existe, intente con otro.',
-            'prioridad.required' => 'La prioridad es requerida.'
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.unique' => 'El nombre ya existe en este tablero, intente con otro.',
+            'trabajo_estimado.min' => 'El Trabajo Estimado debe ser mayor a cero.',
+            'prioridad.required' => 'La prioridad es requerida.',
         ]);
-        $historia = Formatohistoria::findOrFail($id);
-    $historia->update([
-        'nombre' => $request->nombre,
-        'sprint' => $request->sprint,
-        'trabajo_estimado' => $request->trabajo_estimado,
-        'responsable' => $request->responsable,
-        'prioridad' => $request->prioridad,
-        'descripcion' => $request->descripcion,
-    ]);
-
-    // Determinar cambios
-    $datosAnteriores = $historia->getOriginal(); // Obtener los datos originales antes de la actualización
-    $detalles = "Historia actualizada: " . $historia->nombre . ".\n";
-    foreach ($historia->toArray() as $campo => $valorNuevo) {
-        if ($datosAnteriores[$campo] != $valorNuevo) {
-            $detalles .= ucfirst($campo) . " cambiado de '" . ($datosAnteriores[$campo] ?? 'N/A') . "' a '" . $valorNuevo . "'.\n";
+    
+        $historia->update([
+            'nombre' => $request->nombre,
+            'sprint' => $request->sprint,
+            'trabajo_estimado' => $request->trabajo_estimado,
+            'responsable' => $request->responsable,
+            'prioridad' => $request->prioridad,
+            'descripcion' => $request->descripcion,
+        ]);
+    
+        // Determinar cambios
+        $datosAnteriores = $historia->getOriginal(); // Obtener los datos originales antes de la actualización
+        $detalles = "Historia actualizada: " . $historia->nombre . ".\n";
+        foreach ($historia->toArray() as $campo => $valorNuevo) {
+            if ($datosAnteriores[$campo] != $valorNuevo) {
+                $detalles .= ucfirst($campo) . " cambiado de '" . ($datosAnteriores[$campo] ?? 'N/A') . "' a '" . $valorNuevo . "'.\n";
+            }
         }
+    
+        // Registrar en el historial de cambios
+        HistorialCambios::create([
+            'fecha' => now(),
+            'usuario' => Auth::user()->name ?? 'Desconocido',
+            'accion' => 'Edición',
+            'detalles' => $detalles,
+        ]);
+    
+        return redirect()->route('tableros.show', $historia->tablero_id)->with([
+            'success' => 'Historia Actualizada correctamente',
+            'fromEdit' => true,
+        ]);
     }
+
 
     // Registrar en el historial de cambios
     HistorialCambios::create([
@@ -193,6 +235,5 @@ class FormatohistoriaControler extends Controller
     ]);
 
     session()->flash('success', 'Historia eliminada correctamente');
-    return redirect()->route('tablero');
+    return redirect()->route('tableros.show', $historia->tablero_id)->with('success', 'Historia eliminada correctamente');
     }
-}

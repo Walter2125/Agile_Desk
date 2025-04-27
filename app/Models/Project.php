@@ -27,4 +27,9 @@ class Project extends Model
     {
         return $this->hasMany(Sprint::class, 'project_id');
     }
+
+    public function tablero()
+    {
+        return $this->hasOne(Tablero::class, 'project_id');
+    }
 }

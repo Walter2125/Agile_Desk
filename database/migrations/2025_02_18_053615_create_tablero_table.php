@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tableros', function (Blueprint $table) {
+        Schema::create('tablero', function (Blueprint $table) {
             $table->id();
-            // Cada tablero se relaciona con un sprint
-            $table->foreignId('sprint_id')
-                ->constrained('sprints')
-                ->cascadeOnDelete();
-            $table->string('nombre'); // Ejemplo: "Tablero de Sprint 1"
+            $table->unsignedBigInteger('project_id'); // <- CREAS primero la columna
+            $table->foreign('project_id')->references('id')->on('nuevo_proyecto')->onDelete('cascade'); // <- luego FOREIGN KEY
+            $table->string('nombre');  // nombre del tablero
             $table->timestamps();
-
-            // Se asegura que un sprint tenga únicamente un tablero
-            $table->unique('sprint_id');
         });
     }
 
