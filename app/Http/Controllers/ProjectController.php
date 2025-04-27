@@ -17,7 +17,7 @@ class ProjectController extends Controller
     public function create()
     {
         // Buscar todos los usuarios para mostrar en la búsqueda
-        $users = User::all();
+        $users = User::where('role', '!=', 'admin')->paginate(5); // 5 usuarios por página, excluyendo al admin
 
         // Obtener los usuarios seleccionados si se ha editado un proyecto
         $selectedUsers = [];
@@ -216,4 +216,27 @@ class ProjectController extends Controller
         // Retornar los usuarios como JSON
         return response()->json($users);
     }
+
+    public function listUsers(Request $request)
+{
+    $search = $request->input('search', '');
+    
+    $users = User::where('role', '!=', 'admin')
+                ->when($search, function($query) use ($search) {
+                    return $query->where('name', 'like', '%'.$search.'%');
+                })
+                ->paginate(5);
+    
+    if($request->ajax()) {
+        $html = view('projects.partials.users_table', compact('users'))->render();
+        $pagination = $users->links()->toHtml();
+        
+        return response()->json([
+            'html' => $html,
+            'pagination' => $pagination
+        ]);
+    }
+    
+    return view('projects.create', compact('users'));
+}
 }
