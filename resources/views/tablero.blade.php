@@ -130,27 +130,21 @@
                         <span class="titulo-columna text-lg font-bold text-pink-800" style="font-size: 30px; line-height: 1.2;">Backlog</span>
                         <div class="relative">
 
-                            <div class="btn-group dropend">
-                                <!-- Botón del Dropend -->
-                                <button type="button" class="btn btn-secondary dropdown-toggle absolute right-0 top-6 bg-white border rounded shadow-lg " data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
-                                </button>
 
 
-                                <!-- Contenido del Dropdown -->
-                                <ul class="dropdown-menu">
-                                    <!-- Opción: Crear Historia -->
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('formulario.create') }}">
-                                            <i class="bi bi-plus"></i> Crear Historia
-                                        </a>
-                                    </li>
-                                    <!-- Opción: Editar Nombre de la Columna -->
-                                    <li>
-                                        <button class="dropdown-item editar-columna">
-                                            Editar Nombre
-                                        </button>
-                                    </li>
-                                </ul>
+                                    <div class="dots">
+                                        <div></div>
+                                    </div>
+                                    <div class="menu">
+                                        <div>
+                                            <ul>
+                                                <li><a href="#" class="link">Option one</a></li>
+                                                <li><a href="#" class="link">Option two</a></li>
+                                                <li><a href="#" class="link">Option three</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                                <!-- Parte COrregida del codigo -->
