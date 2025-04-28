@@ -29,62 +29,63 @@ class ProjectController extends Controller
 
 
     public function store(Request $request)
-    {
-        // 1. Validación
-        $request->validate([
-            'name' => 'required|unique:nuevo_proyecto,name',
-            'fecha_inicio' => 'required|date',
-            'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
-            'users'        => 'required|array|min:1',
-            'users.*'      => 'exists:users,id',
-        ]);
-    
-        // 2. Ejecutamos la transacción y capturamos el tablero devuelto
-        $tablero = DB::transaction(function () use ($request) {
-            // Crear proyecto
-            $project = Project::create([
-                'name'         => $request->name,
-                'fecha_inicio' => $request->fecha_inicio,
-                'fecha_fin'    => $request->fecha_fin,
-                'user_id'      => auth()->id(),
-            ]);
-    
-            // Asignar usuarios (incluye al creador)
-            $project->users()->sync(array_merge(
-                [auth()->id()],
-                $request->input('users', [])
-            ));
-    
-            // Notificar solo a usuarios asignados
-            foreach ($project->users as $usuario) {
-                Notificaciones::create([
-                    'title'   => 'Nuevo Proyecto',
-                    'message' => 'Se ha creado un nuevo proyecto: ' . $project->name,
-                    'user_id' => $usuario->id,
-                    'read'    => false,
-                ]);
-            }
-    
-            // Crear tablero
-            $tablero = $project->tablero()->create([
-                'nombre' => 'Tablero de ' . $project->name,
-            ]);
-            // Crear columnas predeterminadas
-            $tablero->columna()->createMany([
-                ['nombre' => 'Por hacer'],
-                ['nombre' => 'En progreso'],
-                ['nombre' => 'Terminado'],
-            ]);
-    
-            return $tablero;
-        });
-    
-        // 3. Redirección final con el $tablero ya definido
-        return redirect()
-            ->route('tableros.show', $tablero->id)
-            ->with('success', 'Proyecto, tablero y columnas creados correctamente.');
+{
+    // Validación
+    $request->validate([
+        'name' => 'required|unique:nuevo_proyecto,name',
+        'fecha_inicio' => 'required|date',
+        'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
+        'users'        => 'required|string', // Recibes como STRING, no como array
+    ]);
+
+    // Convertir la cadena de usuarios separados por comas en un array
+    $userIds = array_map('intval', explode(',', $request->users));
+
+    if (empty($userIds)) {
+        return back()->withErrors(['users' => 'Debe seleccionar al menos un usuario.']);
     }
-    
+
+    $tablero = DB::transaction(function () use ($request, $userIds) {
+        // Crear proyecto
+        $project = Project::create([
+            'name'         => $request->name,
+            'fecha_inicio' => $request->fecha_inicio,
+            'fecha_fin'    => $request->fecha_fin,
+            'user_id'      => auth()->id(),
+        ]);
+
+        // Asignar usuarios (incluye al creador)
+        $project->users()->sync(array_unique(array_merge([$project->user_id], $userIds)));
+
+        // Notificar usuarios asignados
+        foreach ($project->users as $usuario) {
+            Notificaciones::create([
+                'title'   => 'Nuevo Proyecto',
+                'message' => 'Se ha creado un nuevo proyecto: ' . $project->name,
+                'user_id' => $usuario->id,
+                'read'    => false,
+            ]);
+        }
+
+        // Crear tablero
+        $tablero = $project->tablero()->create([
+            'nombre' => 'Tablero de ' . $project->name,
+        ]);
+
+        // Crear columnas predeterminadas
+        $tablero->columna()->createMany([
+            ['nombre' => 'Por hacer'],
+            ['nombre' => 'En progreso'],
+            ['nombre' => 'Terminado'],
+        ]);
+
+        return $tablero;
+    });
+
+    return response()->json([
+        'redirect' => route('tableros.show', $tablero->id),
+    ]);
+}
 
    
 
