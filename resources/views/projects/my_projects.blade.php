@@ -18,19 +18,22 @@
         @endif
 
         <!-- Tarjeta para crear nuevo proyecto -->
-        <div class="row mb-5">
-            <div class="col-md-4">
-                <div class="card text-center create-project-card">
-                    <div class="card-body p-4">
-                        <h4 class="card-title font-weight-bold text-dark">Crear Nuevo Proyecto</h4>
-                        <p class="card-text text-muted">Comienza un nuevo proyecto colaborativo</p>
-                        <a href="{{ route('projects.create') }}" class="btn btn-primary btn-lg rounded-pill px-4">
-                            <i class="fas fa-plus mr-2"></i> Crear Proyecto
-                        </a>
+        @if (auth()->user()->usertype == 'admin')<!-- Solo los administradores verán el botón -->
+            <div class="row mb-5">
+                <div class="col-md-4">
+                    <div class="card text-center create-project-card">
+                        <div class="card-body p-4">
+                            <h4 class="card-title font-weight-bold text-dark">Crear Nuevo Proyecto</h4>
+                                <p class="card-text text-muted">Comienza un nuevo proyecto colaborativo</p>
+                                <a href="{{ route('projects.create') }}" class="btn btn-primary btn-lg rounded-pill px-4">
+                                <i class="fas fa-plus mr-2"></i> Crear Proyecto
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
+
 
         @if(count($projects) > 0)
         <h2 class="text-secondary mb-4 border-bottom pb-2">Proyectos Recientes</h2>
