@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Columna;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\Notificaciones;
+use App\Models\tablero;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
@@ -23,44 +26,67 @@ class ProjectController extends Controller
 
     }
 
+
+
     public function store(Request $request)
     {
-        // Validación
+        // 1. Validación
         $request->validate([
-            'name' => 'required|unique:nuevo_proyecto,name', // Cambiado 'projects' por 'nuevo_proyecto'
+            'name' => 'required|unique:nuevo_proyecto,name',
             'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
-            'users' => 'required|array|min:1',  // Aseguramos que al menos un usuario se seleccione
-            'users.*' => 'exists:users,id', // Aseguramos que todos los usuarios seleccionados existen
+            'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
+            'users'        => 'required|array|min:1',
+            'users.*'      => 'exists:users,id',
         ]);
-
-        // Crear el proyecto
-        $project = Project::create([
-            'name' => $request->name,
-            'fecha_inicio' => $request->fecha_inicio,
-            'fecha_fin' => $request->fecha_fin,
-            'user_id' => auth()->id(), // El usuario que crea el proyecto
-        ]);
-        
-        $project->users()->attach(auth()->id());
-        
-        $usuarios = User::all();
-        
-        foreach ($usuarios as $usuario) {
-            Notificaciones::create([
-                'title' => 'Nuevo Proyecto',
-                'message' => 'Se ha creado un nuevo proyecto: ' . $project->name,
-                'user_id' => $usuario->id,
-                'read' => false,
+    
+        // 2. Ejecutamos la transacción y capturamos el tablero devuelto
+        $tablero = DB::transaction(function () use ($request) {
+            // Crear proyecto
+            $project = Project::create([
+                'name'         => $request->name,
+                'fecha_inicio' => $request->fecha_inicio,
+                'fecha_fin'    => $request->fecha_fin,
+                'user_id'      => auth()->id(),
             ]);
-        }
-
-        if ($request->has('users')) {
-            $project->users()->attach($request->users);
-        }
-        return redirect()->route('projects.my')->with('success', 'Proyecto creado exitosamente.');
+    
+            // Asignar usuarios (incluye al creador)
+            $project->users()->sync(array_merge(
+                [auth()->id()],
+                $request->input('users', [])
+            ));
+    
+            // Notificar solo a usuarios asignados
+            foreach ($project->users as $usuario) {
+                Notificaciones::create([
+                    'title'   => 'Nuevo Proyecto',
+                    'message' => 'Se ha creado un nuevo proyecto: ' . $project->name,
+                    'user_id' => $usuario->id,
+                    'read'    => false,
+                ]);
+            }
+    
+            // Crear tablero
+            $tablero = $project->tablero()->create([
+                'nombre' => 'Tablero de ' . $project->name,
+            ]);
+            // Crear columnas predeterminadas
+            $tablero->columna()->createMany([
+                ['nombre' => 'Por hacer'],
+                ['nombre' => 'En progreso'],
+                ['nombre' => 'Terminado'],
+            ]);
+    
+            return $tablero;
+        });
+    
+        // 3. Redirección final con el $tablero ya definido
+        return redirect()
+            ->route('tableros.show', $tablero->id)
+            ->with('success', 'Proyecto, tablero y columnas creados correctamente.');
     }
+    
 
+   
 
     public function index()
     {

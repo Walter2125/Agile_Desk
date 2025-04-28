@@ -2,99 +2,131 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Project;
+use App\Models\Tablero;
+use App\Models\Columna;
 use App\Models\Formatohistoria;
-use App\Models\Notificaciones;
-use App\Models\User;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TableroController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Mostrar todos los tableros del usuario actual
      */
     public function index()
 {
-    // Obtener los IDs de las historias archivadas
+    // 1. IDs de historias ya archivadas
     $historiasArchivadasIds = \App\Models\ArchivoHistoria::pluck('historia_id');
 
-    // Filtrar solo las historias NO archivadas
+    // 2. Historias NO archivadas, ordenadas por prioridad
     $historias = Formatohistoria::whereNotIn('id', $historiasArchivadasIds)
         ->get()
         ->sortBy(function ($historia) {
             switch ($historia->prioridad) {
-                case 'Alta':
-                    return 1;
-                case 'Media':
-                    return 2;
-                case 'Baja':
-                    return 3;
-                default:
-                    return 4;
+                case 'Alta':  return 1;
+                case 'Media': return 2;
+                case 'Baja':  return 3;
+                default:      return 4;
             }
         });
 
+    // 3. Aquí **sí** pasamos $historias a la vista
     return view('tablero', compact('historias'));
 }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
-     * Store a newly created resource in storage.
+     * Formulario para crear un tablero (solo si el proyecto no tiene uno)
      */
-    public function store(Request $request)
+    public function create(Project $proyecto)
     {
        //
     }
 
     /**
-     * Display the specified resource.
+     * Almacenar un nuevo tablero
      */
-    public function show(string $id)
+    public function store(Request $request, Project $proyecto)
     {
-        $tablero = Tablero::with(['columnas.historias'])->findOrFail($id);
-
-        // Retorna la vista 'tablero.blade.php' pasando la variable $tablero
-        return view('tablero', compact('tablero'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $validated = $request->validate([
+        // Verificar que el usuario tiene acceso al proyecto
+        if (!Auth::user()->projects->contains($proyecto->id)) {
+            return redirect()->route('projects.my')
+                ->with('error', 'No tienes acceso a este proyecto.');
+        }
+        
+        // Verificar si el proyecto ya tiene un tablero
+        if ($proyecto->tablero) {
+            return redirect()->route('tableros.show', $proyecto->tablero->id)
+                ->with('info', 'Este proyecto ya tiene un tablero.');
+        }
+        
+        $request->validate([
             'nombre' => 'required|string|max:255',
         ]);
-
-        $tablero = Tablero::findOrFail($id);
-        $tablero->update($validated);
-
+        
+        // Crear el tablero
+        $tablero = new Tablero();
+        $tablero->nombre = $request->nombre;
+        $proyecto->tablero()->save($tablero);
+        
+        // Crear columnas predeterminadas
+        $columnasDefault = ['Por hacer', 'En progreso', 'Terminado'];
+        $orden = 1;
+        
+        foreach ($columnasDefault as $nombreColumna) {
+            $columna = new Columna();
+            $columna->nombre = $nombreColumna;
+            $columna->orden = $orden++;
+            $tablero->columnas()->save($columna);
+        }
+        
         return redirect()->route('tableros.show', $tablero->id)
-            ->with('success', 'Tablero actualizado correctamente.');
+            ->with('success', 'Tablero creado exitosamente.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Mostrar un tablero específico
      */
-    public function destroy(string $id)
+   
+     public function show($id)
+     {
+         $tablero = Tablero::with(['columna.historias', 'project', 'historias'])->findOrFail($id);
+
+         // Verificar que el usuario tiene acceso al proyecto asociado
+         if (!$tablero->project || !Auth::user()->projects->contains($tablero->project->id)) {
+             return redirect()->route('projects.my')
+                 ->with('error', 'No tienes acceso a este tablero.');
+         }
+         
+         // Pasar $tablero a la vista
+         return view('tablero', compact('tablero'));
+     }
+     
+    /**
+     * Formulario para borrar un tablero
+     */
+    public function destroy(Tablero $tablero)
     {
-        Tablero::destroy($id);
-        return redirect()->route('tablero.index')
-            ->with('success', 'Tablero eliminado correctamente.');
+        // Verificar que el usuario tiene acceso al proyecto asociado
+        if (!$tablero->project || !Auth::user()->projects->contains($tablero->project->id)) {
+            return redirect()->route('projects.my')
+                ->with('error', 'No tienes acceso a este tablero.');
+        }
+        
+        // Opcional: Verificar si el usuario es administrador o dueño del proyecto
+        if (Auth::user()->usertype != 'admin' && Auth::user()->id != $tablero->proyecto->user_id) {
+            return redirect()->route('projects.my')
+                ->with('error', 'No tienes permiso para eliminar este tablero.');
+        }
+        
+        // Antes de eliminar el tablero, guarda una referencia al proyecto
+        $proyecto = $tablero->proyecto;
+        
+        // Eliminar el tablero y sus relaciones (asegúrate de tener configurado el onDelete cascade en tus migraciones)
+        $tablero->delete();
+        
+        return redirect()->route('projects.my')
+            ->with('success', 'Tablero eliminado exitosamente.');
     }
 }

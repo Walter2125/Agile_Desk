@@ -7,16 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tablero extends Model
 {
-    protected $fillable = ['proyecto_id', 'nombre'];
+    protected $table = 'tablero';
+    protected $fillable = ['nombre', 'tablero_id'];
 
-    public function proyecto()
+    public function project()
     {
-        return $this->belongsTo(Proyecto::class);
+        return $this->belongsTo(Project::class);
     }
 
     // Cada tablero tiene muchas columnas
     public function columna()
     {
         return $this->hasMany(Columna::class);
+    }
+    // Cada tablero tiene muchas historias
+    public function historias()
+    {
+        return $this->hasMany(Formatohistoria::class, 'tablero_id');
     }
 }

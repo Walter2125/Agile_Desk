@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('columnas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tablero_id')->constrained('tableros')->onDelete('cascade');
+            $table->foreignId('tablero_id')->constrained('tablero')->onDelete('cascade');
             $table->string('nombre'); // nombre de la columna
             $table->integer('orden')->default(0); // campo para el orden de columnas
             $table->timestamps();

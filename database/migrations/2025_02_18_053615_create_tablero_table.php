@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tableros', function (Blueprint $table) {
+        Schema::create('tablero', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('proyecto_id')->constrained('proyectos')->onDelete('cascade');
+            $table->unsignedBigInteger('project_id'); // <- CREAS primero la columna
+            $table->foreign('project_id')->references('id')->on('nuevo_proyecto')->onDelete('cascade'); // <- luego FOREIGN KEY
             $table->string('nombre');  // nombre del tablero
             $table->timestamps();
         });
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tableros');
+        Schema::dropIfExists('tablero');
     }
 };
