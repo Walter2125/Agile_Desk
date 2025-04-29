@@ -80,17 +80,19 @@
                                 </div>
                             </div>
 
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <div class="row mb-3">
-                        <div class="col-md">
-                                            <a href="{{ route('tableros.show', $tablero->id) }}" class="btn btn-secondary me-2"> Volver</a>
-
-                        <button class="btn btn-primary" type="submit">Actualizar</button>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <div class="row mb-3">
+                <div class="col-md">
+                    <a href="{{ route('tableros.show', $historia->tablero_id) }}"
+                        class="btn btn-secondary me-2">
+                         Volver
+                     </a>
+                <button class="btn btn-primary" type="submit">Actualizar</button>
+                
+                </div>
+                </div>
+            </div>
                         
-                        </div>
-                        </div>
-                    </div>
-                                
 
                 
                     </div>

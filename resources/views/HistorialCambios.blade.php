@@ -4,195 +4,13 @@
 
 @section('adminlte_css')
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-<style>
-    body {
-        font-family: 'Roboto', sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: rgb(120, 136, 163);
-        color: #333;
-    }
-
-    .container {
-        width: 90%;
-        max-width: 1000px;
-        margin: 50px auto;
-        background: white;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    h2 {
-        text-align: center;
-        color: #333;
-        font-size: 2rem;
-        margin-bottom: 20px;
-    }
-
-    .filters {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-    }
-
-    .filters input,
-    .filters select,
-    .filters button {
-        padding: 10px 12px;
-        font-size: 14px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        width: 100%;
-        max-width: 220px;
-    }
-
-    .filters button {
-        background-color: #007bff;
-        color: white;
-        cursor: pointer;
-        border: none;
-        transition: 0.3s;
-    }
-
-    .filters button:hover {
-        background-color: #0056b3;
-    }
-
-    .filters .clear-btn {
-        background-color: #dc3545;
-    }
-
-    .filters .clear-btn:hover {
-        background-color: #c82333;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        overflow-x: auto;
-    }
-
-    th, td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #007bff;
-        color: white;
-        font-size: 1rem;
-    }
-
-    tr:hover {
-        background-color: #f9f9f9;
-    }
-
-    .btn-revert {
-        background-color: #dc3545;
-        color: white;
-        padding: 6px 10px;
-        border-radius: 5px;
-        border: none;
-        cursor: pointer;
-        transition: 0.3s;
-        font-size: 14px;
-    }
-
-    .btn-revert:hover {
-        background-color: #c82333;
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        gap: 5px;
-        margin-top: 20px;
-        font-size: 14px;
-        flex-wrap: wrap;
-    }
-
-    .pagination button {
-        padding: 6px 12px;
-        border: none;
-        background-color: #28a745;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .pagination button:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-    }
-
-    .pagination span {
-        align-self: center;
-        font-size: 1rem;
-        color: #333;
-    }
-
-    .empty-msg {
-        text-align: center;
-        font-size: 1rem;
-        color: #777;
-        padding: 20px;
-        font-style: italic;
-    }
-
-    @media (max-width: 768px) {
-        .filters input,
-        .filters select,
-        .filters button {
-            max-width: 100%;
-            width: 100%;
-        }
-
-        table {
-            width: 100%;
-            display: block;
-            overflow-x: auto;
-        }
-
-        .pagination button {
-            padding: 6px 10px;
-            font-size: 12px;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        h2 {
-            font-size: 1.2rem;
-        }
-
-        .filters {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .filters input,
-        .filters select,
-        .filters button {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/historialC.css') }}">
 @stop
 
 @section('content')
 <div class="container">
     <h2>Historial de Cambios</h2>
+    <h5>Historial de cambios del proyecto: {{ $project->name }}</h1>
 
     <div class="filters">
         <input type="text" id="usuarioFiltro" placeholder="Usuario">
@@ -215,7 +33,6 @@
                 <th>Acción</th>
                 <th>Detalles</th>
                 <th>Sprint</th> <!-- Añadí la columna Sprint aquí -->
-                <th>Revertir</th>
             </tr>
         </thead>
         <tbody>
@@ -227,11 +44,7 @@
                     <td>{{ $item->detalles }}</td>
                     <td>{{ $item->sprint ?? 'N/A' }}</td> <!-- Aquí se muestra el sprint o N/A si está vacío -->
                     <td>
-                        <form action="{{ route('historialcambios.revertir', $item->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-revert">Revertir</button>
-                        </form>
+                        
                     </td>
                 </tr>
             @empty

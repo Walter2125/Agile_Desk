@@ -43,8 +43,8 @@
                 <h2 class="h5 mb-0">
                     <i class="fas fa-tasks me-2"></i>Seleccionar Historia para Archivar
                 </h2>
-                <a href="{{ route('archivo.index') }}" class="btn btn-sm btn-light">
-                    <i class="fas fa-archive me-1"></i> Ver Archivadas
+                <a href="{{ route('archivo.index.proyecto', ['project' => $project->id]) }}" class="btn btn-sm btn-light">
+                                        <i class="fas fa-archive me-1"></i> Ver Archivadas
                 </a>
             </div>
         </div>
@@ -64,12 +64,10 @@
                                 <div>
                                     <h5 class="mb-1">{{ $historia->nombre }}</h5>
                                 </div>
-                                <form method="POST" action="{{ route('archivo.archivar', $historia->id) }}">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-outline-primary" title="Archivar historia">
-                                        <i class="fas fa-box-archive me-1"></i> Archivar
-                                    </button>
-                                </form>
+                                <form action="{{ route('archivo.archivar', ['project' => $project->id, 'id' => $historia->id]) }}" method="POST">
+    @csrf
+    <button type="submit" class="btn btn-warning">Archivar</button>
+</form>
                             </div>
                         </div>
                     @endforeach

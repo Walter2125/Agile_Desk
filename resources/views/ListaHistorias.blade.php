@@ -51,11 +51,6 @@
                 </div>
             @endif
             
-            <div class="text-end mt-4">
-                <a href="{{ route('tablero') }}" class="btn btn-primary">
-                    <i class="fas fa-arrow-left"></i> Volver al Tablero
-                </a>
-            </div>
         </div>
     </div>
 @stop
