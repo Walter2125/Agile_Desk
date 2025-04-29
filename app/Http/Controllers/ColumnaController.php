@@ -10,7 +10,7 @@ class ColumnaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tablero_id' => 'required|exists:tableros,id',
+            'tablero_id' => 'required|exists:tablero,id',
             'nombre'     => 'required|string|max:255',
             'orden'      => 'nullable|integer',
         ]);

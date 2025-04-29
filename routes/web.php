@@ -121,6 +121,10 @@ Route::middleware('auth')->group(function () {
     Route::post('columnas', [ColumnaController::class, 'store'])->name('columnas.store');
     Route::put('columnas/{columna}', [ColumnaController::class, 'update'])->name('columnas.update');
     Route::delete('columnas/{columna}', [ColumnaController::class, 'destroy'])->name('columnas.destroy');
+    Route::post('/tableros/{tablero}/columnas', [ColumnaController::class, 'store'])->name('columnas.store');
+    Route::put('/tableros/{tablero}/columnas/{columna}', [ColumnaController::class, 'update'])->name('columnas.update');
+    Route::delete('/tableros/{tablero}/columnas/{columna}', [ColumnaController::class, 'destroy'])->name('columnas.destroy');
+    Route::post('/columna/store', [ColumnaController::class, 'store'])->name('columna.store');
 
     // Calendario
     Route::controller(FullCalendarController::class)->prefix('fullcalendar')->group(function () {
@@ -133,7 +137,6 @@ Route::middleware('auth')->group(function () {
 
     // Columnas y estados (AJAX)
     Route::post('actualizar-estado', [HistoriaController::class, 'actualizarEstado'])->name('actualizar.estado');
-    Route::post('columnas', [ColumnasController::class, 'store'])->name('columnas.store');
     Route::post('actualizar-nombre-columna', [ColumnasController::class, 'actualizarNombre'])->name('columnas.updateName');
 
     // Notificaciones
@@ -199,8 +202,5 @@ Route::middleware('auth')->group(function () {
 
     //Lista de historias por cada usuarios
     Route::get('/mis-historias', [FormatohistoriaControler::class, 'misHistorias'])->name('mis_historias');
-
-    Route::get('/tableros/{tablero}/historias/create', [HistoriaController::class, 'create'])->name('formulario.create');
-
 });
 

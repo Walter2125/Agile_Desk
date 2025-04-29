@@ -91,7 +91,7 @@ class TableroController extends Controller
 
      public function show($id)
      {
-         $tablero = Tablero::with(['columna.historias', 'project', 'historias'])->findOrFail($id);
+         $tablero = Tablero::with(['columnas.historias', 'project', 'historias'])->findOrFail($id);
 
          // Verificar que el usuario tiene acceso al proyecto asociado
          if (!$tablero->project || !Auth::user()->projects->contains($tablero->project->id)) {

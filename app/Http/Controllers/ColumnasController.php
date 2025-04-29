@@ -29,7 +29,7 @@ class ColumnasController extends Controller
     {
         // Validar que exista el id del tablero y que se provea un nombre
         $validated = $request->validate([
-            'tablero_id' => 'required|exists:tableros,id',
+            'tablero_id' => 'required|exists:tablero,id',
             'nombre'     => 'required|string|max:255',
             'position'   => 'nullable|integer'
         ]);
