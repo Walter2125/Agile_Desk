@@ -117,12 +117,12 @@ class FormatohistoriaControler extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit($id)
-    {
-        $historia = Formatohistoria::findOrFail($id);
+{
+    $historia = Formatohistoria::findOrFail($id);
 
-        if (session('fromEdit')) {
-            return redirect()->route('tableros.show', $historia->tablero_id)->with('warning', 'No puedes volver al formulario de edición.');
-        }
+    if (session('fromEdit')) {
+        return redirect()->route('tableros.show', $historia->tablero_id)->with('warning', 'No puedes volver al formulario de edición.');
+    }
 
         return response()
             ->view('formato.edit', compact('historia'))

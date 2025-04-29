@@ -6,30 +6,6 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}"> 
     <style>
-        /* Estilos responsivos para parallax */
-        section.parallax-container {
-            position: relative;
-            height: 300px;
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-        
-        .parallax-layer {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-        
-        #fondo, #sobre, #persona{
-            position: absolute;
-            width: 100%;
-            height: auto;
-            max-width: 100%;
-            object-fit: contain;
-        }
-        
         #text {
             position: absolute;
             color: white;
@@ -42,47 +18,6 @@
             z-index: 10;
             width: 100%;
             text-align: center;
-        }
-        
-        /* Ajustes responsivos para móviles */
-        @media (max-width: 768px) {
-            section.parallax-container {
-                height: 200px;
-            }
-            
-            #text {
-                font-size: 2rem;
-            }
-            
-            #sobre {
-                max-width: 70%;
-                right: -5%;
-            }
-            
-            #persona {
-                max-height: 80%;
-                left: 0;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            section.parallax-container {
-                height: 150px;
-            }
-            
-            #text {
-                font-size: 1.5rem;
-            }
-            
-            #sobre {
-                max-width: 70%;
-                right: -10%;
-            }
-            
-            #persona {
-                max-height: 70%;
-                left: -5%;
-            }
         }
         
         /* Estilos para el panel de administración */
@@ -165,6 +100,14 @@
         .admin-table th {
             background-color: #f8f9fa;
         }
+
+        /* Estilos para paginación */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
         /* Modo oscuro para el panel de administración */
         /* === Modo oscuro global para cards === */
 [data-theme="dark"] .card,
@@ -226,88 +169,79 @@
   border-radius: 4px;
 }
 
+ /* Estilos para el buscador en modo claro */
+ .input-group .form-control {
+        border-radius: 0.25rem 0 0 0.25rem;
+    }
+    
+    .input-group-append .btn {
+        border-radius: 0 0.25rem 0.25rem 0;
+    }
+    
+    /* Estilos para el buscador en modo oscuro */
+    [data-theme="dark"] .input-group .form-control {
+        background-color: #333;
+        border-color: #444;
+        color: #e0e0e0;
+    }
+    
+    [data-theme="dark"] .input-group-append .btn {
+        background-color: #444;
+        border-color: #555;
+        color: #e0e0e0;
+    }
+    
+    [data-theme="dark"] .input-group-append .btn:hover {
+        background-color: #555;
+        border-color: #666;
+    }
+    
+    [data-theme="dark"] ::placeholder {
+        color: #999;
+        opacity: 1;
+    }
+
+    /* Estilos para paginación en modo oscuro */
+    [data-theme="dark"] .pagination .page-link {
+        background-color: #333;
+        border-color: #444;
+        color: #e0e0e0;
+    }
+    
+    [data-theme="dark"] .pagination .page-item.active .page-link {
+        background-color: #4a90e2;
+        border-color: #357abd;
+    }
+    
+    [data-theme="dark"] .pagination .page-link:hover {
+        background-color: #444;
+    }
     </style>
 @stop
 
 @section('content')
-    <!-- Sección Parallax Responsiva -->
-    <section class="parallax-container">
-        <img src="{{ asset('img/home/fondo.png') }}" alt="Fondo decorativo" id="fondo" class="parallax-layer">
-        <img src="{{ asset('img/home/software.png') }}" alt="Imagen de software" id="sobre" class="parallax-layer">
-        <img src="{{ asset('img/home/persona.png') }}" alt="Persona usando Agile Desk" id="persona" class="parallax-layer">
-        <h1 id="text">Agile Desk Admin</h1>
-    </section>
-
-    <!-- Script para el efecto parallax optimizado para móviles -->
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function () {
-            var fondo = document.getElementById('fondo');
-            var sobre = document.getElementById('sobre');
-            var persona = document.getElementById('persona');
-            var text = document.getElementById('text');
-            var lastScrollTop = 0;
-            
-            // Detectar si es dispositivo móvil
-            var isMobile = window.innerWidth <= 768;
-            
-            // Configurar factores de parallax según el dispositivo
-            var factors = {
-                fondo: isMobile ? 0.15 : 0.5,
-                sobre: isMobile ? 0.1 : 0.3,
-                persona: isMobile ? 0.05 : 0.2,
-                text: isMobile ? 0.1 : 0.2
-            };
-            
-            // Función para ajustar los factores cuando cambia el tamaño de la ventana
-            window.addEventListener('resize', function() {
-                isMobile = window.innerWidth <= 768;
-                factors = {
-                    fondo: isMobile ? 0.15 : 0.5,
-                    sobre: isMobile ? 0.1 : 0.3,
-                    persona: isMobile ? 0.05 : 0.2,
-                    text: isMobile ? 0.1 : 0.2
-                };
-            });
-
-            function parallaxEffect() {
-                var scrollTop = window.scrollY || document.documentElement.scrollTop;
-                
-                // Limitar el efecto parallax a cierta distancia de scroll
-                var maxEffectScroll = 500;
-                var effectiveScroll = Math.min(scrollTop, maxEffectScroll);
-                
-                // Optimizar para rendimiento en móviles
-                if (isMobile && Math.abs(scrollTop - lastScrollTop) < 5) {
-                    requestAnimationFrame(parallaxEffect);
-                    return; // Reduce cálculos en scrolls pequeños en móviles
-                }
-                
-                lastScrollTop = scrollTop;
-                
-                // Aplicar transformaciones con los factores adecuados
-                fondo.style.transform = `translateY(${effectiveScroll * factors.fondo}px)`;
-                sobre.style.transform = `translateX(${-effectiveScroll * factors.sobre}px)`;
-                persona.style.transform = `translateY(${-effectiveScroll * factors.persona}px)`;
-                text.style.transform = `translate(-50%, ${-50% + (effectiveScroll * factors.text)}px)`;
-                
-                requestAnimationFrame(parallaxEffect);
-            }
-
-            // Iniciar animación solo si está visible en el viewport
-            var observer = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting) {
-                    requestAnimationFrame(parallaxEffect);
-                }
-            }, { threshold: 0.1 });
-            
-            observer.observe(document.querySelector('.parallax-container'));
-        });
-    </script>
-
+<div class="row mb-3">
+    <div class="col-md-6">
+        <div class="input-group">
+            <input type="text" class="form-control" id="searchProjects" placeholder="Buscar proyectos...">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="btnSearchProjects">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
     <div class="container-fluid">
+        <h1>Inicio para Administradores </h1>
         <!-- Botones de acción rápida (adaptados para móvil) -->
         <div class="button-container">
+<<<<<<< HEAD
             <a href="{{ route('sprints.index') }}" class="btn">Lista de Sprint</a>
+=======
+            <!-- <a href="{{ route('historialcambios.index') }}" class="btn">Historial</a> -->
+           <!--  <a href="{{ route('reasinarhistoria.index') }}" class="btn">Reasignar</a> -->
+>>>>>>> main
             <a href="{{ route('admin.users.index') }}" class="btn">Usuarios</a>
             <a href="{{ route('projects.create') }}" class="btn">Crear Proyecto</a>
         </div>
@@ -334,7 +268,7 @@
             </div>
             <div class="col-6 col-md-3">
                 <div class="quick-stats">
-                    <div class="stat-number">{{ \App\Models\HistoriaModel::count() }}</div>
+                    <div class="stat-number">{{ \App\Models\Formatohistoria::count() }}</div>
                     <div class="stat-label">Historias</div>
                 </div>
             </div>
@@ -357,11 +291,11 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="projectsTableBody">
                             @foreach(\App\Models\Project::with(['creator', 'users', 'sprints' => function($query) {
                                 $query->where('estado', 'activo')->orderBy('fecha_inicio', 'desc');
                             }])->get() as $proyecto)
-                            <tr>
+                            <tr class="project-row">
                                 <td>{{ $proyecto->name }}</td>
                                 <td>{{ $proyecto->creator ? $proyecto->creator->name : 'No asignado' }}</td>
                                 <td class="d-none d-md-table-cell">{{ $proyecto->users->count() }}</td>
@@ -384,6 +318,11 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <div class="pagination-container">
+                        <ul class="pagination" id="projectsPagination">
+                            <!-- La paginación se generará con JavaScript -->
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -395,7 +334,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table admin-table">
+                    <table class="table admin-table" id="activityTable">
                         <thead>
                             <tr>
                                 <th>Usuario</th>
@@ -403,9 +342,9 @@
                                 <th class="d-none d-md-table-cell">Fecha</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach(\App\Models\HistorialCambios::orderBy('fecha', 'desc')->limit(10)->get() as $cambio)
-                            <tr>
+                        <tbody id="activityTableBody">
+                            @foreach(\App\Models\HistorialCambios::orderBy('fecha', 'desc')->get() as $cambio)
+                            <tr class="activity-row">
                                 <td>{{ $cambio->usuario }}</td>
                                 <td>{{ $cambio->accion }}</td>
                                 <td class="d-none d-md-table-cell">{{ \Carbon\Carbon::parse($cambio->fecha)->diffForHumans() }}</td>
@@ -413,6 +352,11 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <div class="pagination-container">
+                        <ul class="pagination" id="activityPagination">
+                            <!-- La paginación se generará con JavaScript -->
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -428,36 +372,57 @@
                         <thead>
                             <tr>
                                 <th>Título</th>
-                                <th class="d-none d-md-table-cell">Sprint</th>
+                                <th class="d-none d-md-table-cell">Tablero</th>
                                 <th class="d-none d-sm-table-cell">Responsable</th>
                                 <th>Prioridad</th>
+                                <th>Estado</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach(\App\Models\HistoriaModel::with('sprint')->orderBy('created_at', 'desc')->limit(5)->get() as $historia)
-                            <tr>
-                                <td>{{ $historia->titulo }}</td>
-                                <td class="d-none d-md-table-cell">{{ $historia->sprint ? $historia->sprint->nombre : 'No asignado' }}</td>
-                                <td class="d-none d-sm-table-cell">{{ $historia->responsable ?: 'No asignado' }}</td>
-                                <td>
-                                    @switch($historia->prioridad)
-                                        @case('alta')
-                                            <span class="badge bg-danger">Alta</span>
-                                            @break
-                                        @case('media')
-                                            <span class="badge bg-warning">Media</span>
-                                            @break
-                                        @case('baja')
-                                            <span class="badge bg-info">Baja</span>
-                                            @break
-                                        @default
-                                            <span class="badge bg-secondary">-</span>
-                                    @endswitch
-                                </td>
-                            </tr>
-                            @endforeach
+                        <tbody id="historiasTableBody">
+                            @forelse(\App\Models\Formatohistoria::with(['tablero'])
+                                ->orderBy('created_at', 'desc')
+                                ->get() as $historia)
+                                <tr class="historia-row">
+                                    <td>{{ $historia->nombre }}</td>
+                                    <td class="d-none d-md-table-cell">
+                                        {{ $historia->tablero ? $historia->tablero->nombre : 'Sin tablero' }}
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        {{ $historia->responsable ?: 'No asignado' }}
+                                    </td>
+                                    <td>
+                                        @switch(strtolower($historia->prioridad))
+                                            @case('alta')
+                                                <span class="badge bg-danger">Alta</span>
+                                                @break
+                                            @case('media')
+                                                <span class="badge bg-warning">Media</span>
+                                                @break
+                                            @case('baja')
+                                                <span class="badge bg-info">Baja</span>
+                                                @break
+                                            @default
+                                                <span class="badge bg-secondary">-</span>
+                                        @endswitch
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ $historia->estado === 'Pendiente' ? 'warning' : 'success' }}">
+                                            {{ $historia->estado }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center">No hay historias registradas</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
+                    <div class="pagination-container">
+                        <ul class="pagination" id="historiasPagination">
+                            <!-- La paginación se generará con JavaScript -->
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -505,4 +470,163 @@
 @section('adminlte_js')
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/color.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Referencias a los elementos DOM
+            const searchInput = document.getElementById('searchProjects');
+            const searchButton = document.getElementById('btnSearchProjects');
+            const projectRows = document.querySelectorAll('.project-row');
+            
+            // Función para filtrar proyectos
+            function filterProjects() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                
+                projectRows.forEach(row => {
+                    const projectName = row.querySelector('td:first-child').textContent.toLowerCase();
+                    const projectManager = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                    
+                    // Si el texto de búsqueda está en el nombre del proyecto o en el responsable
+                    if (projectName.includes(searchTerm) || projectManager.includes(searchTerm)) {
+                        row.style.display = ''; // Mostrar la fila
+                    } else {
+                        row.style.display = 'none'; // Ocultar la fila
+                    }
+                });
+            }
+            
+            // Event listeners
+            searchButton.addEventListener('click', filterProjects);
+            
+            // También filtrar mientras se escribe (después de un pequeño delay)
+            let typingTimer;
+            searchInput.addEventListener('keyup', function() {
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(filterProjects, 500); // Esperar 500ms después de que el usuario deje de escribir
+            });
+            
+            // Limpiar el timer si se sigue escribiendo
+            searchInput.addEventListener('keydown', function() {
+                clearTimeout(typingTimer);
+            });
+            
+            // Filtrar también al presionar Enter
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    filterProjects();
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // Función de configuración de paginación para cualquier tabla
+        function setupTablePagination(tableId, rowSelector, paginationId, rowsPerPage = 5) {
+            const tableBody = document.getElementById(tableId);
+            const rows = tableBody.querySelectorAll(rowSelector);
+            const pagination = document.getElementById(paginationId);
+            
+            // Calcular número de páginas
+            const pageCount = Math.ceil(rows.length / rowsPerPage);
+            
+            // Limpiar paginación existente
+            pagination.innerHTML = '';
+            
+            // Botón Anterior
+            const prevLi = document.createElement('li');
+            prevLi.classList.add('page-item');
+            prevLi.innerHTML = '<a class="page-link" href="#">&laquo;</a>';
+            pagination.appendChild(prevLi);
+            
+            // Páginas numeradas
+            for (let i = 1; i <= pageCount; i++) {
+                const li = document.createElement('li');
+                li.classList.add('page-item');
+                li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                
+                if (i === 1) li.classList.add('active');
+                
+                li.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showTablePage(tableBody, rows, i, rowsPerPage);
+                    
+                    // Actualizar clase activa
+                    const pageItems = pagination.querySelectorAll('.page-item');
+                    pageItems.forEach(item => item.classList.remove('active'));
+                    this.classList.add('active');
+                });
+                
+                pagination.appendChild(li);
+            }
+            
+            // Botón Siguiente
+            const nextLi = document.createElement('li');
+            nextLi.classList.add('page-item');
+            nextLi.innerHTML = '<a class="page-link" href="#">&raquo;</a>';
+            pagination.appendChild(nextLi);
+            
+            // Configurar eventos para prev/next
+            prevLi.addEventListener('click', function(e) {
+                e.preventDefault();
+                const activeItem = pagination.querySelector('.page-item.active');
+                if (activeItem && activeItem.previousElementSibling && activeItem.previousElementSibling.classList.contains('page-item')) {
+                    activeItem.previousElementSibling.querySelector('.page-link').click();
+                }
+            });
+            
+            nextLi.addEventListener('click', function(e) {
+                e.preventDefault();
+                const activeItem = pagination.querySelector('.page-item.active');
+                if (activeItem && activeItem.nextElementSibling && activeItem.nextElementSibling.classList.contains('page-item')) {
+                    activeItem.nextElementSibling.querySelector('.page-link').click();
+                }
+            });
+            
+            // Mostrar primera página al inicio
+            showTablePage(tableBody, rows, 1, rowsPerPage);
+        }
+
+        // Función para mostrar una página específica
+        function showTablePage(tableBody, rows, page, rowsPerPage) {
+            // Ocultar todas las filas
+            rows.forEach(row => {
+                row.style.display = 'none';
+            });
+            
+            // Calcular rango de filas para la página actual
+            const startIndex = (page - 1) * rowsPerPage;
+            const endIndex = Math.min(startIndex + rowsPerPage, rows.length);
+            
+            // Mostrar filas de la página actual
+            for (let i = startIndex; i < endIndex; i++) {
+                rows[i].style.display = '';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configuración de paginación para la tabla de proyectos
+            setupTablePagination(
+                'projectsTableBody', 
+                '.project-row', 
+                'projectsPagination', 
+                5
+            );
+            
+            // Configuración de paginación para la tabla de historias
+            setupTablePagination(
+                'historiasTableBody', 
+                '.historia-row', 
+                'historiasPagination', 
+                5
+            );
+            
+            // Configuración específica para la tabla de actividad reciente
+            setupTablePagination(
+                'activityTableBody', 
+                '.activity-row', 
+                'activityPagination', 
+                5
+            );
+        });
+    </script>
 @stop

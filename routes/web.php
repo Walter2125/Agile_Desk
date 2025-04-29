@@ -92,16 +92,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/tareas/{id}/ver', [TareasController::class, 'show'])->name('tareas.show');
 
 
-    
-    /*
-    Route::get('sprints/create', [SprintController::class, 'create'])->name('sprints.create');
-    Route::post('sprints', [SprintController::class, 'store'])->name('sprints.store');
-    //Route::get('sprints/create', fn() => view('sprints.create'))->name('sprints.create');
-    Route::get('sprints', [SprintController::class, 'index'])->name('sprints.index');
-    Route::get('sprints/detalle', [SprintController::class, 'detalleSprint'])->name('sprints.detalle');
-*/
     // Rutas para Sprints
-    Route::get('sprints', [SprintController::class, 'index'])->name('sprints.index');
+    //Route::get('sprints', [SprintController::class, 'index'])->name('sprints.index');
     Route::get('sprints/create', [SprintController::class, 'create'])->name('sprints.create')->middleware('role:admin');
     Route::post('sprints', [SprintController::class, 'store'])->name('sprints.store')->middleware('role:admin');;
     Route::get('sprints/{sprint}/edit', [SprintController::class, 'edit'])->name('sprints.edit')->middleware('role:admin');;
@@ -181,6 +173,8 @@ Route::middleware('auth')->group(function () {
 
         Route::delete('/projects/{project}/remove-user/{user}',[ProjectController::class, 'removeUser'])->name('projects.removeUser');
         Route::get('/projects/search-users',                   [ProjectController::class, 'searchUsers'])->name('projects.searchUsers');
+
+        Route::get('/users/list', [ProjectController::class, 'listUsers'])->name('users.list');
 
         // Gestión de usuarios
         Route::get('/miembros',    [UserController::class, 'index'])->name('admin.users.index');
