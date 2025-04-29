@@ -110,23 +110,33 @@ class FormatohistoriaControler extends Controller
         return view('formato.show', compact('historia'));
     }
 
+    
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
-{
-    $historia = Formatohistoria::findOrFail($id);
-
-    if (session('fromEdit')) {
-        return redirect()->route('tableros.show', $historia->tablero_id)->with('warning', 'No puedes volver al formulario de edición.');
+    {
+        // Obtener la historia por su ID
+        $historia = Formatohistoria::findOrFail($id);
+    
+        // Obtener el tablero relacionado con la historia
+        $tablero = $historia->tablero; // Asegúrate de que la relación está definida correctamente en el modelo
+    
+        // Verifica si la sesión tiene la bandera 'fromEdit'
+        if (session('fromEdit')) {
+            return redirect()->route('tableros.show', $historia->tablero_id)
+                             ->with('warning', 'No puedes volver al formulario de edición.');
+        }
+    
+        // Pasamos tanto la historia como el tablero a la vista
+        return response()
+            ->view('formato.edit', compact('historia', 'tablero')) // Pasamos ambas variables
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
-
-    return response()
-        ->view('formato.edit', compact('historia'))
-        ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
-        ->header('Pragma', 'no-cache')
-        ->header('Expires', '0');
-}
+    
 
     /**
      * Update the specified resource in storage.
