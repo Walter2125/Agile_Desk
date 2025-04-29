@@ -12,6 +12,7 @@
 @section('content')
     <div class="container text-center mt-5">
         <h2>Reasignar Historia</h2>
+        <h5>Reasignar historia del proyecto: {{ $project->name }}</h1>
 
         <!-- Mostrar el mensaje de éxito si está disponible -->
         @if (session('success'))

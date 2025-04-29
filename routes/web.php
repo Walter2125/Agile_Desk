@@ -148,7 +148,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/historialcambios',                 [HistorialCambiosController::class, 'store'])->name('historialcambios.store');
     
     // Reasignación de historias
-    Route::get('/reasignacion-historias',           [ReasignarHistoriaController::class, 'index'])->name('reasinarhistoria.index');
+    Route::get('proyectos/{project}/reasignar-historias', [ReasignarHistoriaController::class, 'index'])->name('reasignar.index');
     Route::post('/reasignacion-historias/reasignar',[ReasignarHistoriaController::class, 'reasignar']);
 
     //ruta para miembros

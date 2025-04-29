@@ -99,8 +99,10 @@
     <a href="{{ route('proyectos.historialcambios.index', ['project' => $tablero->project->id]) }}" 
    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-auto sm:w-24">
    Historial de Cambios</a>  
-   <a href="{{ route('reasinarhistoria.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-auto sm:w-24">Reasignar Historias</a>
-    </div>
+   <a href="{{ route('reasignar.index', ['project' => $project->id]) }}"
+   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-auto sm:w-24">
+   Reasignar Historias</a>    
+</div>
 
 <a href="{{ route('archivo.seleccionar') }}" class="btn btn-warning">📦 Archivar Historia</a>
 <a href="{{ route('archivo.index') }}" class="btn btn-sm btn-light me-2">
