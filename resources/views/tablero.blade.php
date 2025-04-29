@@ -20,258 +20,366 @@
 @stop
 
 @section('content')
-            @if(session('fromCreate') || session('fromEdit'))
-                <script>
-                    window.history.pushState(null, "", window.location.href);
-                    window.addEventListener("popstate", function () {
-                        window.location.href = "{{ route('tablero') }}";
-                    });
-                </script>
-            @endif
-        <!--El mensage de guradado con exito -->
+    @if(session('fromCreate') || session('fromEdit'))
+        <script>
+            window.history.pushState(null, "", window.location.href);
+            window.addEventListener("popstate", function () {
+                window.location.href = "{{ route('tablero') }}";
+            });
+        </script>
+    @endif
+    <!--El mensage de guradado con exito -->
 
-        @if (session('success'))
+    @if (session('success'))
         <div class="alert alert-primary alert-dismissible fade show" role="alert">
-        <strong></strong>
-                {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <strong></strong>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        @endif
+    @endif
 
-        <!-- migajas de pan-->
-        <div class="container py-3 migajas" id="migajas">
-            <ul class="breadcrumb">
-                <li class="breadcrumb__item breadcrumb__item-firstChild">
+    <!-- migajas de pan-->
+    <div class="container py-3 migajas" id="migajas">
+        <ul class="breadcrumb">
+            <li class="breadcrumb__item breadcrumb__item-firstChild">
                     <span class="breadcrumb__inner">
                         <a href="/HomeUser" class="breadcrumb__title">Home</a>
                     </span>
-                </li>
-                <li class="breadcrumb__item breadcrumb__item-firstChild">
+            </li>
+            <li class="breadcrumb__item breadcrumb__item-firstChild">
                     <span class="breadcrumb__inner">
                         <a href="/projects" class="breadcrumb__title">Proyectos</a>
                     </span>
-                </li>
-                <li class="breadcrumb__item breadcrumb__item--active">
+            </li>
+            <li class="breadcrumb__item breadcrumb__item--active">
                     <span class="breadcrumb__inner">
                         <span class="breadcrumb__title">Tableros</span>
                     </span>
-                </li>
-            </ul>
-        </div>
-        <!-- -->
+            </li>
+        </ul>
+    </div>
+    <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.068);">
         <!-- <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen"> -->
-            <h2 class="text-2xl font-bold mb-6">Tablero del proyecto {{ $tablero->project->name }}</h2>
+        <h2 class="text-2xl font-bold mb-6">Tablero del proyecto {{ $tablero->project->name }}</h2>
 
-      <!-- Barra de búsqueda y filtros -->
-    <div class="flex flex-wrap items-center gap-2 mb-4">
-    <!-- Input de búsqueda -->
-    <input type="text" id="buscar" class="border p-2 rounded w-full sm:w-1/3" placeholder="Buscar historias o tareas...">
+        <!-- Barra de búsqueda y filtros -->
+        <div class="flex flex-wrap items-center gap-2 mb-4">
+            <!-- Input de búsqueda -->
+            <input type="text" id="buscar" class="border p-2 rounded w-full sm:w-1/3" placeholder="Buscar historias o tareas...">
 
-    <!-- Select de estado -->
-    <select id="filtrarEstado" class="border p-2 rounded w-full sm:w-1/3">
-        <option value="">Todos los estados</option>
-        <option value="Historia">Historia</option>
-        <option value="Tarea">Tarea</option>
-    </select>
+            <!-- Select de estado -->
+            <select id="filtrarEstado" class="border p-2 rounded w-full sm:w-1/3">
+                <option value="">Todos los estados</option>
+                <option value="Historia">Historia</option>
+                <option value="Tarea">Tarea</option>
+            </select>
 
-    <!-- Input de fecha -->
-    <input type="date" id="filtrarFecha" class="border p-2 rounded w-full sm:w-1/3">
+            <!-- Input de fecha -->
+            <input type="date" id="filtrarFecha" class="border p-2 rounded w-full sm:w-1/3">
 
-    <!-- Select de responsable -->
-    <select id="filtrarResponsable" class="border p-2 rounded w-full sm:w-1/3">
-        <option value="">Todos los responsables</option>
-        @if (!empty($responsables))
-            @foreach ($responsables as $responsable)
-                <option value="{{ $responsable }}">{{ $responsable }}</option>
-            @endforeach
-        @endif
-    </select>
+            <!-- Select de responsable -->
+            <select id="filtrarResponsable" class="border p-2 rounded w-full sm:w-1/3">
+                <option value="">Todos los responsables</option>
+                @if (!empty($responsables))
+                    @foreach ($responsables as $responsable)
+                        <option value="{{ $responsable }}">{{ $responsable }}</option>
+                    @endforeach
+                @endif
+            </select>
 
-    <!-- Select de etiqueta -->
-    <select id="filtrarEtiqueta" class="border p-2 rounded w-full sm:w-1/3">
-        <option value="">Todas las etiquetas</option>
-    </select>
+            <!-- Select de etiqueta -->
+            <select id="filtrarEtiqueta" class="border p-2 rounded w-full sm:w-1/3">
+                <option value="">Todas las etiquetas</option>
+            </select>
 
-    <!-- Botón limpiar filtros más pequeño -->
-    <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded w-auto sm:w-24">Limpiar</button>
-    <a href="{{ route('proyectos.historialcambios.index', ['project' => $tablero->project->id]) }}" 
-   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-auto sm:w-24">
-   Historial de Cambios</a>  
-   <a href="{{ route('reasignar.index', ['project' => $project->id]) }}"
-   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-auto sm:w-24">
-   Reasignar Historias</a>    
-</div>
-
-<a href="{{ route('archivo.seleccionar', ['project' => $project->id]) }}" class="btn btn-warning">
-    📦 Archivar Historia
-</a>
-
-<a href="{{ route('archivo.index.proyecto', ['project' => $project->id]) }}" class="btn btn-sm btn-light me-2">
-    <i class="fas fa-archive me-1"></i> Ver Archivadas
-</a>
+            <!-- Botón limpiar filtros más pequeño -->
+            <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded w-auto sm:w-24">Limpiar</button>
         </div>
+
+
     </div>
-</div>
+    </div>
+    </div>
+
+    <div class="flex justify-between mb-4 items-center">
 
 
-            <div class="flex justify-between mb-4 items-center">
-
-                <select id="comboboxColumna" class="border p-2 rounded">
-                    <option value="">Seleccionar opción</option>
-                    <option value="opcion1">Sprint 1</option>
-                    <option value="opcion2">Sprint 2</option>
-                    <option value="opcion3">Sprint 3</option>
-                    <option value="opcion4">Sprint 4</option>
-                    <option value="opcion5">Sprint 5</option>
-                </select>
-
-                <button id="agregarColumna" class="bg-green-500 text-white px-4 py-2 rounded">
-                    Agregar Columna
-                </button>
-            </div>
-
-
-            <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
-                <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
-                    <div class="flex justify-between items-center">
-                        <span class="titulo-columna text-lg font-bold text-pink-800" style="font-size: 30px; line-height: 1.2;">Backlog</span>
-                        <div class="relative">
-
-                            <div class="btn-group dropend">
-                                <!-- Botón del Dropend -->
-                                <button type="button" class="btn btn-secondary dropdown-toggle absolute right-0 top-6 bg-white border rounded shadow-lg " data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
-                                </button>
-
-
-                                <!-- Contenido del Dropdown -->
-                                <ul class="dropdown-menu">
-                                    <!-- Opción: Crear Historia -->
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('formulario.create', $tablero->id) }}">
-                                            <i class="bi bi-plus"></i> Crear Historia
-                                        </a>
-                                    </li>
-                                    <!-- Opción: Editar Nombre de la Columna -->
-                                    <li>
-                                        <button class="dropdown-item editar-columna">
-                                            Editar Nombre
+        <div id="tablero" class="kanban-board">
+            <div class="kanban-column">
+                <div class="column-header">Backlog</div>
+                <div class="sortable">
+                    @forelse ($tablero->historias->where('estado', 'Pendiente') as $historia)
+                        <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
+                            <div class="card">
+                                <div class="flex justify-between items-start mb-1">
+                                    <div class="font-bold text-lg text-black truncate max-w-[80%]" title="{{ $historia->nombre }}">
+                                        {{ $historia->nombre }}
+                                    </div>
+                                    <div class="card-options relative">
+                                        <button type="button" class="dropdown-toggle absolute right-0 top-0 bg-white border rounded shadow-sm h-6 w-6 text-xs flex items-center justify-center" data-bs-toggle="dropdown" aria-expanded="false">
+                                            ...
                                         </button>
-                                    </li>
-                                </ul>
-                            </div>
-
-                               <!-- Parte COrregida del codigo -->
-
-                            <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
-                                <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
-                                <div class="container my-4"><div class="col-md-2"><a href="{{ route('formulario.create', $tablero->id) }}" class="btn btn-primary"><i class="bi bi-plus"></i> Crear</a></div></div>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                <div class="min-h-[150px] space-y-2 sortable" style="margin-top: 20px;">
-
-
-                    <!-- Para ordenarlos según la prioridad -->
-                    <div class="min-h-[200px] space-y-4 sortable">
-                        @forelse ($tablero->historias as $historia)
-                            <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
-                                <div class="card bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer">
-                                    <div class="flex justify-start items-start mb-1 gap-1">
-                                        <div class="font-bold text-lg text-black truncate max-w-[200%]" title="{{ $historia->nombre }}">
-                                            {{ $historia->nombre }}
-                    
-                                            <div class="flex space-x-1 shrink-0">
-                                                <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                                <button type="button"
-                                                        class="text-red-500 hover:text-red-700 transition-colors"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#confirmDeleteModal-{{ $historia->id }}">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </div>
-                    
-                                            <!-- Modal de confirmación -->
-                                            <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1"
-                                                 aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="modalLabel-{{ $historia->id }}">Confirmar Eliminación</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            ¿Estás seguro de que deseas eliminar este registro?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                            <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                                                            </form>
-                                                        </div>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{{ route('formulario.edit', $historia->id) }}"><i class="bi bi-pencil mr-2"></i>Editar</a></li>
+                                            <li><button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}"><i class="bi bi-trash mr-2"></i>Eliminar</button></li>
+                                        </ul>
+                                        <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="modalLabel-{{ $historia->id }}">Confirmar Eliminación</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                                                     </div>
-                                                </div>
-                                            </div>
-                    
-                                            <!-- Información de la historia -->
-                                            <div class="mb-3">
-                                                <div class="flex items-center mb-1">
-                                                    <span class="text-gray-600 mr-2 shrink-0">Id:</span>
-                                                    <span class="font-semibold text-gray-800">{{ $historia->id }}</span>
-                                                </div>
-                                                <div class="flex items-center">
-                                                    <span class="text-gray-600 mr-2 shrink-0">Prioridad:</span>
-                                                    <span class="font-semibold text-gray-800">{{ $historia->prioridad }}</span>
+                                                    <div class="modal-body">
+                                                        ¿Estás seguro de que deseas eliminar este registro?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </a>
-                        @empty
-                            <p class="text-gray-500 italic">No hay historias creadas.</p>
-                        @endforelse
-                    </div>
-                    
+                                <div class="text-sm text-gray-600">
+                                    ID: <span class="font-semibold">{{ $historia->id }}</span><br>
+                                    Prioridad: <span class="font-semibold">{{ $historia->prioridad }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    @empty
+                        <p class="text-gray-500 italic">No hay historias en Backlog.</p>
+                    @endforelse
                 </div>
+                <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
+            </div>
+
+            <div class="kanban-column">
+                <div class="column-header">En Curso</div>
+                <div class="sortable">
+                    @forelse ($tablero->historias->where('estado', 'En Curso') as $historia)
+                        <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
+                            <div class="card">
+                                <div class="flex justify-between items-start mb-1">
+                                    <div class="font-bold text-lg text-black truncate max-w-[80%]" title="{{ $historia->nombre }}">
+                                        {{ $historia->nombre }}
+                                    </div>
+                                    <div class="card-options relative">
+                                        <button type="button" class="dropdown-toggle absolute right-0 top-0 bg-white border rounded shadow-sm h-6 w-6 text-xs flex items-center justify-center" data-bs-toggle="dropdown" aria-expanded="false">
+                                            ...
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{{ route('formulario.edit', $historia->id) }}"><i class="bi bi-pencil mr-2"></i>Editar</a></li>
+                                            <li><button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}"><i class="bi bi-trash mr-2"></i>Eliminar</button></li>
+                                        </ul>
+                                        <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="modalLabel-{{ $historia->id }}">Confirmar Eliminación</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        ¿Estás seguro de que deseas eliminar este registro?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-600">
+                                    ID: <span class="font-semibold">{{ $historia->id }}</span><br>
+                                    Prioridad: <span class="font-semibold">{{ $historia->prioridad }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    @empty
+                        <p class="text-gray-500 italic">No hay historias en En Curso.</p>
+                    @endforelse
+                </div>
+                <button class="create-button" onclick="href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
+            </div>
+
+            <div class="kanban-column">
+                <div class="column-header">Listo</div>
+                <div class="sortable">
+                    @forelse ($tablero->historias->where('estado', 'Listo') as $historia)
+                        <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
+                            <div class="card">
+                                <div class="flex justify-between items-start mb-1">
+                                    <div class="font-bold text-lg text-black truncate max-w-[80%]" title="{{ $historia->nombre }}">
+                                        {{ $historia->nombre }}
+                                    </div>
+                                    <div class="card-options relative">
+                                        <button type="button" class="dropdown-toggle absolute right-0 top-0 bg-white border rounded shadow-sm h-6 w-6 text-xs flex items-center justify-center" data-bs-toggle="dropdown" aria-expanded="false">
+                                            ...
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{{ route('formulario.edit', $historia->id) }}"><i class="bi bi-pencil mr-2"></i>Editar</a></li>
+                                            <li><button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}"><i class="bi bi-trash mr-2"></i>Eliminar</button></li>
+                                        </ul>
+                                        <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="modalLabel-{{ $historia->id }}">Confirmar Eliminación</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        ¿Estás seguro de que deseas eliminar este registro?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-600">
+                                    ID: <span class="font-semibold">{{ $historia->id }}</span><br>
+                                    Prioridad: <span class="font-semibold">{{ $historia->prioridad }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    @empty
+                        <p class="text-gray-500 italic">No hay historias en Listo.</p>
+                    @endforelse
+                </div>
+                <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
+            </div>
+            <button class="add-column-button" onclick="abrirModalAgregarColumna()">+</button>
 
         </div>
+
+        <style>
+            .kanban-board {
+                display: flex;
+                align-items: flex-start; /* Align columns to the top */
+                overflow-x: auto;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .kanban-column {
+                background-color: #f0f0f0;
+                border-radius: 5px;
+                width: 250px;
+                min-width: 250px; /* Prevent columns from shrinking too much */
+                display: flex;
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .column-header {
+                font-weight: bold;
+                padding: 10px;
+                background-color: #e0e0e0;
+                border-radius: 5px;
+                margin-bottom: 10px;
+                text-align: center; /* Centrar el texto del encabezado */
+            }
+
+            .card {
+                background-color: #ffffff;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 10px;
+                margin-bottom: 10px;
+                position: relative; /* For options positioning */
+            }
+
+            .card-options {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                cursor: pointer;
+            }
+
+            .create-button {
+                background-color: #ffffff;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 8px 12px;
+                cursor: pointer;
+                align-self: flex-start; /* Align to the start of the column */
+                margin-top: auto; /* Push to the bottom */
+                width: 100%; /* Ocupar todo el ancho del contenedor */
+                text-align: center; /* Centrar el texto del botón */
+            }
+
+            .add-column-button {
+                background-color: #ffffff;
+                border: 1px solid #ccc;
+                border-radius: 50%; /* Make it a circle */
+                width: 30px;
+                height: 30px;
+                font-size: 20px;
+                font-weight: bold;
+                cursor: pointer;
+                margin-left: 10px;
+                align-self: center; /* Vertically center the button */
+            }
+
+            /* Basic styling - adjust as needed */
+        </style>
+
+        <!-- Parte COrregida del codigo -->
+
+
     </div>
-</div>
 
-<!-- modal-->
-<div id="miModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-5 rounded shadow-lg w-1/3">
-        <h2 class="text-xl font-bold mb-4">Agregar Tarea</h2>
-        <div id="listaTareas"></div>
-        <button class="btn btn-success mt-2" onclick="agregarTarea()">Agregar Tarea</button>
-        <button class="btn btn-danger mt-2" onclick="cerrarModal()">Cerrar</button>
     </div>
-</div>
+    </div>
+    </div>
 
-<script>
-    function abrirModal(id) {
-        document.getElementById("miModal").style.display = "flex";
-    }
+    <!-- modal-->
+    <div id="miModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-5 rounded shadow-lg w-1/3">
+            <h2 class="text-xl font-bold mb-4">Agregar Tarea</h2>
+            <div id="listaTareas"></div>
+            <button class="btn btn-success mt-2" onclick="agregarTarea()">Agregar Tarea</button>
+            <button class="btn btn-danger mt-2" onclick="cerrarModal()">Cerrar</button>
+        </div>
+    </div>
 
-    function cerrarModal() {
-        document.getElementById("miModal").style.display = "none";
-    }
+    <script>
+        function abrirModal(id) {
+            document.getElementById("miModal").style.display = "flex";
+        }
 
-    function agregarTarea() {
-        let lista = document.getElementById("listaTareas");
-        let nuevaTarea = document.createElement("div");
-        nuevaTarea.className = "tarea-item";
-        nuevaTarea.innerHTML = `<input type="text" placeholder="Descripción de la tarea">`;
-        lista.appendChild(nuevaTarea);
-    }
-  </script>
+        function cerrarModal() {
+            document.getElementById("miModal").style.display = "none";
+        }
+
+        function agregarTarea() {
+            let lista = document.getElementById("listaTareas");
+            let nuevaTarea = document.createElement("div");
+            nuevaTarea.className = "tarea-item";
+            nuevaTarea.innerHTML = `<input type="text" placeholder="Descripción de la tarea">`;
+            lista.appendChild(nuevaTarea);
+        }
+    </script>
     </div>
 
     <!-- Modal -->
@@ -287,8 +395,8 @@
     </div>
 
 
-<!-- Modal para etiquetas -->
-<div id="modalEtiquetas" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+    <!-- Modal para etiquetas -->
+    <div id="modalEtiquetas" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h3 class="text-xl font-bold mb-4">Asignar Etiquetas</h3>
             <div id="listaEtiquetas" class="mb-4 space-y-2"></div>
@@ -298,6 +406,19 @@
             </div>
         </div>
     </div>
+    <!-- Modal para agregar nueva columna -->
+    <div id="modalAgregarColumna" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+            <h3 class="text-xl font-bold mb-4">Nombre de la Columna </h3>
+            <input type="text" id="nombreColumna" class="border p-2 w-full mb-4" placeholder="Nombre de la columna">
+            <div class="flex justify-end space-x-2">
+                <button onclick="cerrarModalAgregarColumna()" class="bg-red-500 text-white px-4 py-2 rounded">Cancelar</button>
+                <button onclick="guardarColumna()" class="bg-green-500 text-white px-4 py-2 rounded">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+
 @stop
 
 @section('adminlte_js')
@@ -442,7 +563,7 @@
         });
     </script>
 
-<script>
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const buscarInput = document.getElementById('buscar');
             const filtrarEstado = document.getElementById('filtrarEstado');
@@ -494,123 +615,180 @@
         });
     </script>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const modalEtiquetas = document.getElementById('modalEtiquetas');
-    const cerrarEtiquetas = document.getElementById('cerrarEtiquetas');
-    const guardarEtiquetas = document.getElementById('guardarEtiquetas');
-    const listaEtiquetas = document.getElementById('listaEtiquetas');
-    let tarjetaSeleccionada = null;
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalEtiquetas = document.getElementById('modalEtiquetas');
+            const cerrarEtiquetas = document.getElementById('cerrarEtiquetas');
+            const guardarEtiquetas = document.getElementById('guardarEtiquetas');
+            const listaEtiquetas = document.getElementById('listaEtiquetas');
+            let tarjetaSeleccionada = null;
 
-    // Lista de etiquetas disponibles
-    const etiquetasDisponibles = [
-        { nombre: "Sin etiqueta", color: "bg-gray-400" },
-        { nombre: "Urgente", color: "bg-red-500" },
-        { nombre: "Bug", color: "bg-yellow-500" },
-        { nombre: "Mejora", color: "bg-green-500" },
-        { nombre: "Investigación", color: "bg-blue-500" }
-    ];
+            // Lista de etiquetas disponibles
+            const etiquetasDisponibles = [
+                { nombre: "Sin etiqueta", color: "bg-gray-400" },
+                { nombre: "Urgente", color: "bg-red-500" },
+                { nombre: "Bug", color: "bg-yellow-500" },
+                { nombre: "Mejora", color: "bg-green-500" },
+                { nombre: "Investigación", color: "bg-blue-500" }
+            ];
 
-    // Asignar "Sin etiqueta" a cada nueva tarjeta si no tiene
-    document.querySelectorAll('.card').forEach((card, index) => {
-        if (!card.dataset.id) {
-            card.dataset.id = `tarea_${index}`;
-        }
-        if (!card.dataset.etiquetas) {
-            card.dataset.etiquetas = "Sin etiqueta";
-            mostrarEtiquetasEnTarea(card, "Sin etiqueta");
-        }
-    });
+            // Asignar "Sin etiqueta" a cada nueva tarjeta si no tiene
+            document.querySelectorAll('.card').forEach((card, index) => {
+                if (!card.dataset.id) {
+                    card.dataset.id = `tarea_${index}`;
+                }
+                if (!card.dataset.etiquetas) {
+                    card.dataset.etiquetas = "Sin etiqueta";
+                    mostrarEtiquetasEnTarea(card, "Sin etiqueta");
+                }
+            });
 
-    // Restaurar etiquetas guardadas en localStorage
-    document.querySelectorAll('.card').forEach(card => {
-        const idTarea = card.dataset.id;
-        const etiquetaGuardada = localStorage.getItem(`etiqueta_${idTarea}`);
+            // Restaurar etiquetas guardadas en localStorage
+            document.querySelectorAll('.card').forEach(card => {
+                const idTarea = card.dataset.id;
+                const etiquetaGuardada = localStorage.getItem(`etiqueta_${idTarea}`);
 
-        if (etiquetaGuardada) {
-            card.dataset.etiquetas = etiquetaGuardada;
-            mostrarEtiquetasEnTarea(card, etiquetaGuardada);
-        } else {
-            card.dataset.etiquetas = "Sin etiqueta"; // Asegura la etiqueta por defecto
-            mostrarEtiquetasEnTarea(card, "Sin etiqueta");
-        }
-    });
+                if (etiquetaGuardada) {
+                    card.dataset.etiquetas = etiquetaGuardada;
+                    mostrarEtiquetasEnTarea(card, etiquetaGuardada);
+                } else {
+                    card.dataset.etiquetas = "Sin etiqueta"; // Asegura la etiqueta por defecto
+                    mostrarEtiquetasEnTarea(card, "Sin etiqueta");
+                }
+            });
 
-    // Evento de doble clic para abrir el modal
-    document.querySelectorAll('.card').forEach(card => {
-        card.addEventListener('dblclick', (e) => {
-            e.stopPropagation();
-            abrirModal(card);
+            // Evento de doble clic para abrir el modal
+            document.querySelectorAll('.card').forEach(card => {
+                card.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    abrirModal(card);
+                });
+            });
+
+            function abrirModal(card) {
+                tarjetaSeleccionada = card;
+                modalEtiquetas.classList.remove('hidden');
+                generarOpcionesEtiquetas(card);
+            }
+
+            function generarOpcionesEtiquetas(card) {
+                listaEtiquetas.innerHTML = "";
+                etiquetasDisponibles.forEach(etiqueta => {
+                    const div = document.createElement('div');
+                    div.classList.add('flex', 'items-center', 'space-x-2');
+
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = 'etiquetaSeleccionada';
+                    radio.value = etiqueta.nombre;
+                    radio.checked = card.dataset.etiquetas === etiqueta.nombre || (etiqueta.nombre === "Sin etiqueta" && !card.dataset.etiquetas);
+
+                    const label = document.createElement('span');
+                    label.textContent = etiqueta.nombre;
+                    label.classList.add('px-2', 'py-1', 'rounded', etiqueta.color, 'text-white');
+
+                    div.appendChild(radio);
+                    div.appendChild(label);
+                    listaEtiquetas.appendChild(div);
+                });
+            }
+
+            guardarEtiquetas.addEventListener('click', () => {
+                if (!tarjetaSeleccionada) return;
+                const etiquetaSeleccionada = listaEtiquetas.querySelector('input[name="etiquetaSeleccionada"]:checked').value;
+                tarjetaSeleccionada.dataset.etiquetas = etiquetaSeleccionada;
+                mostrarEtiquetasEnTarea(tarjetaSeleccionada, etiquetaSeleccionada);
+
+                const idTarea = tarjetaSeleccionada.dataset.id;
+                localStorage.setItem(`etiqueta_${idTarea}`, etiquetaSeleccionada);
+
+                if (etiquetaSeleccionada === "Urgente") {
+                    toastr.warning("Tarea marcada como Urgente. Notificando al líder técnico...");
+                }
+
+                modalEtiquetas.classList.add('hidden');
+                tarjetaSeleccionada = null;
+            });
+
+            cerrarEtiquetas.addEventListener('click', () => {
+                modalEtiquetas.classList.add('hidden');
+                tarjetaSeleccionada = null;
+            });
+
+            function mostrarEtiquetasEnTarea(card, etiqueta) {
+                let etiquetaContainer = card.querySelector('.etiquetas');
+                if (!etiquetaContainer) {
+                    etiquetaContainer = document.createElement('div');
+                    etiquetaContainer.classList.add('flex', 'space-x-1', 'mt-2', 'etiquetas');
+                    card.appendChild(etiquetaContainer);
+                }
+                etiquetaContainer.innerHTML = "";
+
+                if (etiqueta !== "Sin etiqueta") {
+                    const etiquetaData = etiquetasDisponibles.find(e => e.nombre === etiqueta);
+                    const etiquetaSpan = document.createElement('span');
+                    etiquetaSpan.textContent = etiqueta;
+                    etiquetaSpan.classList.add('px-2', 'py-1', 'text-white', 'rounded', etiquetaData.color);
+                    etiquetaContainer.appendChild(etiquetaSpan);
+                }
+            }
         });
-    });
 
-    function abrirModal(card) {
-        tarjetaSeleccionada = card;
-        modalEtiquetas.classList.remove('hidden');
-        generarOpcionesEtiquetas(card);
-    }
 
-    function generarOpcionesEtiquetas(card) {
-        listaEtiquetas.innerHTML = "";
-        etiquetasDisponibles.forEach(etiqueta => {
-            const div = document.createElement('div');
-            div.classList.add('flex', 'items-center', 'space-x-2');
-
-            const radio = document.createElement('input');
-            radio.type = 'radio';
-            radio.name = 'etiquetaSeleccionada';
-            radio.value = etiqueta.nombre;
-            radio.checked = card.dataset.etiquetas === etiqueta.nombre || (etiqueta.nombre === "Sin etiqueta" && !card.dataset.etiquetas);
-
-            const label = document.createElement('span');
-            label.textContent = etiqueta.nombre;
-            label.classList.add('px-2', 'py-1', 'rounded', etiqueta.color, 'text-white');
-
-            div.appendChild(radio);
-            div.appendChild(label);
-            listaEtiquetas.appendChild(div);
-        });
-    }
-
-    guardarEtiquetas.addEventListener('click', () => {
-        if (!tarjetaSeleccionada) return;
-        const etiquetaSeleccionada = listaEtiquetas.querySelector('input[name="etiquetaSeleccionada"]:checked').value;
-        tarjetaSeleccionada.dataset.etiquetas = etiquetaSeleccionada;
-        mostrarEtiquetasEnTarea(tarjetaSeleccionada, etiquetaSeleccionada);
-
-        const idTarea = tarjetaSeleccionada.dataset.id;
-        localStorage.setItem(`etiqueta_${idTarea}`, etiquetaSeleccionada);
-
-        if (etiquetaSeleccionada === "Urgente") {
-            toastr.warning("Tarea marcada como Urgente. Notificando al líder técnico...");
+    </script>
+    <script>
+        function abrirModalAgregarColumna() {
+            document.getElementById('modalAgregarColumna').classList.remove('hidden');
         }
 
-        modalEtiquetas.classList.add('hidden');
-        tarjetaSeleccionada = null;
-    });
-
-    cerrarEtiquetas.addEventListener('click', () => {
-        modalEtiquetas.classList.add('hidden');
-        tarjetaSeleccionada = null;
-    });
-
-    function mostrarEtiquetasEnTarea(card, etiqueta) {
-        let etiquetaContainer = card.querySelector('.etiquetas');
-        if (!etiquetaContainer) {
-            etiquetaContainer = document.createElement('div');
-            etiquetaContainer.classList.add('flex', 'space-x-1', 'mt-2', 'etiquetas');
-            card.appendChild(etiquetaContainer);
+        function cerrarModalAgregarColumna() {
+            document.getElementById('modalAgregarColumna').classList.add('hidden');
         }
-        etiquetaContainer.innerHTML = "";
 
-        if (etiqueta !== "Sin etiqueta") {
-            const etiquetaData = etiquetasDisponibles.find(e => e.nombre === etiqueta);
-            const etiquetaSpan = document.createElement('span');
-            etiquetaSpan.textContent = etiqueta;
-            etiquetaSpan.classList.add('px-2', 'py-1', 'text-white', 'rounded', etiquetaData.color);
-            etiquetaContainer.appendChild(etiquetaSpan);
+        function guardarColumna() {
+            const tableroId = {{ $tablero->id }}; // ID del tablero actual
+            const nombreColumna = document.getElementById('nombreColumna').value;
+
+            if (!nombreColumna) {
+                alert("El nombre de la columna no puede estar vacío.");
+                return;
+            }
+
+            fetch("{{ route('columna.store') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                },
+                body: JSON.stringify({
+                    tablero_id: tableroId,
+                    nombre: nombreColumna
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.mensaje === "Columna creada") {
+                        const tablero = document.getElementById("tablero");
+                        const nuevaColumna = document.createElement("div");
+                        nuevaColumna.classList.add("kanban-column");
+                        nuevaColumna.innerHTML = `
+                    <div class="column-header">${data.columna.nombre}</div>
+                    <div class="sortable"></div>
+                    <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
+                `;
+                        tablero.insertBefore(nuevaColumna, tablero.lastElementChild);
+                        toastr.success("Columna agregada exitosamente.");
+                        cerrarModalAgregarColumna();
+                    } else {
+                        toastr.error("Error al agregar la columna.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    toastr.error("No se pudo conectar con el servidor.");
+                });
         }
-    }
-});
-</script>
+    </script>
+
 @stop
+
