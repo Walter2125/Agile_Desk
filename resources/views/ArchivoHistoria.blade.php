@@ -38,14 +38,22 @@
 @section('content')
 <div class="container py-4">
     <div class="card shadow-sm">
+
+    @php
+            $primerHistoria = $historiasArchivadas->first()?->historia;
+            $projectId = $primerHistoria?->tablero?->project_id ?? null;
+        @endphp
+
         <div class="card-header bg-primary text-white">
             <div class="d-flex justify-content-between align-items-center">
                 <h2 class="h5 mb-0">
                     <i class="fas fa-archive me-2"></i>Historias Archivadas
                 </h2>
-                <a href="{{ route('archivo.seleccionar') }}" class="btn btn-sm btn-light">
-                    <i class="fas fa-box-open me-1"></i> Ver Activas
-                </a>
+                @if($projectId)
+                    <a href="{{ route('archivo.seleccionar', ['project' => $projectId]) }}" class="btn btn-sm btn-light">
+                        <i class="fas fa-box-open me-1"></i> Ver Activas
+                    </a>
+                @endif
             </div>
         </div>
 
@@ -68,12 +76,12 @@
                                     <h5 class="mb-1">{{ $historia->nombre }}</h5>
                                     <small class="text-muted">Archivada en: {{ \Carbon\Carbon::parse($registro->archivado_en)->format('d/m/Y H:i') }}</small>
                                 </div>
-                                <form method="POST" action="{{ route('archivo.desarchivar', $historia->id) }}">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-outline-success" title="Restaurar historia">
-                                        <i class="fas fa-undo me-1"></i> Restaurar
-                                    </button>
-                                </form>
+                                <form method="POST" action="{{ route('archivo.desarchivar', ['project' => $historia?->tablero?->project_id, 'id' => $historia?->id]) }}">
+    @csrf
+    <button type="submit" class="btn btn-sm btn-outline-success" title="Restaurar historia">
+        <i class="fas fa-undo me-1"></i> Restaurar
+    </button>
+</form>                                   
                             </div>
                         </div>
                     @endforeach

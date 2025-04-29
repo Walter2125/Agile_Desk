@@ -100,8 +100,8 @@ class TableroController extends Controller
          }
          
          // Pasar $tablero a la vista
-         return view('tablero', compact('tablero'));
-     }
+         $project = $tablero->project;
+         return view('tablero', compact('tablero', 'project'));     }
      
     /**
      * Formulario para borrar un tablero
