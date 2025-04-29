@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Formatohistoria extends Model
 {
-    use HasFactory;
     protected $fillable = [
         'nombre',
         'sprint',
@@ -15,18 +13,19 @@ class Formatohistoria extends Model
         'responsable',
         'prioridad',
         'descripcion',
+        'sprint_id'
     ];
 
-    public function archivo()
+    public function sprint()
     {
-        return $this->hasOne(ArchivoHistoria::class, 'historia_id');
+        return $this->belongsTo(Sprint::class);
     }
 
-     // Pertenece a una columna
-     public function columna()
-     {
-         return $this->belongsTo(Columna::class, 'columna_id');
-     }
+    // Pertenece a una columna
+    public function columna()
+    {
+        return $this->belongsTo(Columna::class, 'columna_id');
+    }
     // Pertenece a un tablero
     public function tablero()
     {

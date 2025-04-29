@@ -37,13 +37,12 @@ class FormatohistoriaControler extends Controller
      */
     public function create(Tablero $tablero)
     {
-        return view('formato.create', compact('tablero'));
+        $sprint_id = request('sprint'); // Obtener el sprint_id de la URL
+        $sprints = $tablero->project->sprints; // Obtener los sprints del proyecto
+        return view('formato.create', compact('tablero', 'sprints', 'sprint_id'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request,Tablero $tablero)
+    public function store(Request $request, Tablero $tablero)
     {
         $request->validate([
             'nombre' => [
@@ -59,6 +58,7 @@ class FormatohistoriaControler extends Controller
             'responsable' => 'nullable|string|max:255',
             'prioridad' => 'required|in:Alta,Media,Baja',
             'descripcion' => 'nullable|string',
+            'sprint_id' => 'nullable|exists:sprints,id',
         ], [
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.unique' => 'El nombre ya existe en este tablero, intente con otro.',
@@ -74,7 +74,8 @@ class FormatohistoriaControler extends Controller
         $historia->prioridad = $request->prioridad;
         $historia->descripcion = $request->descripcion;
         $historia->user_id = auth()->id(); // ✅ ESTO ES FUNDAMENTAL
-        $historia->tablero_id = $tablero->id; // Asociar la historia al tablero
+        $historia->sprint_id = $request->sprint_id; // Agregar el sprint_id
+        $historia->tablero_id = $tablero->id;
         $historia->save();
 
         // Enviar notificación al usuario autenticado
@@ -93,12 +94,11 @@ class FormatohistoriaControler extends Controller
             'detalles' => 'Se creó una nueva historia: ' . $historia->nombre,
         ]);
 
-        return redirect()
-        ->route('tableros.show', $tablero->id)
-        ->with([
-            'success' => 'Historia Creada correctamente',
-            'fromCreate' => true, ]);
-
+        return redirect()->route('tableros.show', $tablero->id)
+            ->with([
+                'success' => 'Historia Creada correctamente',
+                'fromCreate' => true,
+            ]);
     }
 
     /**
