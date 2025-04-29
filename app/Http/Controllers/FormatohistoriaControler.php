@@ -9,6 +9,7 @@ use App\Models\HistorialCambios;
 use App\Models\ReasinarHistorias;
 use App\Models\ListaHistoria;
 use App\Models\Tablero;
+use App\Models\ArchivoHistoria;
 use Illuminate\Http\Request;
 use App\Models\Columna;
 
@@ -53,7 +54,6 @@ class FormatohistoriaControler extends Controller
             'nombre' => [
                 'required',
                 'max:255',
-                // Validar que el nombre sea único dentro del tablero actual
                 \Illuminate\Validation\Rule::unique('formatohistorias')->where(function ($query) use ($tablero) {
                     return $query->where('tablero_id', $tablero->id);
                 }),
@@ -71,7 +71,7 @@ class FormatohistoriaControler extends Controller
         ]);
 
         $historia = new Formatohistoria();
-        $historia->nombre = $request->nombre;//aqui aun falta mas revisar
+        $historia->nombre = $request->nombre;
         $historia->sprint = $request->sprint;
         $historia->trabajo_estimado = $request->trabajo_estimado;
         $historia->responsable = $request->responsable;
@@ -146,7 +146,6 @@ class FormatohistoriaControler extends Controller
             'nombre' => [
                 'required',
                 'max:255',
-                // Validar que el nombre sea único dentro del tablero actual, excluyendo el registro actual
                 \Illuminate\Validation\Rule::unique('formatohistorias')->where(function ($query) use ($historia) {
                     return $query->where('tablero_id', $historia->tablero_id);
                 })->ignore($historia->id),
@@ -163,6 +162,8 @@ class FormatohistoriaControler extends Controller
             'prioridad.required' => 'La prioridad es requerida.',
         ]);
 
+        $datosAnteriores = $historia->getOriginal(); // Datos antes de actualizar
+
         $historia->update([
             'nombre' => $request->nombre,
             'sprint' => $request->sprint,
@@ -172,8 +173,7 @@ class FormatohistoriaControler extends Controller
             'descripcion' => $request->descripcion,
         ]);
 
-        // Determinar cambios
-        $datosAnteriores = $historia->getOriginal(); // Obtener los datos originales antes de la actualización
+        // Registrar los cambios
         $detalles = "Historia actualizada: " . $historia->nombre . ".\n";
         foreach ($historia->toArray() as $campo => $valorNuevo) {
             if ($datosAnteriores[$campo] != $valorNuevo) {
@@ -181,12 +181,14 @@ class FormatohistoriaControler extends Controller
             }
         }
 
-        // Registrar en el historial de cambios
         HistorialCambios::create([
             'fecha' => now(),
             'usuario' => Auth::user()->name ?? 'Desconocido',
             'accion' => 'Edición',
             'detalles' => $detalles,
+            'sprint' => $historia->sprint,
+            'project_id' => $historia->tablero->project_id, // <<--- AGREGAR ESTO
+
         ]);
 
         return redirect()->route('tableros.show', $historia->tablero_id)->with([
@@ -199,29 +201,31 @@ class FormatohistoriaControler extends Controller
      */
     public function destroy(string $id)
     {
-    $historia = Formatohistoria::findOrFail($id);
-    $nombreHistoria = $historia->nombre;
+        $historia = Formatohistoria::findOrFail($id);
+        $nombreHistoria = $historia->nombre;
 
-    // Notificar al usuario autenticado sobre la eliminación
-    Notificaciones::create([
-        'title' => 'Historia Eliminada',
-        'message' => 'Se ha eliminado la historia: ' . $nombreHistoria,
-        'user_id' => auth()->id(),
-        'read' => false,
-    ]);
+        // Notificar eliminación
+        Notificaciones::create([
+            'title' => 'Historia Eliminada',
+            'message' => 'Se ha eliminado la historia: ' . $nombreHistoria,
+            'user_id' => auth()->id(),
+            'read' => false,
+        ]);
 
-    // Eliminar la historia
-    $historia->delete();
+        $historia->delete();
 
-    // Registrar en el historial de cambios
-    HistorialCambios::create([
-        'fecha' => now(),
-        'usuario' => Auth::user()->name ?? 'Desconocido',
-        'accion' => 'Eliminación',
-        'detalles' => "Se eliminó la historia: " . $nombreHistoria,
-    ]);
+        // Registrar en historial
+        HistorialCambios::create([
+            'fecha' => now(),
+            'usuario' => Auth::user()->name ?? 'Desconocido',
+            'accion' => 'Eliminación',
+            'detalles' => "Se eliminó la historia: " . $nombreHistoria,
+            'sprint' => $historia->sprint,
+            'project_id' => $historia->tablero->project_id, // <<--- AGREGAR ESTO
 
-    session()->flash('success', 'Historia eliminada correctamente');
-    return redirect()->route('tableros.show', $historia->tablero_id)->with('success', 'Historia eliminada correctamente');
+        ]);
+
+        return redirect()->route('tableros.show', $historia->tablero_id)
+            ->with('success', 'Historia eliminada correctamente');
     }
 }

@@ -97,12 +97,21 @@
 
     <!-- Botón limpiar filtros más pequeño -->
     <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded w-auto sm:w-24">Limpiar</button>
+    <a href="{{ route('proyectos.historialcambios.index', ['project' => $tablero->project->id]) }}" 
+   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-auto sm:w-24">
+   Historial de Cambios</a>  
+   <a href="{{ route('reasignar.index', ['project' => $project->id]) }}"
+   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-auto sm:w-24">
+   Reasignar Historias</a>    
 </div>
 
-<a href="{{ route('archivo.seleccionar') }}" class="btn btn-warning">📦 Archivar Historia</a>
-<a href="{{ route('archivo.index') }}" class="btn btn-sm btn-light me-2">
-                <i class="fas fa-archive me-1"></i> Ver Archivadas
-            </a>
+<a href="{{ route('archivo.seleccionar', ['project' => $project->id]) }}" class="btn btn-warning">
+    📦 Archivar Historia
+</a>
+
+<a href="{{ route('archivo.index.proyecto', ['project' => $project->id]) }}" class="btn btn-sm btn-light me-2">
+    <i class="fas fa-archive me-1"></i> Ver Archivadas
+</a>
         </div>
     </div>
 </div>

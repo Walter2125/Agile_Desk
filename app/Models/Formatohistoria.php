@@ -15,7 +15,8 @@ class Formatohistoria extends Model
         'responsable',
         'prioridad',
         'descripcion',
-        'columna_id'
+        'columna_id',
+        'project_id',
     ];
 
     public function archivo()
@@ -33,4 +34,8 @@ class Formatohistoria extends Model
     {
         return $this->belongsTo(Tablero::class, 'tablero_id');
     }
+    public function project()
+{
+    return $this->belongsTo(Project::class, 'project_id');
+}
 }

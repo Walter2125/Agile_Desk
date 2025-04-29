@@ -7,11 +7,7 @@
 @endsection
 
 @section('Mensaje')
-    <li class="nav-item d-flex align-items-center ps-3 mensaje-titulo">
-        <span class="titulo-formulario">
-            Crear nueva tarea
-        </span>
-    </li>
+   
 @endsection
 
 @section('content')
@@ -20,32 +16,40 @@
    
         <form action="{{ route('tareas.store') }}" method="POST">
             @csrf
+            <li class="nav-item d-flex align-items-center justify-content-between ps-3" style="padding-top: 0.4rem; padding-bottom: 0.4rem;">
+                <h1 class="fw-bold mb-0" style="font-size: 2rem;">✏️ Crear Una Nueva Tarea</h1>
+
+                <div class="d-flex flex-column align-items-end col-md-4">
+                <label for="historia_id" class="form-label mb-1">Historia Asociada</label>
+                <input type="hidden" name="historia_id" value="{{ $historia->id ?? '' }}">
+                <input type="text" class="form-control" id="historia_nombre" value="{{ $historia->nombre ?? '' }}" readonly>
+                </div>
+            </li>
+            
             <div class="col md">
                     <label for="nombre" class="form-label">Nombre</label>
                     <input type="text" class="form-control" id="nombre" name="nombre" required>
             </div>
 
             <div class="row g-2">
-                    <div class="col-md-3">
-                    <label for="historia_id" class="form-label">Historia Asociada</label>
-                    <input type="hidden" name="historia_id" value="{{ $historia->id ?? '' }}">
-                    <input type="text" class="form-control" id="historia_nombre" value="{{ $historia->nombre ?? '' }}" readonly>
-                    </div>
                     <div class="col md">
                         <label for="asignado" class="form-label">Asignado a</label>
                         <input type="text" class="form-control" id="asignado" name="asignado">
                     </div>
                     <div class="col-md-4">
-                        <div class="container mt-4">
-                        <label for="actividad" class="form-label"> Actividad</label>
-                            <select class="form-select" aria-label="Default select example" id="actividad" name="actividad" required >
-                                <option value="Configuracion">Configuración</option>
-                                <option value="Desarrollo">Desarrollo</option>
-                                <option value="Prueba">Prueba</option>
-                                <option value="Diseño">Diseño</option>
-                            </select>
-                            </div>
-                    </div >
+                    <div class="container mt-4">
+                        <label for="actividad" class="form-label mb-2">Actividad</label>
+                        <select class="form-select form-select-lg" aria-label="Default select example" id="actividad" name="actividad" required>
+                            <option value="Configuracion">Configuración</option>
+                            <option value="Desarrollo">Desarrollo</option>
+                            <option value="Prueba">Prueba</option>
+                            <option value="Diseño">Diseño</option>
+                        </select>
+                    </div>
+                    </div>
+
+                    
+
             </div>
             <div class="row g-2">
             <div class="col mb-3">

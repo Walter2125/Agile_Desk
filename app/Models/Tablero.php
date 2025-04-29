@@ -25,4 +25,5 @@ class Tablero extends Model
     {
         return $this->hasMany(Formatohistoria::class, 'tablero_id');
     }
+    
 }
