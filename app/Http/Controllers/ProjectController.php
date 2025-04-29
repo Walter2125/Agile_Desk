@@ -17,9 +17,8 @@ class ProjectController extends Controller
     public function create()
     {
         // Buscar todos los usuarios para mostrar en la búsqueda
-        $users = User::all();
+        $users = User::where('role', '!=', 'admin')->paginate(5); // 5 usuarios por página, excluyendo al admin
 
-        // Obtener los usuarios seleccionados si se ha editado un proyecto
         $selectedUsers = [];
 
         return view('projects.create', compact('users', 'selectedUsers'));
@@ -30,61 +29,62 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
-        // 1. Validación
-        $request->validate([
-            'name' => 'required|unique:nuevo_proyecto,name',
-            'fecha_inicio' => 'required|date',
-            'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
-            'users'        => 'required|array|min:1',
-            'users.*'      => 'exists:users,id',
-        ]);
-    
-        // 2. Ejecutamos la transacción y capturamos el tablero devuelto
-        $tablero = DB::transaction(function () use ($request) {
-            // Crear proyecto
-            $project = Project::create([
-                'name'         => $request->name,
-                'fecha_inicio' => $request->fecha_inicio,
-                'fecha_fin'    => $request->fecha_fin,
-                'user_id'      => auth()->id(),
-            ]);
-    
-            // Asignar usuarios (incluye al creador)
-            $project->users()->sync(array_merge(
-                [auth()->id()],
-                $request->input('users', [])
-            ));
-    
-            // Notificar solo a usuarios asignados
-            foreach ($project->users as $usuario) {
-                Notificaciones::create([
-                    'title'   => 'Nuevo Proyecto',
-                    'message' => 'Se ha creado un nuevo proyecto: ' . $project->name,
-                    'user_id' => $usuario->id,
-                    'read'    => false,
-                ]);
-            }
-    
-            // Crear tablero
-            $tablero = $project->tablero()->create([
-                'nombre' => 'Tablero de ' . $project->name,
-            ]);
-            // Crear columnas predeterminadas
-            $tablero->columna()->createMany([
-                ['nombre' => 'Por hacer'],
-                ['nombre' => 'En progreso'],
-                ['nombre' => 'Terminado'],
-            ]);
-    
-            return $tablero;
-        });
-    
-        // 3. Redirección final con el $tablero ya definido
-        return redirect()
-            ->route('tableros.show', $tablero->id)
-            ->with('success', 'Proyecto, tablero y columnas creados correctamente.');
+    // Validación
+    $request->validate([
+        'name' => 'required|unique:nuevo_proyecto,name',
+        'fecha_inicio' => 'required|date',
+        'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
+        'users'        => 'required|string', 
+    ]);
+
+    // Convertir la cadena de usuarios separados por comas en un array
+    $userIds = array_map('intval', explode(',', $request->users));
+
+    if (empty($userIds)) {
+        return back()->withErrors(['users' => 'Debe seleccionar al menos un usuario.']);
     }
-    
+
+    $tablero = DB::transaction(function () use ($request, $userIds) {
+        // Crear proyecto
+        $project = Project::create([
+            'name'         => $request->name,
+            'fecha_inicio' => $request->fecha_inicio,
+            'fecha_fin'    => $request->fecha_fin,
+            'user_id'      => auth()->id(),
+        ]);
+
+        // Asignar usuarios (incluye al creador)
+        $project->users()->sync(array_unique(array_merge([$project->user_id], $userIds)));
+
+        // Notificar usuarios asignados
+        foreach ($project->users as $usuario) {
+            Notificaciones::create([
+                'title'   => 'Nuevo Proyecto',
+                'message' => 'Se ha creado un nuevo proyecto: ' . $project->name,
+                'user_id' => $usuario->id,
+                'read'    => false,
+            ]);
+        }
+
+        // Crear tablero
+        $tablero = $project->tablero()->create([
+            'nombre' => 'Tablero de ' . $project->name,
+        ]);
+
+        // Crear columnas predeterminadas
+        $tablero->columna()->createMany([
+            ['nombre' => 'Por hacer'],
+            ['nombre' => 'En progreso'],
+            ['nombre' => 'Terminado'],
+        ]);
+
+        return $tablero;
+    });
+
+    return response()->json([
+        'redirect' => route('tableros.show', $tablero->id),
+    ]);
+    }
 
    
 
@@ -106,15 +106,15 @@ class ProjectController extends Controller
     {
         // Obtener el proyecto por su ID, con los usuarios asignados
         $project = Project::with('users')->findOrFail($id);
-
+    
         // Verificar si el usuario logueado es el propietario del proyecto
         if (auth()->id() !== $project->user_id) {
             return redirect()->route('projects.my')->with('error', 'No tienes permiso para editar este proyecto.');
         }
-
-        // Obtener todos los usuarios
-        $users = User::all();
-
+    
+        // Obtener todos los usuarios PAGINADOS
+        $users = User::where('role', '!=', 'admin')->paginate(5);
+    
         return view('projects.edit', compact('project', 'users'));
     }
 
@@ -171,9 +171,8 @@ class ProjectController extends Controller
         return response()->json(['error' => 'El usuario no está asociado a este proyecto'], 404);
     }
 
-
     public function destroy(Request $request, $id)
-{
+    {
     $project = Project::find($id);
 
     if (!$project) {
@@ -199,7 +198,7 @@ class ProjectController extends Controller
             ? response()->json(['error' => 'Error al eliminar el proyecto: ' . $e->getMessage()], 500)
             : redirect()->route('projects.my')->with('error', 'Error al eliminar el proyecto.');
     }
-}
+    }
 
 
     
@@ -215,5 +214,28 @@ class ProjectController extends Controller
 
         // Retornar los usuarios como JSON
         return response()->json($users);
+    }
+
+    public function listUsers(Request $request)
+    {
+    $search = $request->input('search', '');
+    
+    $users = User::where('role', '!=', 'admin')
+                ->when($search, function($query) use ($search) {
+                    return $query->where('name', 'like', '%'.$search.'%');
+                })
+                ->paginate(5);
+    
+    if($request->ajax()) {
+        $html = view('projects.partials.users_table', compact('users'))->render();
+        $pagination = $users->links()->toHtml();
+        
+        return response()->json([
+            'html' => $html,
+            'pagination' => $pagination
+        ]);
+    }
+    
+    return view('projects.create', compact('users'));
     }
 }

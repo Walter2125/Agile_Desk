@@ -176,6 +176,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/projects/{project}/remove-user/{user}',[ProjectController::class, 'removeUser'])->name('projects.removeUser');
         Route::get('/projects/search-users',                   [ProjectController::class, 'searchUsers'])->name('projects.searchUsers');
 
+        Route::get('/users/list', [ProjectController::class, 'listUsers'])->name('users.list');
+
         // Gestión de usuarios
         Route::get('/miembros',    [UserController::class, 'index'])->name('admin.users.index');
         Route::get('/users/search',[UserController::class, 'search'])->name('users.search');
