@@ -198,7 +198,7 @@ return [
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
-    'classes_topnav_container' => 'container',
+    'classes_topnav_container' => 'container-fluid m-0 p-0',
 
     /*
     |--------------------------------------------------------------------------
@@ -324,11 +324,6 @@ return [
         [
             'text' => 'Proyectos',
             'url' => 'projects',
-            'icon' => 'fas fa-fw fa-folder',
-        ],
-        [
-            'text' => 'Sprints',
-            'url' => 'sprints',
             'icon' => 'fas fa-fw fa-folder',
         ],
         [

@@ -116,7 +116,8 @@ class FormatohistoriaControler extends Controller
     public function edit($id)
 {
     $historia = Formatohistoria::findOrFail($id);
-
+    $tablero = $historia->tablero; 
+    
     if (session('fromEdit')) {
         return redirect()->route('tableros.show', $historia->tablero_id)->with('warning', 'No puedes volver al formulario de edición.');
     }
