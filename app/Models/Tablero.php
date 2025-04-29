@@ -16,7 +16,7 @@ class Tablero extends Model
     }
 
     // Cada tablero tiene muchas columnas
-    public function columna()
+    public function columnas()
     {
         return $this->hasMany(Columna::class);
     }
