@@ -54,33 +54,33 @@ class TableroController extends Controller
             return redirect()->route('projects.my')
                 ->with('error', 'No tienes acceso a este proyecto.');
         }
-        
+
         // Verificar si el proyecto ya tiene un tablero
         if ($proyecto->tablero) {
             return redirect()->route('tableros.show', $proyecto->tablero->id)
                 ->with('info', 'Este proyecto ya tiene un tablero.');
         }
-        
+
         $request->validate([
             'nombre' => 'required|string|max:255',
         ]);
-        
+
         // Crear el tablero
         $tablero = new Tablero();
         $tablero->nombre = $request->nombre;
         $proyecto->tablero()->save($tablero);
-        
+
         // Crear columnas predeterminadas
         $columnasDefault = ['Por hacer', 'En progreso', 'Terminado'];
         $orden = 1;
-        
+
         foreach ($columnasDefault as $nombreColumna) {
             $columna = new Columna();
             $columna->nombre = $nombreColumna;
             $columna->orden = $orden++;
             $tablero->columnas()->save($columna);
         }
-        
+
         return redirect()->route('tableros.show', $tablero->id)
             ->with('success', 'Tablero creado exitosamente.');
     }
@@ -88,7 +88,7 @@ class TableroController extends Controller
     /**
      * Mostrar un tablero específico
      */
-   
+
      public function show($id)
      {
          $tablero = Tablero::with(['columna.historias', 'project', 'historias'])->findOrFail($id);
@@ -98,11 +98,13 @@ class TableroController extends Controller
              return redirect()->route('projects.my')
                  ->with('error', 'No tienes acceso a este tablero.');
          }
-         
+
          // Pasar $tablero a la vista
          return view('tablero', compact('tablero'));
+
+
      }
-     
+
     /**
      * Formulario para borrar un tablero
      */
@@ -113,19 +115,19 @@ class TableroController extends Controller
             return redirect()->route('projects.my')
                 ->with('error', 'No tienes acceso a este tablero.');
         }
-        
+
         // Opcional: Verificar si el usuario es administrador o dueño del proyecto
         if (Auth::user()->usertype != 'admin' && Auth::user()->id != $tablero->proyecto->user_id) {
             return redirect()->route('projects.my')
                 ->with('error', 'No tienes permiso para eliminar este tablero.');
         }
-        
+
         // Antes de eliminar el tablero, guarda una referencia al proyecto
         $proyecto = $tablero->proyecto;
-        
+
         // Eliminar el tablero y sus relaciones (asegúrate de tener configurado el onDelete cascade en tus migraciones)
         $tablero->delete();
-        
+
         return redirect()->route('projects.my')
             ->with('success', 'Tablero eliminado exitosamente.');
     }

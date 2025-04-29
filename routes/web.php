@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function () {
             ? redirect()->route('homeadmin')
             : redirect()->route('HomeUser');
     })->name('dashboard');
-    
+
     // Home de usuario normal
     Route::get('/HomeUser', [HomeController::class, 'index'])->name('HomeUser');
 
@@ -76,11 +76,11 @@ Route::middleware('auth')->group(function () {
     Route::get('tableros/{tablero}/historias/create', [FormatohistoriaControler::class, 'create'])->name('formulario.create');
     // Para almacenar la nueva historia asociada a ese mismo tablero
     Route::post('tableros/{tablero}/historias', [FormatohistoriaControler::class, 'store'])->name('formulario.store');
-    
+
     //Lista de historias por cada usuarios
     Route::get('/mis-historias', [FormatohistoriaControler::class, 'index'])->name('mis_historias');
 
-    // tareas por historia 
+    // tareas por historia
     Route::get('/historias/{id}/tareas', [TareasController::class, 'indexPorHistoria'])->name('tareas.porHistoria');
     //Rutas para tareas
     Route::get('/tareas',[TareasController::class,'index'])->name('tareas.index');
@@ -92,7 +92,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/tareas/{id}/ver', [TareasController::class, 'show'])->name('tareas.show');
 
 
-    
+
     /*
     Route::get('sprints/create', [SprintController::class, 'create'])->name('sprints.create');
     Route::post('sprints', [SprintController::class, 'store'])->name('sprints.store');
@@ -163,7 +163,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/tableros/{id}',  [TableroController::class, 'show'])->name('tableros.show');
     Route::delete('/tableros/{tablero}', [TableroController::class, 'destroy'])->name('tableros.destroy');
 
-    
+
     Route::delete('/projects/{project}',                   [ProjectController::class, 'destroy'])->name('projects.destroy');
 
     // **Rutas de administrador** (solo usuarios con usertype = 'admin')
@@ -188,7 +188,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/miembros',    [UserController::class, 'index'])->name('admin.users.index');
         Route::get('/users/search',[UserController::class, 'search'])->name('users.search');
 
-        
+
     });
 
     //Rutas de aarchivar historias
@@ -196,8 +196,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/archivo/archivar/{id}', [ArchivoHistoriaController::class, 'archivar'])->name('archivo.archivar');
         Route::get('/archivo', [ArchivoHistoriaController::class, 'index'])->name('archivo.index');
         Route::post('/archivo/desarchivar/{id}', [ArchivoHistoriaController::class, 'desarchivar'])->name('archivo.desarchivar');
-        
+
     //Lista de historias por cada usuarios
     Route::get('/mis-historias', [FormatohistoriaControler::class, 'misHistorias'])->name('mis_historias');
+
+    Route::get('/tableros/{tablero}/historias/create', [HistoriaController::class, 'create'])->name('formulario.create');
+
 });
 

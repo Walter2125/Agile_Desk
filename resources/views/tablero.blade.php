@@ -124,34 +124,243 @@
             </div>
 
 
-            <div id="tablero" class="flex space-x-4 w-full overflow-x-auto p-2">
-                <div class="columna bg-pink-100 p-4 rounded w-full sm:w-60 flex-shrink-0">
-                    <div class="flex justify-between items-center">
-                        <span class="titulo-columna text-lg font-bold text-pink-800" style="font-size: 30px; line-height: 1.2;">Backlog</span>
-                        <div class="relative">
+            <div id="tablero" class="kanban-board">
+                <div class="kanban-column">
+                    <div class="column-header">Backlog</div>
+                    <div class="sortable">
+                        @forelse ($tablero->historias->where('estado', 'Backlog') as $historia)
+                            <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
+                                <div class="card">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <div class="font-bold text-lg text-black truncate max-w-[80%]" title="{{ $historia->nombre }}">
+                                            {{ $historia->nombre }}
+                                        </div>
+                                        <div class="card-options relative">
+                                            <button type="button" class="dropdown-toggle absolute right-0 top-0 bg-white border rounded shadow-sm h-6 w-6 text-xs flex items-center justify-center" data-bs-toggle="dropdown" aria-expanded="false">
+                                                ...
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="{{ route('formulario.edit', $historia->id) }}"><i class="bi bi-pencil mr-2"></i>Editar</a></li>
+                                                <li><button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}"><i class="bi bi-trash mr-2"></i>Eliminar</button></li>
+                                            </ul>
+                                            <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="modalLabel-{{ $historia->id }}">Confirmar Eliminación</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            ¿Estás seguro de que deseas eliminar este registro?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm text-gray-600">
+                                        ID: <span class="font-semibold">{{ $historia->id }}</span><br>
+                                        Prioridad: <span class="font-semibold">{{ $historia->prioridad }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        @empty
+                            <p class="text-gray-500 italic">No hay historias en Backlog.</p>
+                        @endforelse
+                    </div>
+                    <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
+                </div>
 
-                            <div class="btn-group dropend">
-                                <!-- Botón del Dropend -->
-                                <button type="button" class="btn btn-secondary dropdown-toggle absolute right-0 top-6 bg-white border rounded shadow-lg " data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
-                                </button>
+                <div class="kanban-column">
+                    <div class="column-header">En Curso</div>
+                    <div class="sortable">
+                        @forelse ($tablero->historias->where('estado', 'En Curso') as $historia)
+                            <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
+                                <div class="card">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <div class="font-bold text-lg text-black truncate max-w-[80%]" title="{{ $historia->nombre }}">
+                                            {{ $historia->nombre }}
+                                        </div>
+                                        <div class="card-options relative">
+                                            <button type="button" class="dropdown-toggle absolute right-0 top-0 bg-white border rounded shadow-sm h-6 w-6 text-xs flex items-center justify-center" data-bs-toggle="dropdown" aria-expanded="false">
+                                                ...
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="{{ route('formulario.edit', $historia->id) }}"><i class="bi bi-pencil mr-2"></i>Editar</a></li>
+                                                <li><button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}"><i class="bi bi-trash mr-2"></i>Eliminar</button></li>
+                                            </ul>
+                                            <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="modalLabel-{{ $historia->id }}">Confirmar Eliminación</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            ¿Estás seguro de que deseas eliminar este registro?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm text-gray-600">
+                                        ID: <span class="font-semibold">{{ $historia->id }}</span><br>
+                                        Prioridad: <span class="font-semibold">{{ $historia->prioridad }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        @empty
+                            <p class="text-gray-500 italic">No hay historias en En Curso.</p>
+                        @endforelse
+                    </div>
+                    <button class="create-button" onclick="href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
+                </div>
 
+                <div class="kanban-column">
+                    <div class="column-header">Listo</div>
+                    <div class="sortable">
+                        @forelse ($tablero->historias->where('estado', 'Listo') as $historia)
+                            <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
+                                <div class="card">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <div class="font-bold text-lg text-black truncate max-w-[80%]" title="{{ $historia->nombre }}">
+                                            {{ $historia->nombre }}
+                                        </div>
+                                        <div class="card-options relative">
+                                            <button type="button" class="dropdown-toggle absolute right-0 top-0 bg-white border rounded shadow-sm h-6 w-6 text-xs flex items-center justify-center" data-bs-toggle="dropdown" aria-expanded="false">
+                                                ...
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="{{ route('formulario.edit', $historia->id) }}"><i class="bi bi-pencil mr-2"></i>Editar</a></li>
+                                                <li><button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}"><i class="bi bi-trash mr-2"></i>Eliminar</button></li>
+                                            </ul>
+                                            <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="modalLabel-{{ $historia->id }}">Confirmar Eliminación</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            ¿Estás seguro de que deseas eliminar este registro?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm text-gray-600">
+                                        ID: <span class="font-semibold">{{ $historia->id }}</span><br>
+                                        Prioridad: <span class="font-semibold">{{ $historia->prioridad }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        @empty
+                            <p class="text-gray-500 italic">No hay historias en Listo.</p>
+                        @endforelse
+                    </div>
+                    <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
+                </div>
 
-                                <!-- Contenido del Dropdown -->
-                                <ul class="dropdown-menu">
-                                    <!-- Opción: Crear Historia -->
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('formulario.create', $tablero->id) }}">
-                                            <i class="bi bi-plus"></i> Crear Historia
-                                        </a>
-                                    </li>
-                                    <!-- Opción: Editar Nombre de la Columna -->
-                                    <li>
-                                        <button class="dropdown-item editar-columna">
-                                            Editar Nombre
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
+                <button class="add-column-button">+</button>
+            </div>
+
+            <style>
+                .kanban-board {
+                    display: flex;
+                    align-items: flex-start; /* Align columns to the top */
+                    overflow-x: auto;
+                    gap: 10px;
+                    padding: 10px;
+                }
+
+                .kanban-column {
+                    background-color: #f0f0f0;
+                    border-radius: 5px;
+                    width: 250px;
+                    min-width: 250px; /* Prevent columns from shrinking too much */
+                    display: flex;
+                    flex-direction: column;
+                    padding: 10px;
+                }
+
+                .column-header {
+                    font-weight: bold;
+                    padding: 10px;
+                    background-color: #e0e0e0;
+                    border-radius: 5px;
+                    margin-bottom: 10px;
+                    text-align: center; /* Centrar el texto del encabezado */
+                }
+
+                .card {
+                    background-color: #ffffff;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    padding: 10px;
+                    margin-bottom: 10px;
+                    position: relative; /* For options positioning */
+                }
+
+                .card-options {
+                    position: absolute;
+                    top: 5px;
+                    right: 5px;
+                    cursor: pointer;
+                }
+
+                .create-button {
+                    background-color: #ffffff;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    padding: 8px 12px;
+                    cursor: pointer;
+                    align-self: flex-start; /* Align to the start of the column */
+                    margin-top: auto; /* Push to the bottom */
+                    width: 100%; /* Ocupar todo el ancho del contenedor */
+                    text-align: center; /* Centrar el texto del botón */
+                }
+
+                .add-column-button {
+                    background-color: #ffffff;
+                    border: 1px solid #ccc;
+                    border-radius: 50%; /* Make it a circle */
+                    width: 30px;
+                    height: 30px;
+                    font-size: 20px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    margin-left: 10px;
+                    align-self: center; /* Vertically center the button */
+                }
+
+                /* Basic styling - adjust as needed */
+            </style>
 
                                <!-- Parte COrregida del codigo -->
 
@@ -173,7 +382,7 @@
                                     <div class="flex justify-start items-start mb-1 gap-1">
                                         <div class="font-bold text-lg text-black truncate max-w-[200%]" title="{{ $historia->nombre }}">
                                             {{ $historia->nombre }}
-                    
+
                                             <div class="flex space-x-1 shrink-0">
                                                 <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-500 hover:text-blue-700 transition-colors">
                                                     <i class="bi bi-pencil"></i>
@@ -185,7 +394,7 @@
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </div>
-                    
+
                                             <!-- Modal de confirmación -->
                                             <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1"
                                                  aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
@@ -209,7 +418,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                    
+
                                             <!-- Información de la historia -->
                                             <div class="mb-3">
                                                 <div class="flex items-center mb-1">
@@ -226,10 +435,10 @@
                                 </div>
                             </a>
                         @empty
-                            <p class="text-gray-500 italic">No hay historias creadas.</p>
+                            <p class="text-gray-0 italic"></p>
                         @endforelse
                     </div>
-                    
+
                 </div>
 
         </div>
