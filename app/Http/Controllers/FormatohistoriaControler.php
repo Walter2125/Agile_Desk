@@ -91,6 +91,8 @@ class FormatohistoriaControler extends Controller
             'accion' => 'Creación',
             'detalles' => 'Se creó una nueva historia: ' . $historia->nombre,
             'sprint' => $historia->sprint,
+            'project_id' => $tablero->project_id, // <<--- AGREGAR ESTO
+
         ]);
 
         return redirect()
@@ -179,6 +181,8 @@ class FormatohistoriaControler extends Controller
             'accion' => 'Edición',
             'detalles' => $detalles,
             'sprint' => $historia->sprint,
+            'project_id' => $historia->tablero->project_id, // <<--- AGREGAR ESTO
+
         ]);
 
         return redirect()->route('tableros.show', $historia->tablero_id)->with([
@@ -212,6 +216,8 @@ class FormatohistoriaControler extends Controller
             'accion' => 'Eliminación',
             'detalles' => "Se eliminó la historia: " . $nombreHistoria,
             'sprint' => $historia->sprint,
+            'project_id' => $historia->tablero->project_id, // <<--- AGREGAR ESTO
+
         ]);
 
         return redirect()->route('tableros.show', $historia->tablero_id)

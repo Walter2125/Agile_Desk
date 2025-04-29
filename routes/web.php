@@ -143,12 +143,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('notificaciones/{id}', [NotificacionesController::class, 'destroy'])->name('notificaciones.destroy');
 
     // Historial de cambios
-    Route::get('/historialcambios',                  [HistorialCambiosController::class, 'index'])->name('historialcambios.index');
+    Route::get('/proyectos/{project}/historialcambios', [HistorialCambiosController::class, 'index'])->name('proyectos.historialcambios.index');
     Route::get('/historialcambios/{id}',             [HistorialCambiosController::class, 'show'])->name('historialcambios.show');
     Route::post('/historialcambios',                 [HistorialCambiosController::class, 'store'])->name('historialcambios.store');
-    Route::match(['post','delete'], '/historialcambios/revertir/{id}',
-         [HistorialCambiosController::class, 'revertir'])->name('historialcambios.revertir');
-
+    
     // Reasignación de historias
     Route::get('/reasignacion-historias',           [ReasignarHistoriaController::class, 'index'])->name('reasinarhistoria.index');
     Route::post('/reasignacion-historias/reasignar',[ReasignarHistoriaController::class, 'reasignar']);

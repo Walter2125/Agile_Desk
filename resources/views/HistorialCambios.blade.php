@@ -10,6 +10,7 @@
 @section('content')
 <div class="container">
     <h2>Historial de Cambios</h2>
+    <h5>Historial de cambios del proyecto: {{ $project->name }}</h1>
 
     <div class="filters">
         <input type="text" id="usuarioFiltro" placeholder="Usuario">

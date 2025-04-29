@@ -10,6 +10,11 @@ class HistorialCambios extends Model
     use HasFactory;
 
     protected $table = 'historialcambios';
-    protected $fillable = ['fecha', 'usuario', 'accion', 'detalles', 'sprint',];
-    public $timestamps = false; // Ya tienes `fecha` en la migración
+    protected $fillable = ['fecha', 'usuario', 'accion', 'detalles', 'sprint', 'project_id'];
+    public $timestamps = false;
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
 }
