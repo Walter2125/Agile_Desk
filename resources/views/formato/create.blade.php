@@ -1,4 +1,4 @@
-@extends('adminlte::page') 
+@extends('adminlte::page')
 @section('title', 'Agile Desk')
 
 @section('Mensaje')
@@ -27,8 +27,10 @@
     @endif
 
     {{-- Ahora la ruta recibe el parámetro tablero --}}
-    <form action="{{ route('formulario.store', ['tablero' => $tablero->id]) }}" method="post">
-        @csrf
+    <form action="{{ route('formulario.store', ['tablero' => $tablero->id, 'columna' => $columna->id]) }}" method="post">
+
+    @csrf
+        <input type="hidden" name="columna_id" value="{{ $columna->id }}">
         <div class="container-fluid contenedor-con-borde ">
             <div class="row g-2">
                 <div class="col-md-3">

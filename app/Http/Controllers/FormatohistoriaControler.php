@@ -10,6 +10,8 @@ use App\Models\ReasinarHistorias;
 use App\Models\ListaHistoria;
 use App\Models\Tablero;
 use Illuminate\Http\Request;
+use App\Models\Columna;
+
 
 use Illuminate\Support\Facades\Auth; // Para obtener el usuario autenticado
 
@@ -35,15 +37,17 @@ class FormatohistoriaControler extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Tablero $tablero)
+    public function create(Tablero $tablero, Columna $columna)
     {
-        return view('formato.create', compact('tablero'));
+        return view('formato.create', compact('tablero', 'columna'));
     }
+
+
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request,Tablero $tablero)
+    public function store(Request $request, Tablero $tablero, Columna $columna)
     {
         $request->validate([
             'nombre' => [
@@ -65,7 +69,7 @@ class FormatohistoriaControler extends Controller
             'trabajo_estimado.min' => 'El Trabajo Estimado debe ser mayor a cero.',
             'prioridad.required' => 'La prioridad es requerida.',
         ]);
-       
+
         $historia = new Formatohistoria();
         $historia->nombre = $request->nombre;//aqui aun falta mas revisar
         $historia->sprint = $request->sprint;
@@ -76,6 +80,9 @@ class FormatohistoriaControler extends Controller
         $historia->user_id = auth()->id(); // ✅ ESTO ES FUNDAMENTAL
         $historia->tablero_id = $tablero->id; // Asociar la historia al tablero
         $historia->save();
+        $historia->columna_id = $request->columna_id;
+        $historia->columna_id = $columna->id; // ✅ Aquí está el cambio
+
 
         // Enviar notificación al usuario autenticado
         Notificaciones::create([
@@ -134,7 +141,7 @@ class FormatohistoriaControler extends Controller
     public function update(Request $request, string $id)
     {
         $historia = Formatohistoria::findOrFail($id);
-    
+
         $request->validate([
             'nombre' => [
                 'required',
@@ -155,7 +162,7 @@ class FormatohistoriaControler extends Controller
             'trabajo_estimado.min' => 'El Trabajo Estimado debe ser mayor a cero.',
             'prioridad.required' => 'La prioridad es requerida.',
         ]);
-    
+
         $historia->update([
             'nombre' => $request->nombre,
             'sprint' => $request->sprint,
@@ -164,7 +171,7 @@ class FormatohistoriaControler extends Controller
             'prioridad' => $request->prioridad,
             'descripcion' => $request->descripcion,
         ]);
-    
+
         // Determinar cambios
         $datosAnteriores = $historia->getOriginal(); // Obtener los datos originales antes de la actualización
         $detalles = "Historia actualizada: " . $historia->nombre . ".\n";
@@ -173,7 +180,7 @@ class FormatohistoriaControler extends Controller
                 $detalles .= ucfirst($campo) . " cambiado de '" . ($datosAnteriores[$campo] ?? 'N/A') . "' a '" . $valorNuevo . "'.\n";
             }
         }
-    
+
         // Registrar en el historial de cambios
         HistorialCambios::create([
             'fecha' => now(),
@@ -181,7 +188,7 @@ class FormatohistoriaControler extends Controller
             'accion' => 'Edición',
             'detalles' => $detalles,
         ]);
-    
+
         return redirect()->route('tableros.show', $historia->tablero_id)->with([
             'success' => 'Historia Actualizada correctamente',
             'fromEdit' => true,

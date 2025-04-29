@@ -15,6 +15,7 @@ class Formatohistoria extends Model
         'responsable',
         'prioridad',
         'descripcion',
+        'columna_id'
     ];
 
     public function archivo()

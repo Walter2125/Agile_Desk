@@ -166,7 +166,7 @@
                                 </div>
                             </a>
                         @empty
-                            <p class="text-gray-500 italic">No hay historias en Backlog.</p>
+                            <p class="text-gray-500 italic">No hay historias en esta columna.</p>
                         @endforelse
                     </div>
                     <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
@@ -227,7 +227,7 @@
                                 </div>
                             </a>
                         @empty
-                            <p class="text-gray-500 italic">No hay historias en En Curso.</p>
+                            <p class="text-gray-500 italic">No hay historias en esta columna.</p>
                         @endforelse
                     </div>
                     <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
@@ -288,26 +288,43 @@
                                 </div>
                             </a>
                         @empty
-                            <p class="text-gray-500 italic">No hay historias en Listo.</p>
+                            <p class="text-gray-500 italic">No hay historias en esta columna.</p>
                         @endforelse
                     </div>
                     <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
                 </div>
 
 
-                @foreach ($tablero->columnas as $columna)
-                    @if (!in_array($columna->nombre, ['Backlog', 'En Curso', 'Listo']))
-                        <div class="kanban-column">
+
+                    @foreach ($tablero->columnas as $columna)
+                        <div class="kanban-column" id="columna-{{ $columna->id }}">
                             <div class="column-header">{{ $columna->nombre }}</div>
+
+                            <!-- Mostrar las historias de esta columna -->
                             <div class="sortable">
-                                @foreach ($columna->historias as $historia)
-                                    @include('partials.historia', ['historia' => $historia])
-                                @endforeach
+                                @forelse ($columna->historias as $historia)
+                                    <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
+                                        <div class="card">
+                                            <div class="flex justify-between items-start mb-1">
+                                                <div class="font-bold text-lg text-black truncate " title="{{ $historia->nombre }}">
+                                                    {{ $historia->nombre }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <p class="text-gray-500 italic">No hay historias en esta columna.</p>
+                                @endforelse
                             </div>
+
+                            <!-- Botón de crear historia -->
                             <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
                         </div>
-                    @endif
-                @endforeach
+                    @endforeach
+                </div>
+
+
+
 
                 <button class="add-column-button" onclick="abrirModalAgregarColumna()">+</button>
 
@@ -791,6 +808,14 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
     <script>
         function abrirModalAgregarColumna() {
+            // Verificar cuántas columnas existen en el tablero
+            const columnasExistentes = document.querySelectorAll(`#tablero .kanban-column`).length;
+            if (columnasExistentes >= 9) {
+                alert("No se pueden agregar más de 9 columnas.");
+                return; // No abrir el modal si ya hay 9 columnas
+            }
+
+            // Si hay menos de 9 columnas, entonces abre el modal
             document.getElementById('modalAgregarColumna').classList.remove('hidden');
         }
 
@@ -805,6 +830,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!nombreColumna) {
                 alert("El nombre de la columna no puede estar vacío.");
                 return;
+            }
+
+            // Verificar cuántas columnas existen en el tablero
+            const columnasExistentes = document.querySelectorAll(`#tablero .kanban-column`).length;
+            if (columnasExistentes >= 9) {
+                alert("No se pueden agregar más de 9 columnas.");
+                return; // No continuar si ya hay 9 columnas
             }
 
             fetch("{{ route('columna.store') }}", {
@@ -841,6 +873,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     toastr.error("No se pudo conectar con el servidor.");
                 });
         }
+
+
     </script>
 
 @stop

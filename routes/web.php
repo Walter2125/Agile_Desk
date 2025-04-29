@@ -66,8 +66,10 @@ Route::middleware('auth')->group(function () {
 
     // Rutas para formulario de historias
     //Route::get('/form',[FormatohistoriaControler::class,'index'])->name('form.index');
- //   Route::get('/create', [FormatohistoriaControler::class, 'create'])->name('formulario.create');
-    Route::post('/form/store', [FormatohistoriaControler::class, 'store'])->name('formulario.store');
+   // Route::get('/create', [FormatohistoriaControler::class, 'create'])->name('formulario.create');
+
+    Route::post('formulario/store/{tablero}/{columna}', [FormatohistoriaControler::class, 'store'])->name('formulario.store');
+
     Route::get('/form/{formulario}/edit',[FormatohistoriaControler::class,'edit'])->name('formulario.edit');
     Route::patch('/form/{id}/update', [FormatohistoriaControler::class, 'update'])->name('formulario.update');
     Route::delete('/form/{formulario}/destroy',[FormatohistoriaControler::class,'destroy'])->name('formulario.destroy');
@@ -138,6 +140,7 @@ Route::middleware('auth')->group(function () {
     // Columnas y estados (AJAX)
     Route::post('actualizar-estado', [HistoriaController::class, 'actualizarEstado'])->name('actualizar.estado');
     Route::post('actualizar-nombre-columna', [ColumnasController::class, 'actualizarNombre'])->name('columnas.updateName');
+
 
     // Notificaciones
     Route::get('notificaciones', [NotificacionesController::class, 'index'])->name('notificaciones.index');
