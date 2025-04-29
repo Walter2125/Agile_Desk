@@ -19,7 +19,6 @@ class ProjectController extends Controller
         // Buscar todos los usuarios para mostrar en la búsqueda
         $users = User::where('role', '!=', 'admin')->paginate(5); // 5 usuarios por página, excluyendo al admin
 
-        // Obtener los usuarios seleccionados si se ha editado un proyecto
         $selectedUsers = [];
 
         return view('projects.create', compact('users', 'selectedUsers'));
@@ -29,13 +28,13 @@ class ProjectController extends Controller
 
 
     public function store(Request $request)
-{
+    {
     // Validación
     $request->validate([
         'name' => 'required|unique:nuevo_proyecto,name',
         'fecha_inicio' => 'required|date',
         'fecha_fin'    => 'required|date|after_or_equal:fecha_inicio',
-        'users'        => 'required|string', // Recibes como STRING, no como array
+        'users'        => 'required|string', 
     ]);
 
     // Convertir la cadena de usuarios separados por comas en un array
@@ -85,7 +84,7 @@ class ProjectController extends Controller
     return response()->json([
         'redirect' => route('tableros.show', $tablero->id),
     ]);
-}
+    }
 
    
 
@@ -107,15 +106,15 @@ class ProjectController extends Controller
     {
         // Obtener el proyecto por su ID, con los usuarios asignados
         $project = Project::with('users')->findOrFail($id);
-
+    
         // Verificar si el usuario logueado es el propietario del proyecto
         if (auth()->id() !== $project->user_id) {
             return redirect()->route('projects.my')->with('error', 'No tienes permiso para editar este proyecto.');
         }
-
-        // Obtener todos los usuarios
-        $users = User::all();
-
+    
+        // Obtener todos los usuarios PAGINADOS
+        $users = User::where('role', '!=', 'admin')->paginate(5);
+    
         return view('projects.edit', compact('project', 'users'));
     }
 
@@ -172,9 +171,8 @@ class ProjectController extends Controller
         return response()->json(['error' => 'El usuario no está asociado a este proyecto'], 404);
     }
 
-
     public function destroy(Request $request, $id)
-{
+    {
     $project = Project::find($id);
 
     if (!$project) {
@@ -200,7 +198,7 @@ class ProjectController extends Controller
             ? response()->json(['error' => 'Error al eliminar el proyecto: ' . $e->getMessage()], 500)
             : redirect()->route('projects.my')->with('error', 'Error al eliminar el proyecto.');
     }
-}
+    }
 
 
     
@@ -219,7 +217,7 @@ class ProjectController extends Controller
     }
 
     public function listUsers(Request $request)
-{
+    {
     $search = $request->input('search', '');
     
     $users = User::where('role', '!=', 'admin')
@@ -239,5 +237,5 @@ class ProjectController extends Controller
     }
     
     return view('projects.create', compact('users'));
-}
+    }
 }

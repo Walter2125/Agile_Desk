@@ -11,7 +11,8 @@
         @if ($user->usertype !== 'admin')
             <tr>
                 <td>
-                <input type="checkbox" class="user-checkbox" value="{{ $user->id }}" id="user_{{ $user->id }}">
+                <input type="checkbox" class="user-checkbox" value="{{ $user->id }}" id="user_{{ $user->id }}"
+                @if(isset($selectedUsers) && in_array($user->id, $selectedUsers)) checked @endif>
 
                 </td>
                 <td>{{ $user->name }}</td>

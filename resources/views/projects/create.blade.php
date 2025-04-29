@@ -8,17 +8,41 @@
     <link rel="stylesheet" href="{{ asset('css/sprints.css') }}">
     <link rel="stylesheet" href="{{ asset('css/flatpickr.min.css') }}">  
     <style>
-        /* Estilos específicos para el formulario de creación */
-        .create-project-form {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        /* Eliminar todos los fondos azules */
+        body, html {
+            background-color: white !important;
+            height: 100%;
+        }
+        
+        .wrapper {
+            background-color: transparent !important;
+            height: 100%;
+        }
+        
+        .content-wrapper {
+            background-color: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-left: 250px !important; /* Ajustar para el menú lateral */
+            min-height: 100% !important;
+        }
+        
+        /* Ajustes para el formulario */
+        .project-dashboard {
+            padding: 20px;
             width: 100%;
-            margin: 0 auto;
-            backdrop-filter: blur(10px);
+            height: 100%;
+        }
+        
+        .create-project-form {
+            background: white;
+            padding: 30px;
+            width: 100%;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
+        /* Resto de tus estilos originales */
         .form-header {
             text-align: center;
             margin-bottom: 30px;
@@ -120,7 +144,6 @@
             margin-top: 5px;
         }
 
-        /* Estilos para la tabla de usuarios */
         .card {
             border: none;
             border-radius: 8px;
@@ -161,7 +184,6 @@
             height: 18px;
         }
 
-        /* Buscador */
         #user_search {
             width: 100%;
             padding: 12px 15px;
@@ -179,7 +201,6 @@
             outline: none;
         }
 
-        /* Paginación */
         .pagination {
             justify-content: center;
         }
@@ -200,93 +221,15 @@
             color: #1565C0;
             background-color: #f8f9fa;
         }
-
-        /* Contenedor principal */
-        .project-dashboard {
-            padding: 20px;
-            width: 100%;
-            max-width: none;
-        }
-.migajas {
-  margin: 1rem 0;
-  padding: 0 1rem;
-  overflow: visible;
-}
-
-/* --- Listado de migajas --- */
-.migajas .breadcrumb {
-    background-color: linear-gradient(120deg, #1E3C72, #2A5298);
-  display: flex;
-  flex-wrap: wrap;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  position: relative;
-  z-index: 2;
-}
-
-/* Ítems de migajas */
-.migajas .breadcrumb__item {
-  display: inline-flex;
-  align-items: center;
-  background-color: #fff !important;
-  color: #252525;
-  font-family: 'Oswald', sans-serif;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  padding: 0.5rem 1rem;
-  margin-right: 0.5rem;
-  border-radius: 7px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  
-}
-
-.migajas .breadcrumb__item:hover {
-  background-color: #490099;
-  color: #fff;
-}
-
-/* Contenido interior para "des-skewear" */
-.migajas .breadcrumb__inner {
-  transform: skew(21deg);
-}
-
-/* Ítem activo */
-.migajas .breadcrumb__item--active {
-  background-color: #8e00d4 !important;
-  color: #fff !important;
-  pointer-events: none;
-}
     </style>
 @endsection
 
 @section('content')
-<!-- migajas de pan-->
-<div class="container py-3 migajas" id="migajas">
-    <ul class="breadcrumb">
-        <li class="breadcrumb__item breadcrumb__item-firstChild">
-            <span class="breadcrumb__inner">
-                <a href="/dashboard" class="breadcrumb__title">Home</a>
-            </span>
-        </li>
-        <li class="breadcrumb__item breadcrumb__item-firstChild">
-            <span class="breadcrumb__inner">
-                <a href="/projects" class="breadcrumb__title">Proyectos</a>
-            </span>
-        </li>
-        <li class="breadcrumb__item breadcrumb__item--active">
-            <span class="breadcrumb__inner">
-                <a href="#" class="breadcrumb__title">Crear Proyecto</a>
-            </span>
-        </li>
-    </ul>
-</div>
-
 <div class="project-dashboard">
     <div class="create-project-form">
         <div class="form-header">
             <h1>🏗️ Crear Nuevo Proyecto</h1>
-            <p>Completa el formulario para añadir un nuevo proyecto</p>
+            <p>Complete el formulario para añadir un nuevo proyecto</p>
         </div>
 
         <form id="projectForm" action="{{ route('projects.store') }}" method="POST">
@@ -426,7 +369,7 @@
                 success: function(response) {
                     $('#users-container').html(response.html);
                     $('#pagination-container').html(response.pagination);
-                    bindUserCheckboxes(); // volver a enlazar
+                    bindUserCheckboxes();
                 }
             });
         }

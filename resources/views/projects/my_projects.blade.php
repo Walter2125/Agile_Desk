@@ -34,7 +34,6 @@
             </div>
         @endif
 
-
         @if(count($projects) > 0)
         <h2 class="text-secondary mb-4 border-bottom pb-2">Proyectos Recientes</h2>
             <div class="row">
@@ -48,9 +47,7 @@
                                                 <i class="fas fa-project-diagram text-primary mr-2"></i>
                                                 {{ $project->name }}
                                             </h3>
-                                            <a href="{{ route('sprints.create') }}" class="btn btn-primary btn-lg rounded-pill px-4">
-                                                <i class="fas fa-plus mr-2"></i> Crear Sprint
-                                            </a>
+                                            
                                         </div>
                                     </div>
                                 </div>
