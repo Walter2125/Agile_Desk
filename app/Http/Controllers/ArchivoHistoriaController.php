@@ -5,35 +5,42 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ArchivoHistoria;
 use App\Models\Formatohistoria;
+use App\Models\Project;
 
-class ArchivoHistoriaController extends Controller {
+class ArchivoHistoriaController extends Controller
+{
+    public function mostrarHistoriasDisponibles(Project $project)
+    {
+        $historias = FormatoHistoria::where('project_id', $project->id)
+            ->whereNotIn('id', ArchivoHistoria::pluck('historia_id'))
+            ->get();
 
-    public function mostrarHistoriasDisponibles() {
-        $historias = FormatoHistoria::whereNotIn('id', ArchivoHistoria::pluck('historia_id'))->get();
-        return view('seleccionar', compact('historias'));
+        return view('seleccionar', compact('historias', 'project'));
     }
 
-    public function archivar($id) {
+    public function archivar(Project $project, $id)
+    {
         ArchivoHistoria::create([
             'historia_id' => $id,
             'archivado_en' => now(),
         ]);
 
-        return redirect()->route('archivo.index')->with('success', 'Historia archivada correctamente.');
-    }
-    public function mostrarArchivables()
-{
-    $historias = Formatohistoria::where('archivado', false)->get(); // o el criterio que estés usando
-    return view('seleccionar', compact('historias'));
-}
-
-    public function index() {
-        $historiasArchivadas = ArchivoHistoria::with('historia')->get();
-        return view('ArchivoHistoria', compact('historiasArchivadas'));
+        return redirect()->route('archivo.seleccionar', $project->id)->with('success', 'Historia archivada correctamente.');
     }
 
-    public function desarchivar($id) {
+    public function desarchivar(Project $project, $id)
+    {
         ArchivoHistoria::where('historia_id', $id)->delete();
-        return redirect()->route('tablero')->with('success', 'Historia desarchivada correctamente.');
+
+        return redirect()->route('archivo.index.proyecto', $project->id)->with('success', 'Historia desarchivada correctamente.');
+    }
+
+    public function indexPorProyecto(Project $project)
+    {
+        $historiasArchivadas = ArchivoHistoria::whereHas('historia', function ($query) use ($project) {
+            $query->where('project_id', $project->id);
+        })->with('historia')->get();
+
+        return view('ArchivoHistoria', compact('historiasArchivadas', 'project'));
     }
 }

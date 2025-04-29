@@ -9,6 +9,7 @@ use App\Models\HistorialCambios;
 use App\Models\ReasinarHistorias;
 use App\Models\ListaHistoria;
 use App\Models\Tablero;
+use App\Models\ArchivoHistoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // Para obtener el usuario autenticado
 
@@ -74,6 +75,7 @@ class FormatohistoriaControler extends Controller
         $historia->descripcion = $request->descripcion;
         $historia->user_id = auth()->id();
         $historia->tablero_id = $tablero->id;
+        $historia->project_id = $tablero->project_id; // ← ESTA LÍNEA ES LA CLAVE
         $historia->save();
 
         // Enviar notificación
