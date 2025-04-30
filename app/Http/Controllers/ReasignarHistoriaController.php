@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Formatohistoria;
 use App\Models\User;
 use App\Models\HistorialCambios;
+use App\Models\Project;
 
 
 use App\Models\ReasinarHistorias;
@@ -13,14 +14,17 @@ use App\Models\ReasinarHistorias;
 
 class ReasignarHistoriaController extends Controller
 {
-    public function index()
-    {
-        $historias = Formatohistoria::select('id', 'nombre', 'responsable')->get();  // Asegurarte de incluir 'responsable'
-        $usuarios = User::all();  // O el modelo adecuado para obtener los usuarios
-    
-        return view('ReasignacionHistoria', compact('historias', 'usuarios'));
-    }
+    public function index(Project $project)
+{
+    // Historias solo del proyecto actual
+    $historias = Formatohistoria::whereHas('tablero.project', function ($query) use ($project) {
+        $query->where('id', $project->id);
+    })->select('id', 'nombre', 'responsable')->get();
 
+    $usuarios = User::all();
+
+    return view('ReasignacionHistoria', compact('historias', 'usuarios', 'project'));
+}
     public function reasignar(Request $request)
 {
     $request->validate([
@@ -39,9 +43,10 @@ class ReasignarHistoriaController extends Controller
         'fecha' => now(),
         'usuario' => auth()->user()->name ?? 'Sistema',
         'accion' => 'Reasignación',
-        'detalles' => "Historia '{$historia->nombre}' reasignada de '{$responsableAnterior}' a '{$nuevoResponsable}'."
+        'detalles' => "Historia '{$historia->nombre}' reasignada de '{$responsableAnterior}' a '{$nuevoResponsable}'.",
+        'sprint' => $historia->sprint,
+        'project_id' => $historia->tablero->project_id, // <<--- Esto es lo nuevo
     ]);
 
-    return redirect()->route('historialcambios.index')->with('success', 'Responsable reasignado correctamente');
-}
+    return redirect()->route('tableros.show', $historia->tablero_id)->with('success', 'Responsable reasignado correctamente');}
 }

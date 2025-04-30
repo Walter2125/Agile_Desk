@@ -1,3 +1,15 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: transparent; /* O el color que quieras */
+}
+.fondo-formulario {
+    background-color: rgb(255, 252, 252);
+    height: 100vh;
+    padding: 20px;
+}
+
 #mi_alerta {
     background-color: #fff3cd;
     color: #856404;
@@ -34,13 +46,12 @@
     display: block;
 }
 
-/*estilo para los input y selectores */
+/*estilo selectore */
 .input-custom {
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ffffff;
-    transition: all 0.3s ease;
+    height: auto;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
 }
 
 .input-custom:focus {
@@ -116,7 +127,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 
 .contenedor-con-borde {
-    background-color: #7ea7d0;
+    background-color: #CFD8DC;
     border: 2px solid #ccc;          /* Borde completo */
     border-radius: 10px;             /* Esquinas redondeadas */
     padding: 15px 20px;              /* Espaciado interno más cómodo */
@@ -125,4 +136,31 @@ input[type="number"]::-webkit-inner-spin-button {
     display: block;
     width: 100%;                     /* Asegura que ocupe todo el ancho disponible */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Sombra sutil para que resalte */
+}
+
+.form-header {
+    margin-bottom: 1rem; /* Reducimos un poco el margen inferior */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.titulo {
+    display: inline-block;
+    position: relative;
+    padding-left: 2.5rem; /* Deja espacio para el emoji */
+}
+
+.subtitulo {
+    margin-left: 2.5rem; /* Mismo espacio que el padding del h1 */
+    margin-top: 0.25rem; /* Menos espacio entre el título y el subtítulo */
+    color: #666;
+}
+
+.row.g-2 {
+    align-items: center; /* Asegura que los elementos dentro de la fila estén alineados verticalmente */
+}
+
+.text-end {
+    text-align: right; /* Alinea el número de historia hacia la derecha */
 }
