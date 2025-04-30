@@ -235,7 +235,7 @@ class FormatohistoriaControler extends Controller
             'sprint' => $historia->sprint,
             'fecha' => now(),
             'project_id' => $historia->tablero->project_id,
-        , // <<--- AGREGAR ESTO
+         // <<--- AGREGAR ESTO
 
         ]);
 
