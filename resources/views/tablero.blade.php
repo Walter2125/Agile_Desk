@@ -28,6 +28,7 @@
                     });
                 </script>
             @endif
+
         <!--El mensage de guradado con exito -->
 
         @if (session('success'))
@@ -77,6 +78,7 @@
 
     <!-- Botón limpiar filtros más pequeño -->
     <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded w-auto sm:w-24">Limpiar</button>
+
     <!-- Después del div de filtros, agregar este botón -->
     <button id="crearSprint" class="btn btn-primary mb-3" onclick="window.location.href='{{ route('sprints.create', ['project_id' => $tablero->project_id]) }}'">
         <i class="fas fa-plus"></i> Crear Sprint
@@ -84,19 +86,21 @@
 
 </div>
 
-<a href="{{ route('archivo.seleccionar') }}" class="btn btn-warning">📦 Archivar Historia</a>
-<a href="{{ route('archivo.index') }}" class="btn btn-sm btn-light me-2">
-                <i class="fas fa-archive me-1"></i> Ver Archivadas
-            </a>
+<a href="{{ route('archivo.seleccionar', ['project' => $project->id]) }}" class="btn btn-warning">
+    📦 Archivar Historia
+</a>
+
+<a href="{{ route('archivo.index.proyecto', ['project' => $project->id]) }}" class="btn btn-sm btn-light me-2">
+    <i class="fas fa-archive me-1"></i> Ver Archivadas
+</a>
         </div>
     </div>
 </div>
-
-          
             <div id="tablero" class="kanban-board">
                 <div class="kanban-column">
                     <div class="column-header">Backlog</div>
                     <div class="sortable">
+
                         @forelse ($tablero->historias->where('sprint_id', null)->where('estado', 'Pendiente') as $historia)
                             <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
                                 <div class="card">
@@ -131,10 +135,12 @@
                                                             </form>
                                                         </div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="text-sm text-gray-600">
                                         ID: <span class="font-semibold">{{ $historia->id }}</span><br>
                                         Prioridad: <span class="font-semibold">{{ $historia->prioridad }}</span>
@@ -142,6 +148,7 @@
                                 </div>
                             </a>
                         @empty
+
                             <p class="text-gray-500 italic">No hay historias en Backlog.</p>
                         @endforelse
                     </div>
@@ -234,7 +241,13 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
+
+                                    </div>
+                                    <div class="text-sm text-gray-600">
+                                        ID: <span class="font-semibold">{{ $historia->id }}</span><br>
+                                        Prioridad: <span class="font-semibold">{{ $historia->prioridad }}</span>
                                     </div>
                                     <div class="text-sm text-gray-600">
                                         ID: <span class="font-semibold">{{ $historia->id }}</span><br>
@@ -249,6 +262,7 @@
                     <button class="create-button" onclick="window.location.href='{{ route('formulario.create', ['tablero' => $tablero->id, 'sprint' => $sprint->id]) }}'">
                         + Crear Historia
                     </button>
+
                 </div>
                 @endforeach
             </div>
@@ -311,7 +325,9 @@
             <button id="guardarEtiquetas" class="bg-green-500 text-white px-4 py-2 rounded">Guardar</button>
         </div>
     </div>
+
 </div>
+
 
 @stop
 
@@ -549,6 +565,7 @@ o.querySelector('.titulo-columna').textContent.trim(); // Nombre de la columna
             etiquetaContainer.appendChild(etiquetaSpan);
         }
     }
+    
     </script>
 @stop
 

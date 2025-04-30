@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('usuario'); // Columna para el nombre del usuario
             $table->string('accion'); // Columna para el tipo de acción (Creación, Edición, Eliminación)
             $table->text('detalles'); // Columna para detalles sobre el cambio
-            $table->integer('sprint')->nullable();
+            $table->unsignedBigInteger('sprint')->nullable();
             $table->timestamps();
         });
     }

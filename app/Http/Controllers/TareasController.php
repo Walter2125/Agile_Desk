@@ -15,8 +15,14 @@ class TareasController extends Controller
     {
         // Obtener todas las tareas junto con la historia asociada
         $tareas = Tareas::with('historia')->get();
-        $historias = Formatohistoria::all(); // Todas las historias
-        return view('tareas.index', compact('tareas', 'historias'));
+        $historias = Formatohistoria::all();
+    
+        $tablero = null;
+        if ($tareas->count() > 0 && $tareas->first()->historia) {
+            $tablero = $tareas->first()->historia->tablero;
+        }
+    
+        return view('tareas.index', compact('tareas', 'historias', 'tablero'));
     }
 
     public function indexPorHistoria($id)
@@ -44,9 +50,10 @@ class TareasController extends Controller
         }
     
         $historia = Formatohistoria::find($request->historia_id);
+        $tablero = $historia?->tablero; 
     
         return response()
-            ->view('tareas.create', compact('historia'))
+            ->view('tareas.create', compact('historia', 'tablero'))
             ->header('Cache-Control','no-cache, no-store, must-revalidate')
             ->header('Pragma','no-cache')
             ->header('Expires','0');
@@ -81,7 +88,7 @@ class TareasController extends Controller
         ]);
 
         // Redirigir con un mensaje de éxitoreturn redirect()->route('tareas.index')->with([
-            return redirect()->route('tareas.index')->with([
+            return redirect()->route('tareas.porHistoria', $request->historia_id)->with([
                 'success' => 'Tarea creada correctamente.',
                 'fromCreate' => true,
             ]);
@@ -104,20 +111,20 @@ class TareasController extends Controller
     public function edit(string $id)
     {
 
-        if (session('fromEditTarea')) {
-            return redirect()->route('tablero')->with('warning', 'No puedes volver al formulario de edición de tareas.');
-        }
-    
-        // Obtener la tarea a editar
-        $tarea = Tareas::findOrFail($id);
-        // Obtener todas las historias para permitir la selección
-        $historias = Formatohistoria::all();
-    
-        return response()
-            ->view('tareas.edit', compact('tarea', 'historias'))
-            ->header('Cache-Control','no-cache, no-store, must-revalidate')
-            ->header('Pragma','no-cache')
-            ->header('Expires','0');
+        
+    if (session('fromEditTarea')) {
+        return redirect()->route('tablero')->with('warning', 'No puedes volver al formulario de edición de tareas.');
+    }
+
+    $tarea = Tareas::findOrFail($id);
+    $historias = Formatohistoria::all();
+    $tablero = $tarea->historia->tablero; 
+
+    return response()
+        ->view('tareas.edit', compact('tarea', 'historias', 'tablero'))
+        ->header('Cache-Control','no-cache, no-store, must-revalidate')
+        ->header('Pragma','no-cache')
+        ->header('Expires','0');
     }
 
     /**

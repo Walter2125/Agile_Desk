@@ -47,22 +47,20 @@
     @endif
 
 
-   @if (isset($historia))
-    <!-- Si estamos dentro de una historia, mostramos el botón de "Ver todas las tareas" -->
-    <div class="row mb-3">
-        <div class="d-flex justify-content-md-end">
-            <a href="{{ route('tablero') }}" class="btn btn-secondary mt-4 mb-4 me-2 ">Atras</a>
-            <a href="{{ route('tareas.index') }}" class="btn btn-secondary mt-4 mb-4">Ver todas las tareas</a>
-        </div>
-    </div>
-@else
-    <!-- Si estamos en la vista de "Todas las tareas", mostramos un botón para regresar -->
-    <div class="row md-3">
-        <div class="d-flex justify-content-md-end">
-            <a href="{{ route('tablero') }}" class="btn btn-secondary mt-4 mb-4">Atras</a>
-        </div>
-    </div>
-@endif
+    @if (isset($historia))
+            <div class="row mb-3">
+                <div class="d-flex justify-content-md-end">
+                    <a href="{{ route('formulario.show', $historia->id) }}"" class="btn btn-secondary mt-4 mb-4 me-2">Atras</a>
+                    <!--<a href="{{ route('tareas.index') }}" class="btn btn-secondary mt-4 mb-4">Ver todas las tareas</a> -->
+                </div>
+            </div>
+        @elseif (isset($tablero))
+            <div class="row mb-3">
+                <div class="d-flex justify-content-md-end">
+                    <a href="{{ route('tableros.show', $tablero->id) }}" class="btn btn-secondary mt-4 mb-4">Atras</a>
+                </div>
+            </div>
+    @endif
 
 <!-- Tabla responsiva -->
 <div class="table-responsive">

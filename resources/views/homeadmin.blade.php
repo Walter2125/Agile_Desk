@@ -236,8 +236,12 @@
         <h1>Inicio para Administradores </h1>
         <!-- Botones de acción rápida (adaptados para móvil) -->
         <div class="button-container">
+<<<<<<< HEAD
+            <a href="{{ route('sprints.index') }}" class="btn">Lista de Sprint</a>
+=======
             <!-- <a href="{{ route('historialcambios.index') }}" class="btn">Historial</a> -->
            <!--  <a href="{{ route('reasinarhistoria.index') }}" class="btn">Reasignar</a> -->
+>>>>>>> main
             <a href="{{ route('admin.users.index') }}" class="btn">Usuarios</a>
             <a href="{{ route('projects.create') }}" class="btn">Crear Proyecto</a>
         </div>

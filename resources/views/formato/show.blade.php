@@ -66,7 +66,7 @@
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <div class="row mb-3">
                 <div class="col-md">
-                <a href="{{ route('tablero') }}" class="btn btn-secondary">Volver</a>
+                <!--<a href="{{ route('tablero') }}" class="btn btn-secondary">Volver</a>-->
                 <a href="{{ route('tareas.create',['historia_id' => $historia ->id]) }}" class="btn btn-primary"> Crear Tarea</a>
                 <a href="{{ route('tareas.porHistoria', $historia->id) }}" class="btn btn-info">Ver Tareas</a>
                                 

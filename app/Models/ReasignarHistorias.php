@@ -15,4 +15,8 @@ class ReasignarHistorias extends Model
     {
         return $this->belongsTo(User::class, 'responsable_id');
     }
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
 }

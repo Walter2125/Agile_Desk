@@ -130,21 +130,21 @@ section {
 }
 /* CSS DE AGUNAS FUNCIONES DEL TABLERO  */
 #filtrarEstado {
-    color: #333;              
-    background-color: #fff;   
-    border-color: #ccc;       
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
     transition: background-color 0.3s, color 0.3s;
   }
-  
+
   #filtrarEstado option {
-    color: #333;             
-    background-color: #fff;  
+    color: #333;
+    background-color: #fff;
   }
 
   #filtrarFecha, #filtrarResponsable, #filtrarEtiqueta, #buscar, #comboboxColumna{
-    color: #333;              
-    background-color: #fff;   
-    border-color: #ccc;       
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
     transition: background-color 0.3s, color 0.3s;
   }
 
@@ -154,16 +154,16 @@ section {
   }
   /* CSS de algunas funciones del formato Historias  */
   #nombreHistoria, #numeroHistoria, #responsableHistoria, #prioridadHistoria, #descripcionHistoria, #listaTareas{
-    color: #333;              
-    background-color: #fff;   
-    border-color: #ccc;       
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
     transition: background-color 0.3s, color 0.3s;
   }
    /* CSS de algunas funciones para el proyecto */
   #fecha_inicio, #fecha_fin, #name{
-    color: #333;              
-    background-color: #fff;   
-    border-color: #ccc;       
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
     transition: background-color 0.3s, color 0.3s;
   }
   /* CSS del fondo */
@@ -175,14 +175,14 @@ section {
 /* CSS de las migajas */
   .migajas {
     margin-top: 1rem;
-    display: flex;  
+    display: flex;
     flex-direction: column;
     height: 100%;
     width: 100%;
     min-width: 480px;
     padding: 0 40px;
     }
-    
+
     .breadcrumb {
     display: flex;
     border-radius: 10px;
@@ -195,8 +195,8 @@ section {
     z-index: 1;
     justify-content: left;
     }
-    
-    
+
+
     .breadcrumb__item {
     height: 100%;
     background-color: white;
@@ -217,40 +217,40 @@ section {
     padding: 0 20px;
     cursor: pointer;
     }
-    
-    
+
+
     .breadcrumb__item:hover {
     background: #490099;
     color: #FFF;
     }
-    
+
     .breadcrumb__inner {
     display: flex;
     flex-direction: column;
     margin: auto;
     z-index: 2;
-    transform: skew(21deg);  
+    transform: skew(21deg);
     }
-    
+
     .breadcrumb__title {
     text-decoration: none;
     color: inherit;
     font-size: 16px;
-    text-overflow: ellipsis;  
+    text-overflow: ellipsis;
     overflow: hidden;
-    white-space: nowrap;  
+    white-space: nowrap;
     }
-    
+
     .breadcrumb__item--active {
-        background-color: #8e00d4; 
+        background-color: #8e00d4;
         color: #fff;
-        pointer-events: none; 
+        pointer-events: none;
       }
     @media all and (max-width: 1000px) {
     .breadcrumb {
     height: 35px;
     }
-    
+
     .breadcrumb__title{
     font-size: 11px;
     }
@@ -258,7 +258,7 @@ section {
     padding: 0 20px;
     }
     }
-    
+
     @media all and (max-width: 710px) {
     .breadcrumb {
     height: 30px;
@@ -266,7 +266,7 @@ section {
     .breadcrumb__item {
     padding: 0 20px;
     }
-    
+
     }
 
 /* MODAL - MODO OSCURO */
@@ -362,4 +362,56 @@ section {
     padding: 15px;
     border-radius: 8px;
 }
+/* Estilos del Dropdown */
+.dropdown-toggle {
+    cursor: pointer;
+    background: none; /* Fondo transparente para que se adapte mejor al diseño */
+    border: none;
+}
 
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%; /* Ubica el menú justo debajo del botón */
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0; /* Borde claro */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 160px; /* Ancho fijo */
+    z-index: 50;
+}
+
+.dropdown-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-menu li {
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-menu li button,
+.dropdown-menu li a {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+    background: none;
+    border: none;
+}
+
+.dropdown-menu li button:hover,
+.dropdown-menu li a:hover {
+    background-color: #f3f4f6; /* Fondo al pasar el mouse */
+    color: #1f2937;
+}
+
+.dropdown-menu.visible {
+    display: block;
+}
