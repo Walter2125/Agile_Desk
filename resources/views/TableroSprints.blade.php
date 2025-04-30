@@ -40,26 +40,6 @@
 
         @endif
 
-        <!-- migajas de pan-->
-        <div class="container py-3 migajas" id="migajas">
-            <ul class="breadcrumb">
-                <li class="breadcrumb__item breadcrumb__item-firstChild">
-                    <span class="breadcrumb__inner">
-                        <a href="/HomeUser" class="breadcrumb__title">Home</a>
-                    </span>
-                </li>
-                <li class="breadcrumb__item breadcrumb__item-firstChild">
-                    <span class="breadcrumb__inner">
-                        <a href="/projects" class="breadcrumb__title">Proyectos</a>
-                    </span>
-                </li>
-                <li class="breadcrumb__item breadcrumb__item--active">
-                    <span class="breadcrumb__inner">
-                        <span class="breadcrumb__title">Tableros</span>
-                    </span>
-                </li>
-            </ul>
-        </div>
         <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.068);">
         <!-- <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen"> -->
@@ -101,10 +81,7 @@
     <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded w-auto sm:w-24">Limpiar</button>
 </div>
 
-<a href="{{ route('archivo.seleccionar') }}" class="btn btn-warning">📦 Archivar Historia</a>
-<a href="{{ route('archivo.index') }}" class="btn btn-sm btn-light me-2">
-                <i class="fas fa-archive me-1"></i> Ver Archivadas
-            </a>
+
         </div>
     </div>
 </div>
@@ -122,6 +99,7 @@
                                     <div class="flex justify-between items-start mb-1">
                                         <div class="font-bold text-lg text-black truncate  title="{{ $historia->nombre }}">
                                             {{ $historia->nombre }}
+                                            
                                         </div>
                                     <div class="card-options flex gap-2 justify-end">
                                         <!-- Botón de editar -->

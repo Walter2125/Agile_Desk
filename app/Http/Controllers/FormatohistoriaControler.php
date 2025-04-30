@@ -79,7 +79,7 @@ class FormatohistoriaControler extends Controller
         $historia->responsable = $request->responsable;
         $historia->prioridad = $request->prioridad;
         $historia->descripcion = $request->descripcion;
-        $historia->user_id = auth()->id();
+        $historia->user_id = auth()->id();  
         $historia->sprint_id = $request->input('sprint_id') ?? null;
         $historia->tablero_id = $tablero->id;
         $historia->columna_id = $columna->id;
@@ -97,13 +97,16 @@ class FormatohistoriaControler extends Controller
 
         // Registrar en el historial de cambios
         HistorialCambios::create([
-            'fecha' => now(),
-            'usuario' => Auth::user()->name ?? 'Desconocido',
+            'usuario' => Auth::user()->name,
             'accion' => 'Creación',
             'detalles' => 'Se creó una nueva historia: ' . $historia->nombre,
+            'sprint' => $historia->sprint,
+            'fecha' => now(),
+            'project_id' => $tablero->project_id,
+        
         ]);
 
-        return redirect()->route('tableros.show', $tablero->id)
+        return redirect()->route('sprints.show', $tablero->id)
             ->with([
                 'success' => 'Historia Creada correctamente',
                 'fromCreate' => true,
@@ -133,7 +136,7 @@ class FormatohistoriaControler extends Controller
 
         // Verifica si la sesión tiene la bandera 'fromEdit'
         if (session('fromEdit')) {
-            return redirect()->route('tableros.show', $historia->tablero_id)
+            return redirect()->route('sprints.show', $tablero->id)
                              ->with('warning', 'No puedes volver al formulario de edición.');
         }
 
@@ -192,12 +195,12 @@ class FormatohistoriaControler extends Controller
         }
 
         HistorialCambios::create([
-            'fecha' => now(),
-            'usuario' => Auth::user()->name ?? 'Desconocido',
+            'usuario' => Auth::user()->name,
             'accion' => 'Edición',
-            'detalles' => $detalles,
+            'detalles' => 'Se editó la historia: ' . $historia->nombre,
             'sprint' => $historia->sprint,
-            'project_id' => $historia->tablero->project_id, // <<--- AGREGAR ESTO
+            'fecha' => now(),
+            'project_id' => $historia->tablero->project_id ,// <<--- AGREGAR ESTO
 
         ]);
 
@@ -226,16 +229,17 @@ class FormatohistoriaControler extends Controller
 
         // Registrar en historial
         HistorialCambios::create([
-            'fecha' => now(),
-            'usuario' => Auth::user()->name ?? 'Desconocido',
+            'usuario' => Auth::user()->name,
             'accion' => 'Eliminación',
-            'detalles' => "Se eliminó la historia: " . $nombreHistoria,
+            'detalles' => 'Se eliminó la historia: ' . $nombreHistoria,
             'sprint' => $historia->sprint,
-            'project_id' => $historia->tablero->project_id, // <<--- AGREGAR ESTO
+            'fecha' => now(),
+            'project_id' => $historia->tablero->project_id,
+        , // <<--- AGREGAR ESTO
 
         ]);
 
-        return redirect()->route('tableros.show', $historia->tablero_id)
+        return redirect()->route('sprints.show', $historia->tablero_id)
             ->with('success', 'Historia eliminada correctamente');
     }
 }

@@ -17,7 +17,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-@stop
+    
+    @stop
 
 @section('content')
             @if(session('fromCreate') || session('fromEdit'))
@@ -28,7 +29,7 @@
                     });
                 </script>
             @endif
-
+            
         <!--El mensage de guradado con exito -->
 
         @if (session('success'))
@@ -42,7 +43,7 @@
 
         
         <!-- -->
-    <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.068);">
+    <div class="bg-gray-100 " style="background-color: rgba(243, 244, 246, 0.068);">
         <!-- <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen"> -->
             <h2 class="text-2xl font-bold mb-6">Tablero del proyecto {{ $tablero->project->name }}</h2>
 
@@ -80,10 +81,21 @@
     <button id="limpiarFiltros" class="bg-red-500 text-white px-4 py-2 rounded w-auto sm:w-24">Limpiar</button>
 
     <!-- Después del div de filtros, agregar este botón -->
-    <button id="crearSprint" class="btn btn-primary mb-3" onclick="window.location.href='{{ route('sprints.create', ['project_id' => $tablero->project_id]) }}'">
+    <button id="crearSprint" class="bg-red-500 text-white px-4 py-2 rounded w-auto sm:w-24" onclick="window.location.href='{{ route('sprints.create', ['project_id' => $tablero->project_id]) }}'">
         <i class="fas fa-plus"></i> Crear Sprint
     </button>
 
+    <a href="{{ route('archivo.seleccionar', ['project' => $tablero->project->id]) }}" class="btn btn-warning">📦 Archivar Historia</a>
+    <a href="{{ route('archivo.index.proyecto', ['project' => $tablero->project->id]) }}" class="btn">Ver Archivadas</a>
+            </a>
+    <a href="{{ route('proyectos.historialcambios.index', ['project' => $tablero->project->id]) }}" class="btn btn-info">
+    Ver historial de cambios
+</a>
+<a href="{{ route('reasignar.index', ['project' => $tablero->project->id]) }}" class="btn btn-info">
+    Reasignar historias
+</a>
+
+    
 </div>
 
 
@@ -101,6 +113,7 @@
                                     <div class="flex justify-between items-start mb-1">
                                         <div class="font-bold text-lg text-black truncate max-w-[80%]" title="{{ $historia->nombre }}">
                                             {{ $historia->nombre }}
+                                            
                                         </div>
                                         <div class="card-options relative">
                                             <button type="button" class="dropdown-toggle absolute right-0 top-0 bg-white border rounded shadow-sm h-6 w-6 text-xs flex items-center justify-center" data-bs-toggle="dropdown" aria-expanded="false">
@@ -321,6 +334,7 @@
     </div>
 
 </div>
+
 
 
 @stop

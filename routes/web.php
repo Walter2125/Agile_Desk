@@ -203,10 +203,6 @@ Route::get('/archivo/seleccionar/{project}', [ArchivoHistoriaController::class, 
 Route::post('/archivo/archivar/{project}/{id}', [ArchivoHistoriaController::class, 'archivar'])->name('archivo.archivar');
 Route::get('/archivo/proyecto/{project}', [ArchivoHistoriaController::class, 'indexPorProyecto'])->name('archivo.index.proyecto');
 Route::post('/archivo/desarchivar/{project}/{id}', [ArchivoHistoriaController::class, 'desarchivar'])->name('archivo.desarchivar');
-    Route::get('/archivo/seleccionar', [ArchivoHistoriaController::class, 'mostrarHistoriasDisponibles'])->name('archivo.seleccionar');
-        Route::post('/archivo/archivar/{id}', [ArchivoHistoriaController::class, 'archivar'])->name('archivo.archivar');
-        Route::get('/archivo', [ArchivoHistoriaController::class, 'index'])->name('archivo.index');
-        Route::post('/archivo/desarchivar/{id}', [ArchivoHistoriaController::class, 'desarchivar'])->name('archivo.desarchivar');
 
     //Lista de historias por cada usuarios
     Route::get('/mis-historias', [FormatohistoriaControler::class, 'misHistorias'])->name('mis_historias');
