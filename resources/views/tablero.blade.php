@@ -114,7 +114,7 @@
                         <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
                             <div class="card">
                                 <div class="flex justify-between items-start mb-1">
-                                    <div class="font-bold text-lg text-black truncate max-w-[80%]" title="{{ $historia->nombre }}">
+                                    <div class="font-bold text-lg text-black truncate " title="{{ $historia->nombre }}">
                                         {{ $historia->nombre }}
                                     </div>
                                     <div class="card-options relative">
@@ -177,7 +177,7 @@
                         <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
                             <div class="card">
                                 <div class="flex justify-between items-start mb-1">
-                                    <div class="font-bold text-lg text-black truncate max-w-[80%]" title="{{ $historia->nombre }}">
+                                    <div class="font-bold text-lg text-black truncate " title="{{ $historia->nombre }}">
                                         {{ $historia->nombre }}
                                     </div>
                                     <div class="card-options relative">
@@ -231,7 +231,7 @@
                         <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
                             <div class="card">
                                 <div class="flex justify-between items-start mb-1">
-                                    <div class="font-bold text-lg text-black truncate max-w-[80%]" title="{{ $historia->nombre }}">
+                                    <div class="font-bold text-lg text-black truncate " title="{{ $historia->nombre }}">
                                         {{ $historia->nombre }}
                                     </div>
                                     <div class="card-options relative">
@@ -279,32 +279,35 @@
 
             </div>
 
-            @foreach ($tablero->columnas as $columna)
-                <div class="kanban-column">
-                    <div class="column-header">{{ $columna->nombre }}</div>
-                    <div class="sortable">
-                        @foreach ($columna->historias as $historia)
-                            @include('partials.historia', ['historia' => $historia])
-                        @endforeach
+                @foreach ($tablero->columnas as $columna)
+                    <div class="kanban-column">
+                        <div class="column-header">{{ $columna->nombre }}</div>
+                        <div class="sortable">
+                            @forelse ($columna->historias as $historia)
+                                <!-- Aquí va tu tarjeta -->
+                                <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
+                                    <div class="card">
+                                        <!-- contenido de la tarjeta -->
+                                        <div class="flex justify-between items-start mb-1">
+                                            <div class="font-bold text-lg text-black truncate " title="{{ $historia->nombre }}">
+                                                {{ $historia->nombre }}
+                                            </div>
+                                            @include('partials.botones', ['historia' => $historia])
+                                        </div>
+                                        <div class="text-sm text-gray-600">
+                                            ID: <span class="font-semibold">{{ $historia->id }}</span><br>
+                                            Prioridad: <span class="font-semibold">{{ $historia->prioridad }}</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            @empty
+                                <p class="text-gray-500 italic">No hay historias en esta columna.</p>
+                            @endforelse
+                        </div>
+                        <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
                     </div>
-                    <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
-                </div>
-            @endforeach
-
-            <!-- Formulario manual para probar creación de columna -->
-            <form method="POST" action="{{ route('columna.store') }}" class="mb-4 bg-white p-4 rounded shadow">
-                @csrf
-                <input type="hidden" name="tablero_id" value="{{ $tablero->id }}">
-
-                <div class="mb-2">
-                    <label for="nombre" class="block font-bold mb-1">Nombre de la columna:</label>
-                    <input type="text" id="nombre" name="nombre" class="border p-2 w-full" placeholder="Por ejemplo: En espera" required>
-                </div>
-
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Crear columna</button>
-            </form>
-
-
+                @endforeach
+            </div>
 
 
             <button class="add-column-button" onclick="abrirModalAgregarColumna()">+</button>

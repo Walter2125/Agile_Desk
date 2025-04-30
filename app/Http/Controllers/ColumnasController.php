@@ -34,6 +34,8 @@ class ColumnasController extends Controller
         if ($columnasExistentes >= 9) {
             return response()->json(['mensaje' => 'No se pueden agregar más de 9 columnas.'], 400);
         }
+
+
         // Validar que exista el id del tablero y que se provea un nombre
         $validated = $request->validate([
             'tablero_id' => 'required|exists:tableros,id',
