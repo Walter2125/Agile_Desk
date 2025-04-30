@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Columna;
+use App\Models\Tablero;
 
 class ColumnasController extends Controller
 {
@@ -32,6 +34,7 @@ class ColumnasController extends Controller
         if ($columnasExistentes >= 9) {
             return response()->json(['mensaje' => 'No se pueden agregar más de 9 columnas.'], 400);
         }
+
         // Validar que exista el id del tablero y que se provea un nombre
         $validated = $request->validate([
             'tablero_id' => 'required|exists:tablero,id',

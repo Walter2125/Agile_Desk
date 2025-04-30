@@ -9,7 +9,7 @@ class Columna extends Model
 {
     protected $fillable = ['tablero_id', 'nombre', 'orden'];
 
-    public function tablero()
+    public function tableros()
     {
         return $this->belongsTo(Tablero::class);
     }

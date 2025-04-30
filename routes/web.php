@@ -158,6 +158,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/tableros/{tablero}', [TableroController::class, 'destroy'])->name('tableros.destroy');
 
 
+
+    Route::delete('/projects/{project}',                   [ProjectController::class, 'destroy'])->name('projects.destroy');
+
+
+
     Route::delete('/projects/{project}',                   [ProjectController::class, 'destroy'])->name('projects.destroy');
     
     // **Rutas de administrador** (solo usuarios con usertype = 'admin')
@@ -185,7 +190,18 @@ Route::middleware('auth')->group(function () {
         Route::get('/users/search',[UserController::class, 'search'])->name('users.search');
 
 
+    Route::post('columnas', [ColumnaController::class, 'store'])->name('columnas.store');
+    Route::post('/tableros/{tablero}/columnas', [ColumnaController::class, 'store'])->name('columnas.store');
+    Route::post('/columna/store', [ColumnaController::class, 'store'])->name('columna.store');
+    Route::put('/columna/{columna}/actualizar', [ColumnaController::class, 'update'])->name('columna.update');
+
+
+
+});
+
+
     });
+
 
     //Rutas de aarchivar historias
 Route::get('/archivo/seleccionar/{project}', [ArchivoHistoriaController::class, 'mostrarHistoriasDisponibles'])->name('archivo.seleccionar');

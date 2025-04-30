@@ -49,10 +49,13 @@ class TableroController extends Controller
      */
     public function store(Request $request, Project $proyecto)
     {
+
+
         // Verificar que el usuario tiene acceso al proyecto
         if (!Auth::user()->projects->contains($proyecto->id)) {
             return redirect()->route('projects.my')
                 ->with('error', 'No tienes acceso a este proyecto.');
+
         }
 
         // Verificar si el proyecto ya tiene un tablero
@@ -91,6 +94,9 @@ class TableroController extends Controller
 
      public function show($id)
      {
+
+         $tablero = Tablero::with(['columnas.historias', 'project', 'historias'])->findOrFail($id);
+
         $tablero = Tablero::with([
             'project.sprints' => function($query) {
                 $query->orderBy('fecha_inicio');
@@ -111,17 +117,24 @@ class TableroController extends Controller
   /*
          $tablero = Tablero::with(['columnas.historias', 'project'])->findOrFail($id);
 
+
          // Verificar que el usuario tiene acceso al proyecto asociado
          if (!$tablero->project || !Auth::user()->projects->contains($tablero->project->id)) {
              return redirect()->route('projects.my')
                  ->with('error', 'No tienes acceso a este tablero.');
          }
 
+
+         // Pasar $tablero a la vista
+         $project = $tablero->project;
+         return view('tablero', compact('tablero', 'project'));     }
+
          // Pasar el tablero a la vista
          return view('tablero', compact('tablero'));
 */
 
      }
+
 
     /**
      * Formulario para borrar un tablero

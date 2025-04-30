@@ -75,12 +75,12 @@ class FormatohistoriaControler extends Controller
         $historia->responsable = $request->responsable;
         $historia->prioridad = $request->prioridad;
         $historia->descripcion = $request->descripcion;
-        $historia->user_id = auth()->id(); // ✅ ESTO ES FUNDAMENTAL
+        $historia->user_id = auth()->id(); // 
         $historia->sprint_id = $request->sprint_id; // Agregar el sprint_id
         $historia->tablero_id = $tablero->id;
         $historia->save();
         $historia->columna_id = $request->columna_id;
-        $historia->columna_id = $columna->id; // ✅ Aquí está el cambio
+        $historia->columna_id = $columna->id; //  
 
 
         // Enviar notificación al usuario autenticado
@@ -115,10 +115,32 @@ class FormatohistoriaControler extends Controller
         return view('formato.show', compact('historia'));
     }
 
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
+
+        // Obtener la historia por su ID
+        $historia = Formatohistoria::findOrFail($id);
+
+        // Obtener el tablero relacionado con la historia
+        $tablero = $historia->tablero; // Asegúrate de que la relación está definida correctamente en el modelo
+
+        // Verifica si la sesión tiene la bandera 'fromEdit'
+        if (session('fromEdit')) {
+            return redirect()->route('tableros.show', $historia->tablero_id)
+                             ->with('warning', 'No puedes volver al formulario de edición.');
+        }
+
+        // Pasamos tanto la historia como el tablero a la vista
+        return response()
+            ->view('formato.edit', compact('historia', 'tablero')) // Pasamos ambas variables
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
+    }
+
 {
     $historia = Formatohistoria::findOrFail($id);
 
@@ -132,6 +154,7 @@ class FormatohistoriaControler extends Controller
         ->header('Pragma', 'no-cache')
         ->header('Expires', '0');
 }
+
 
     /**
      * Update the specified resource in storage.
