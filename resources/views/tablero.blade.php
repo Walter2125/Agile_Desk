@@ -300,7 +300,28 @@
 
         @foreach ($tablero->columnas as $columna)
                     <div class="kanban-column">
-                        <div class="column-header">{{ $columna->nombre }}</div>
+                        <div class="column-header flex justify-between items-center">
+                            <span class="columna-nombre">{{ $columna->nombre }}</span>
+
+                            <div class="dropend columna-menu">
+                                <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <button class="dropdown-item" onclick="abrirModalEditarColumna({{ $columna->id }}, '{{ $columna->nombre }}')">
+                                            Editar nombre
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-danger" onclick="eliminarColumna({{ $columna->id }})">
+                                            Eliminar columna
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <div class="sortable">
                             @forelse ($columna->historias as $historia)
                                 <!-- Aquí va tu tarjeta -->
@@ -401,6 +422,17 @@
                 margin-left: 10px;
                 align-self: center; /* Vertically center the button */
             }
+            .columna-menu {
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.2s ease;
+            }
+
+            .column-header:hover .columna-menu {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
 
             /* Basic styling - adjust as needed */
         </style>
@@ -478,6 +510,19 @@
             </div>
         </div>
     </div>
+
+    <div id="modalEditarColumna" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
+            <h2 class="text-xl font-bold mb-4">Editar nombre de columna</h2>
+            <input type="text" id="nuevoNombreColumna" class="form-control w-full mb-4" placeholder="Nuevo nombre">
+            <div class="flex justify-end gap-2">
+                <button class="btn btn-secondary" onclick="cerrarModalEditarColumna()">Cancelar</button>
+                <button class="btn btn-primary" onclick="guardarEdicionColumna()">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+
+
 
 
 @stop
@@ -813,5 +858,63 @@
                 });
         }
     </script>
+
+    <script>
+        let columnaIdActual = null;
+
+        function abrirModalEditarColumna(id, nombre) {
+            columnaIdActual = id;
+            document.getElementById('nuevoNombreColumna').value = nombre;
+            document.getElementById('modalEditarColumna').classList.remove('hidden');
+        }
+
+        function cerrarModalEditarColumna() {
+            document.getElementById('modalEditarColumna').classList.add('hidden');
+            document.getElementById('nuevoNombreColumna').value = "";
+            columnaIdActual = null;
+        }
+
+        function guardarEdicionColumna() {
+            const nuevoNombre = document.getElementById('nuevoNombreColumna').value.trim();
+            if (!nuevoNombre) {
+                toastr.error("El nuevo nombre no puede estar vacío.");
+                return;
+            }
+
+            fetch(`/columna/${columnaIdActual}/actualizar`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                },
+                body: JSON.stringify({ nombre: nuevoNombre })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => Promise.reject(err));
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // ✅ Actualiza directamente el nombre en el DOM sin recargar
+                    const columnaDOM = document.querySelector(`[data-columna-id='${columnaIdActual}']`);
+                    if (columnaDOM) {
+                        const spanNombre = columnaDOM.querySelector('.columna-nombre');
+                        if (spanNombre) {
+                            spanNombre.textContent = nuevoNombre;
+                        }
+                    }
+
+                    toastr.success("Columna actualizada correctamente.");
+                    cerrarModalEditarColumna();
+                })
+                .catch(error => {
+                    toastr.error(error?.mensaje || "Error al actualizar el nombre.");
+                });
+        }
+    </script>
+
+
+
 @stop
 

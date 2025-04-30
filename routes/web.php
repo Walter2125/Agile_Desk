@@ -183,6 +183,7 @@ Route::middleware('auth')->group(function () {
     Route::post('columnas', [ColumnaController::class, 'store'])->name('columnas.store');
     Route::post('/tableros/{tablero}/columnas', [ColumnaController::class, 'store'])->name('columnas.store');
     Route::post('/columna/store', [ColumnaController::class, 'store'])->name('columna.store');
+    Route::put('/columna/{columna}/actualizar', [ColumnaController::class, 'update'])->name('columna.update');
 
 
 
