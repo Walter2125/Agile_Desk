@@ -262,7 +262,7 @@
             </div>
             <div class="col-6 col-md-3">
                 <div class="quick-stats">
-                    <div class="stat-number">{{ \App\Models\Sprint::where('estado', 'Nuevo')->count() }}</div>
+                    <div class="stat-number">{{ \App\Models\Sprint::count() }}</div>
                     <div class="stat-label">Sprints Activos</div>
                 </div>
             </div>

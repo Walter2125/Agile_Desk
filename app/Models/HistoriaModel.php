@@ -29,7 +29,7 @@ class HistoriaModel extends Model
     // Relación con Tareas (opcional, si usas otra tabla para tareas)
     public function tareas()
     {
-        return $this->hasMany(TareaModel::class, 'historia_id');
+        return $this->hasMany(Tareas::class, 'historia_id');
     }
     // Relación con Tablero (opcional, si usas otra tabla para tableros)
 

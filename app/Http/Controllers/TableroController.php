@@ -91,6 +91,24 @@ class TableroController extends Controller
 
      public function show($id)
      {
+        $tablero = Tablero::with([
+            'project.sprints' => function($query) {
+                $query->orderBy('fecha_inicio');
+            },
+            'historias'
+        ])->findOrFail($id);
+        
+        // Obtener los sprints únicos del proyecto
+        $sprints = $tablero->project->sprints->unique('id');
+    
+        // Verificar que el usuario tiene acceso al proyecto asociado
+        if (!$tablero->project || !Auth::user()->projects->contains($tablero->project->id)) {
+            return redirect()->route('projects.my')
+                ->with('error', 'No tienes acceso a este tablero.');
+        }
+        
+        return view('tablero', compact('tablero', 'sprints'));
+  /*
          $tablero = Tablero::with(['columnas.historias', 'project'])->findOrFail($id);
 
          // Verificar que el usuario tiene acceso al proyecto asociado
@@ -101,7 +119,7 @@ class TableroController extends Controller
 
          // Pasar el tablero a la vista
          return view('tablero', compact('tablero'));
-
+*/
 
      }
 

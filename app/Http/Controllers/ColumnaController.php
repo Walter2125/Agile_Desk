@@ -45,4 +45,3 @@ class ColumnaController extends Controller
         return response()->json(['mensaje' => 'Columna eliminada']);
     }
 }
-

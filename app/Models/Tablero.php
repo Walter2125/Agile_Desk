@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Tablero extends Model
 {
     protected $table = 'tablero';
-    protected $fillable = ['nombre', 'tablero_id'];
+    protected $fillable = ['nombre', 'project_id', 'sprint_id'];
 
     public function project()
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
     // Cada tablero tiene muchas columnas
@@ -25,5 +24,16 @@ class Tablero extends Model
     {
         return $this->hasMany(Formatohistoria::class, 'tablero_id');
     }
-    
+
+    public function sprints()
+    {
+        return $this->hasMany(Sprint::class, 'tablero_id');
+    }
+
+    // Un tablero pertenece a un sprint
+    public function sprint()
+    {
+        return $this->belongsTo(Sprint::class);
+    }
+
 }
