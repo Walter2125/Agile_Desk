@@ -86,13 +86,7 @@
 
 </div>
 
-<a href="{{ route('archivo.seleccionar', ['project' => $project->id]) }}" class="btn btn-warning">
-    📦 Archivar Historia
-</a>
 
-<a href="{{ route('archivo.index.proyecto', ['project' => $project->id]) }}" class="btn btn-sm btn-light me-2">
-    <i class="fas fa-archive me-1"></i> Ver Archivadas
-</a>
         </div>
     </div>
 </div>

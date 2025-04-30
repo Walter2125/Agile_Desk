@@ -63,7 +63,9 @@
         <!-- -->
     <div class="bg-gray-100 p-10" style="background-color: rgba(243, 244, 246, 0.068);">
         <!-- <div class="w-full mx-auto bg-white p-6 rounded-lg shadow-lg overflow-x-auto h-screen"> -->
-            <h2 class="text-2xl font-bold mb-6">Tablero del proyecto {{ $tablero->project->name }}</h2>
+            <h2 class="text-2xl font-bold mb-6">
+    Tablero del proyecto {{ $tablero?->project?->name ?? 'Proyecto no encontrado' }}
+</h2>
 
       <!-- Barra de búsqueda y filtros -->
     <div class="flex flex-wrap items-center gap-2 mb-4">
@@ -112,7 +114,7 @@
 
             <div id="tablero" class="kanban-board">
                 <div class="kanban-column">
-                    <div class="column-header">Backlog</div>
+                    <div class="column-header">Pendiente</div>
                     <div class="sortable">
                         @forelse ($tablero->historias->where('estado', 'Pendiente') as $historia)
                             <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
@@ -839,7 +841,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return; // No continuar si ya hay 9 columnas
             }
 
-            fetch("{{ route('columnas.store') }}", {
+            fetch("{{ route('columnas.store', ['tablero' => $tablero->id]) }}", { // Agregar el parámetro 'tablero'
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

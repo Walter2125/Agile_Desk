@@ -32,4 +32,9 @@ class Project extends Model
     {
         return $this->hasOne(Tablero::class, 'project_id');
     }
+
+    public function columna()
+    {
+        return $this->hasMany(Columna::class);
+    }
 }

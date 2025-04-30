@@ -78,10 +78,13 @@ class SprintController extends Controller
     public function show($id)
     {
         $sprint = Sprint::with(['historias', 'project.tablero'])->findOrFail($id);
-        $tablero = $sprint->project->tablero;
-        $tablero = Tablero::with(['columna', 'columna.historias'])->find($id);
+       /* $tablero = $sprint->project->tablero;
+        $tablero = Tablero::with('project')->find($id);
+        */
+        $tablero = Tablero::with(['columnas', 'columnas.historias'])->find($id);
         $sprints = $sprint->project->sprints; // Obtener todos los sprints del proyecto
-        
+        $tablero = $sprint->project->tablero; // Obtener el tablero relacionado con el proyecto
+        $sprints = $sprint->project->sprints; 
         return view('TableroSprints', [
             'sprint' => $sprint,
             'tablero' => $tablero,

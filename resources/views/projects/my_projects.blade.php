@@ -91,7 +91,9 @@
                             
                             <div class="card-footer bg-white border-0 pb-3">
                                 <div class="d-flex justify-content-between">
-                                <a href="{{ route('tableros.show', $project->id) }}" class="btn btn-outline-info btn-sm rounded-pill" aria-label="Crear nuevo sprint"> <i class="fas fa-eye mr-1"></i>ver</a>
+                                <a href="{{ route('tableros.show', $project->tablero?->id) }}" class="btn btn-outline-info btn-sm rounded-pill" aria-label="Crear nuevo sprint">
+                                    <i class="fas fa-eye mr-1"></i> Ver
+                                </a>
                                     @if(auth()->id() === $project->user_id)
                                         <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-outline-warning btn-sm rounded-pill">
                                             <i class="fas fa-pencil-alt mr-1"></i> Editar
