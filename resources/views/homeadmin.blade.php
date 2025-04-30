@@ -288,7 +288,7 @@
                         </thead>
                         <tbody id="projectsTableBody">
                             @foreach(\App\Models\Project::with(['creator', 'users', 'sprints' => function($query) {
-                                $query->where('estado', 'activo')->orderBy('fecha_inicio', 'desc');
+                                $query->orderBy('fecha_inicio', 'desc');
                             }])->get() as $proyecto)
                             <tr class="project-row">
                                 <td>{{ $proyecto->name }}</td>

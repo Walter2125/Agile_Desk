@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('formatohistorias', function (Blueprint $table) {
-
             $table->id();
             $table->string('nombre');
             $table->string('estado')->default('Pendiente');
@@ -26,10 +25,8 @@ return new class extends Migration
             $table->unsignedBigInteger('tablero_id'); // Nueva columna
             $table->foreign('tablero_id')->references('id')->on('tablero')->onDelete('cascade'); 
             $table->timestamps();
-            
-            // Agregar un índice único compuesto para 'nombre' y 'tablero_id'
+
             $table->unique(['nombre', 'tablero_id'], 'formatohistorias_nombre_tablero_unique');
-    
         });
     }
 

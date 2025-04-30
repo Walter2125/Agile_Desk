@@ -42,10 +42,10 @@ class FormatohistoriaControler extends Controller
     {
         $sprint_id = request('sprint'); // Obtener el sprint_id de la URL
         $sprints = $tablero->project->sprints; // Obtener los sprints del proyecto
-        return view('formato.create', compact('tablero', 'sprints', 'sprint_id'));
+        return view('formato.create', compact('tablero', 'columna', 'sprints', 'sprint_id')); // Incluye $columna
     }
 
-    public function store(Request $request, Tablero $tablero)
+    public function store(Request $request, Tablero $tablero, Columna $columna)
     {
         $request->validate([
             'nombre' => [
@@ -68,6 +68,10 @@ class FormatohistoriaControler extends Controller
             'prioridad.required' => 'La prioridad es requerida.',
         ]);
 
+        // Asegúrate de que el estado se asigna correctamente al nombre de la columna
+        $estado = $historia->nombre ?? 'Pendiente'; // Usa un valor predeterminado si $columna->nombre es null
+
+        // Crear la historia
         $historia = new Formatohistoria();
         $historia->nombre = $request->nombre;
         $historia->sprint = $request->sprint;
@@ -75,13 +79,13 @@ class FormatohistoriaControler extends Controller
         $historia->responsable = $request->responsable;
         $historia->prioridad = $request->prioridad;
         $historia->descripcion = $request->descripcion;
-        $historia->user_id = auth()->id(); // 
-        $historia->sprint_id = $request->sprint_id; // Agregar el sprint_id
+        $historia->user_id = auth()->id();
+        $historia->sprint_id = $request->input('sprint_id') ?? null;
         $historia->tablero_id = $tablero->id;
+        $historia->columna_id = $columna->id;
+        $historia->estado = $estado; // Asignar el estado basado en el nombre de la columna
+        $historia->project_id = $tablero->project_id; // Añadido: obtener project_id del tablero
         $historia->save();
-        $historia->columna_id = $request->columna_id;
-        $historia->columna_id = $columna->id; //  
-
 
         // Enviar notificación al usuario autenticado
         Notificaciones::create([
@@ -94,7 +98,7 @@ class FormatohistoriaControler extends Controller
         // Registrar en el historial de cambios
         HistorialCambios::create([
             'fecha' => now(),
-            'usuario' => Auth::user()->name ?? 'Desconocido', // Usuario autenticado o "Desconocido"
+            'usuario' => Auth::user()->name ?? 'Desconocido',
             'accion' => 'Creación',
             'detalles' => 'Se creó una nueva historia: ' . $historia->nombre,
         ]);
@@ -120,7 +124,7 @@ class FormatohistoriaControler extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit($id)
-
+    {
         // Obtener la historia por su ID
         $historia = Formatohistoria::findOrFail($id);
 
@@ -140,21 +144,6 @@ class FormatohistoriaControler extends Controller
             ->header('Pragma', 'no-cache')
             ->header('Expires', '0');
     }
-
-{
-    $historia = Formatohistoria::findOrFail($id);
-
-    if (session('fromEdit')) {
-        return redirect()->route('tableros.show', $historia->tablero_id)->with('warning', 'No puedes volver al formulario de edición.');
-    }
-
-    return response()
-        ->view('formato.edit', compact('historia'))
-        ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
-        ->header('Pragma', 'no-cache')
-        ->header('Expires', '0');
-}
-
 
     /**
      * Update the specified resource in storage.

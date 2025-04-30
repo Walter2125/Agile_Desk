@@ -195,12 +195,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/columna/store', [ColumnaController::class, 'store'])->name('columna.store');
     Route::put('/columna/{columna}/actualizar', [ColumnaController::class, 'update'])->name('columna.update');
 
-
-
 });
-
-
-    });
 
 
     //Rutas de aarchivar historias

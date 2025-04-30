@@ -13,12 +13,10 @@ class Formatohistoria extends Model
         'responsable',
         'prioridad',
         'descripcion',
-
-        'sprint_id'
-      /*
+        'sprint_id',
         'columna_id',
-        'project_id',
-        */
+        'tablero_id',
+        'project_id', // Asegúrate de incluir este campo
     ];
 
     public function sprint()
