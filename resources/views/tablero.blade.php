@@ -118,14 +118,22 @@
                                         {{ $historia->nombre }}
                                     </div>
                                     <div class="card-options relative">
-                                        <button type="button" class="dropdown-toggle absolute right-0 top-0 bg-white border rounded shadow-sm h-6 w-6 text-xs flex items-center justify-center" data-bs-toggle="dropdown" aria-expanded="false">
-                                            ...
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="{{ route('formulario.edit', $historia->id) }}"><i class="bi bi-pencil mr-2"></i>Editar</a></li>
-                                            <li><button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}"><i class="bi bi-trash mr-2"></i>Eliminar</button></li>
-                                        </ul>
-                                        <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
+                                        <div class="card-options flex gap-2 justify-end">
+                                            <!-- Botón de editar -->
+                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-600 hover:text-blue-800" title="Editar">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+
+                                            <!-- Botón para abrir el modal de eliminación -->
+                                            <button type="button" class="text-red-600 hover:text-red-800" title="Eliminar"
+                                                    data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </div>
+
+                                        <!-- Modal de confirmación para eliminar -->
+                                        <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1"
+                                             aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -137,7 +145,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-danger">Eliminar</button>
@@ -146,6 +154,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                                 <div class="text-sm text-gray-600">
@@ -267,7 +276,37 @@
                     @endforelse
                 </div>
                 <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
+
             </div>
+
+            @foreach ($tablero->columnas as $columna)
+                <div class="kanban-column">
+                    <div class="column-header">{{ $columna->nombre }}</div>
+                    <div class="sortable">
+                        @foreach ($columna->historias as $historia)
+                            @include('partials.historia', ['historia' => $historia])
+                        @endforeach
+                    </div>
+                    <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
+                </div>
+            @endforeach
+
+            <!-- Formulario manual para probar creación de columna -->
+            <form method="POST" action="{{ route('columna.store') }}" class="mb-4 bg-white p-4 rounded shadow">
+                @csrf
+                <input type="hidden" name="tablero_id" value="{{ $tablero->id }}">
+
+                <div class="mb-2">
+                    <label for="nombre" class="block font-bold mb-1">Nombre de la columna:</label>
+                    <input type="text" id="nombre" name="nombre" class="border p-2 w-full" placeholder="Por ejemplo: En espera" required>
+                </div>
+
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Crear columna</button>
+            </form>
+
+
+
+
             <button class="add-column-button" onclick="abrirModalAgregarColumna()">+</button>
 
         </div>
@@ -433,58 +472,7 @@
     <!-- Código del Tablero Scrum -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const tablero = document.getElementById('tablero');
-            const modal = document.getElementById('modal');
-            const nuevoNombreInput = document.getElementById('nuevoNombre');
-            let columnaActual;
 
-            document.getElementById('agregarColumna').addEventListener('click', agregarColumna);
-
-            function agregarColumna() {
-                if (document.querySelectorAll('.columna').length >= 9) return;
-                const nuevaColumna = document.createElement('div');
-                nuevaColumna.classList.add('columna', 'bg-gray-200', 'p-4', 'rounded', 'w-60', 'flex-shrink-0');
-                nuevaColumna.innerHTML = `
-                    <div class="flex justify-between items-center">
-                        <span class="titulo-columna text-lg font-bold" >Nueva columna</span>
-
-                        <div class="relative">
-                        <div class="btn-group dropend">
-                                <!-- Botón del Dropdown -->
-                                <button type="button" class="btn btn-secondary dropdown-toggle   absolute right-0 top-6 bg-white border rounded shadow-lg " data-bs-toggle="dropdown" aria-expanded="false" style="position: relative; top: -2px; height: 28px; width: 28px; font-size: 14px; padding: 4px;">
-                                </button>
-
-
-                                <!-- Contenido del Dropdown -->
-                                <ul class="dropdown-menu">
-                                    <!-- Opción: Crear Historia -->
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('formulario.create', $tablero->id) }}">
-                                            <i class="bi bi-plus"></i> Crear Historia
-                                        </a>
-                                    </li>
-                                    <!-- Opción: Editar Nombre de la Columna -->
-                                    <li>
-                                        <button class="dropdown-item editar-columna">
-                                            Editar Nombre de la Columna
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-
-
-                            <div class="menu-opciones hidden absolute right-0 top-6 bg-white border rounded shadow-lg z-10">
-                                <button class="editar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Editar Nombre</button>
-                                <button class="eliminar-columna px-4 py-2 hover:bg-gray-100 w-full text-left">Eliminar Columna</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="min-h-[150px] space-y-2 sortable"></div>
-                `;
-                tablero.appendChild(nuevaColumna);
-                inicializarArrastrables();
-                agregarEventosOpciones();
-            }
 
             function agregarEventosOpciones() {
                 document.querySelectorAll('.opciones-columna').forEach(btn => {
@@ -743,14 +731,22 @@
 
         function cerrarModalAgregarColumna() {
             document.getElementById('modalAgregarColumna').classList.add('hidden');
+            document.getElementById('nombreColumna').value = ""; // limpia el input
         }
 
         function guardarColumna() {
-            const tableroId = {{ $tablero->id }}; // ID del tablero actual
-            const nombreColumna = document.getElementById('nombreColumna').value;
+            const nombreColumna = document.getElementById('nombreColumna').value.trim();
+            const tableroId = {{ $tablero->id }};
+            const columnasActuales = document.querySelectorAll('.kanban-column').length;
+            const maxColumnas = 12; // 3 fijas + 9 dinámicas
 
             if (!nombreColumna) {
-                alert("El nombre de la columna no puede estar vacío.");
+                toastr.error("El nombre de la columna no puede estar vacío.");
+                return;
+            }
+
+            if (columnasActuales >= maxColumnas) {
+                toastr.warning("Ya alcanzaste el límite de 9 columnas personalizadas.");
                 return;
             }
 
@@ -758,37 +754,42 @@
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                    "X-CSRF-TOKEN": document.querySelector('meta[name=\"csrf-token\"]').getAttribute("content")
                 },
                 body: JSON.stringify({
                     tablero_id: tableroId,
                     nombre: nombreColumna
                 })
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.mensaje === "Columna creada") {
-                        const tablero = document.getElementById("tablero");
-                        const nuevaColumna = document.createElement("div");
-                        nuevaColumna.classList.add("kanban-column");
-                        nuevaColumna.innerHTML = `
-                    <div class="column-header">${data.columna.nombre}</div>
-                    <div class="sortable"></div>
-                    <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
-                `;
-                        tablero.insertBefore(nuevaColumna, tablero.lastElementChild);
-                        toastr.success("Columna agregada exitosamente.");
-                        cerrarModalAgregarColumna();
-                    } else {
-                        toastr.error("Error al agregar la columna.");
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => Promise.reject(err));
                     }
+                    return response.json();
+                })
+                .then(data => {
+                    toastr.success("Columna creada correctamente.");
+
+                    const tablero = document.getElementById("tablero");
+                    const nuevaColumna = document.createElement("div");
+                    nuevaColumna.className = "kanban-column";
+                    nuevaColumna.innerHTML = `
+            <div class="column-header">${data.columna.nombre}</div>
+            <div class="sortable"></div>
+            <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
+        `;
+                    tablero.appendChild(nuevaColumna);
+
+                    cerrarModalAgregarColumna();
                 })
                 .catch(error => {
-                    console.error("Error:", error);
-                    toastr.error("No se pudo conectar con el servidor.");
+                    if (error?.mensaje) {
+                        toastr.error(error.mensaje);
+                    } else {
+                        toastr.error("Error al conectar con el servidor.");
+                    }
                 });
         }
     </script>
-
 @stop
 

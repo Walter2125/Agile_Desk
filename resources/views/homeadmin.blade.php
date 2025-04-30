@@ -4,7 +4,7 @@
 
 @section('adminlte_css')
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}"> 
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <style>
         #text {
             position: absolute;
@@ -19,7 +19,7 @@
             width: 100%;
             text-align: center;
         }
-        
+
         /* Estilos para el panel de administración */
         .admin-header {
             background-color: rgba(255, 255, 255, 0.9);
@@ -28,13 +28,13 @@
             margin-bottom: 20px;
             border-left: 4px solid #4a90e2;
         }
-        
+
         .admin-card {
             margin-bottom: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        
+
         .admin-card .card-header {
             background-color: #f8f9fa;
             font-weight: bold;
@@ -74,7 +74,7 @@
             background: linear-gradient(to right, #4a90e2, #357abd);
             transform: scale(1.05);
         }
-        
+
         .quick-stats {
             text-align: center;
             padding: 10px;
@@ -82,13 +82,13 @@
             border-radius: 5px;
             margin-bottom: 20px;
         }
-        
+
         .quick-stats .stat-number {
             font-size: 1.5rem;
             font-weight: bold;
             color: #4a90e2;
         }
-        
+
         .quick-stats .stat-label {
             font-size: 0.9rem;
             color: #6c757d;
@@ -107,7 +107,7 @@
             justify-content: center;
             margin-top: 15px;
         }
-        
+
         /* Modo oscuro para el panel de administración */
         /* === Modo oscuro global para cards === */
 [data-theme="dark"] .card,
@@ -173,29 +173,29 @@
  .input-group .form-control {
         border-radius: 0.25rem 0 0 0.25rem;
     }
-    
+
     .input-group-append .btn {
         border-radius: 0 0.25rem 0.25rem 0;
     }
-    
+
     /* Estilos para el buscador en modo oscuro */
     [data-theme="dark"] .input-group .form-control {
         background-color: #333;
         border-color: #444;
         color: #e0e0e0;
     }
-    
+
     [data-theme="dark"] .input-group-append .btn {
         background-color: #444;
         border-color: #555;
         color: #e0e0e0;
     }
-    
+
     [data-theme="dark"] .input-group-append .btn:hover {
         background-color: #555;
         border-color: #666;
     }
-    
+
     [data-theme="dark"] ::placeholder {
         color: #999;
         opacity: 1;
@@ -207,12 +207,12 @@
         border-color: #444;
         color: #e0e0e0;
     }
-    
+
     [data-theme="dark"] .pagination .page-item.active .page-link {
         background-color: #4a90e2;
         border-color: #357abd;
     }
-    
+
     [data-theme="dark"] .pagination .page-link:hover {
         background-color: #444;
     }
@@ -236,16 +236,11 @@
         <h1>Inicio para Administradores </h1>
         <!-- Botones de acción rápida (adaptados para móvil) -->
         <div class="button-container">
-<<<<<<< HEAD
-            <a href="{{ route('sprints.index') }}" class="btn">Lista de Sprint</a>
-=======
-            <!-- <a href="{{ route('historialcambios.index') }}" class="btn">Historial</a> -->
-           <!--  <a href="{{ route('reasinarhistoria.index') }}" class="btn">Reasignar</a> -->
->>>>>>> main
+
             <a href="{{ route('admin.users.index') }}" class="btn">Usuarios</a>
             <a href="{{ route('projects.create') }}" class="btn">Crear Proyecto</a>
         </div>
-        
+
         <!-- Estadísticas Rápidas -->
         <div class="row mt-4">
             <div class="col-6 col-md-3">
@@ -273,7 +268,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Listado de Proyectos -->
         <div class="card admin-card">
             <div class="card-header">
@@ -326,7 +321,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Actividad Reciente -->
         <div class="card admin-card mt-4">
             <div class="card-header">
@@ -360,7 +355,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Historias de Usuario Recientes -->
         <div class="card admin-card mt-4">
             <div class="card-header">
@@ -426,7 +421,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Resumen de Sprints -->
         <div class="card admin-card mt-4">
             <div class="card-header">
@@ -451,11 +446,11 @@
                                         <p><strong>Fin:</strong> {{ \Carbon\Carbon::parse($sprint->fecha_fin)->format('d/m/Y') }}</p>
                                     </div>
                                 </div>
-                                
+
                                 @php
                                     $totalHistorias = \App\Models\HistoriaModel::where('sprint_id', $sprint->id)->count();
                                 @endphp
-                                
+
                                 <p><strong>Historias:</strong> {{ $totalHistorias }}</p>
                             </div>
                         </div>
@@ -477,15 +472,15 @@
             const searchInput = document.getElementById('searchProjects');
             const searchButton = document.getElementById('btnSearchProjects');
             const projectRows = document.querySelectorAll('.project-row');
-            
+
             // Función para filtrar proyectos
             function filterProjects() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
-                
+
                 projectRows.forEach(row => {
                     const projectName = row.querySelector('td:first-child').textContent.toLowerCase();
                     const projectManager = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                    
+
                     // Si el texto de búsqueda está en el nombre del proyecto o en el responsable
                     if (projectName.includes(searchTerm) || projectManager.includes(searchTerm)) {
                         row.style.display = ''; // Mostrar la fila
@@ -494,22 +489,22 @@
                     }
                 });
             }
-            
+
             // Event listeners
             searchButton.addEventListener('click', filterProjects);
-            
+
             // También filtrar mientras se escribe (después de un pequeño delay)
             let typingTimer;
             searchInput.addEventListener('keyup', function() {
                 clearTimeout(typingTimer);
                 typingTimer = setTimeout(filterProjects, 500); // Esperar 500ms después de que el usuario deje de escribir
             });
-            
+
             // Limpiar el timer si se sigue escribiendo
             searchInput.addEventListener('keydown', function() {
                 clearTimeout(typingTimer);
             });
-            
+
             // Filtrar también al presionar Enter
             searchInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
@@ -525,46 +520,46 @@
             const tableBody = document.getElementById(tableId);
             const rows = tableBody.querySelectorAll(rowSelector);
             const pagination = document.getElementById(paginationId);
-            
+
             // Calcular número de páginas
             const pageCount = Math.ceil(rows.length / rowsPerPage);
-            
+
             // Limpiar paginación existente
             pagination.innerHTML = '';
-            
+
             // Botón Anterior
             const prevLi = document.createElement('li');
             prevLi.classList.add('page-item');
             prevLi.innerHTML = '<a class="page-link" href="#">&laquo;</a>';
             pagination.appendChild(prevLi);
-            
+
             // Páginas numeradas
             for (let i = 1; i <= pageCount; i++) {
                 const li = document.createElement('li');
                 li.classList.add('page-item');
                 li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
-                
+
                 if (i === 1) li.classList.add('active');
-                
+
                 li.addEventListener('click', function(e) {
                     e.preventDefault();
                     showTablePage(tableBody, rows, i, rowsPerPage);
-                    
+
                     // Actualizar clase activa
                     const pageItems = pagination.querySelectorAll('.page-item');
                     pageItems.forEach(item => item.classList.remove('active'));
                     this.classList.add('active');
                 });
-                
+
                 pagination.appendChild(li);
             }
-            
+
             // Botón Siguiente
             const nextLi = document.createElement('li');
             nextLi.classList.add('page-item');
             nextLi.innerHTML = '<a class="page-link" href="#">&raquo;</a>';
             pagination.appendChild(nextLi);
-            
+
             // Configurar eventos para prev/next
             prevLi.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -573,7 +568,7 @@
                     activeItem.previousElementSibling.querySelector('.page-link').click();
                 }
             });
-            
+
             nextLi.addEventListener('click', function(e) {
                 e.preventDefault();
                 const activeItem = pagination.querySelector('.page-item.active');
@@ -581,7 +576,7 @@
                     activeItem.nextElementSibling.querySelector('.page-link').click();
                 }
             });
-            
+
             // Mostrar primera página al inicio
             showTablePage(tableBody, rows, 1, rowsPerPage);
         }
@@ -592,11 +587,11 @@
             rows.forEach(row => {
                 row.style.display = 'none';
             });
-            
+
             // Calcular rango de filas para la página actual
             const startIndex = (page - 1) * rowsPerPage;
             const endIndex = Math.min(startIndex + rowsPerPage, rows.length);
-            
+
             // Mostrar filas de la página actual
             for (let i = startIndex; i < endIndex; i++) {
                 rows[i].style.display = '';
@@ -606,25 +601,25 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Configuración de paginación para la tabla de proyectos
             setupTablePagination(
-                'projectsTableBody', 
-                '.project-row', 
-                'projectsPagination', 
+                'projectsTableBody',
+                '.project-row',
+                'projectsPagination',
                 5
             );
-            
+
             // Configuración de paginación para la tabla de historias
             setupTablePagination(
-                'historiasTableBody', 
-                '.historia-row', 
-                'historiasPagination', 
+                'historiasTableBody',
+                '.historia-row',
+                'historiasPagination',
                 5
             );
-            
+
             // Configuración específica para la tabla de actividad reciente
             setupTablePagination(
-                'activityTableBody', 
-                '.activity-row', 
-                'activityPagination', 
+                'activityTableBody',
+                '.activity-row',
+                'activityPagination',
                 5
             );
         });
