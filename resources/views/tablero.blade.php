@@ -171,9 +171,9 @@
             </div>
 
             <div class="kanban-column">
-                <div class="column-header">En Curso</div>
+                <div class="column-header">Pendiente</div>
                 <div class="sortable">
-                    @forelse ($tablero->historias->where('estado', 'En Curso') as $historia)
+                    @forelse ($tablero->historias->where('estado', 'Pendiente') as $historia)
                         <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
                             <div class="card">
                                 <div class="flex justify-between items-start mb-1">
@@ -181,14 +181,22 @@
                                         {{ $historia->nombre }}
                                     </div>
                                     <div class="card-options relative">
-                                        <button type="button" class="dropdown-toggle absolute right-0 top-0 bg-white border rounded shadow-sm h-6 w-6 text-xs flex items-center justify-center" data-bs-toggle="dropdown" aria-expanded="false">
-                                            ...
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="{{ route('formulario.edit', $historia->id) }}"><i class="bi bi-pencil mr-2"></i>Editar</a></li>
-                                            <li><button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}"><i class="bi bi-trash mr-2"></i>Eliminar</button></li>
-                                        </ul>
-                                        <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
+                                        <div class="card-options flex gap-2 justify-end">
+                                            <!-- Botón de editar -->
+                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-600 hover:text-blue-800" title="Editar">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+
+                                            <!-- Botón para abrir el modal de eliminación -->
+                                            <button type="button" class="text-red-600 hover:text-red-800" title="Eliminar"
+                                                    data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </div>
+
+                                        <!-- Modal de confirmación para eliminar -->
+                                        <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1"
+                                             aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -200,7 +208,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-danger">Eliminar</button>
@@ -209,6 +217,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                                 <div class="text-sm text-gray-600">
@@ -218,16 +227,17 @@
                             </div>
                         </a>
                     @empty
-                        <p class="text-gray-500 italic">No hay historias en En Curso.</p>
+                        <p class="text-gray-500 italic">No hay historias en Backlog.</p>
                     @endforelse
                 </div>
-                <button class="create-button" onclick="href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
+                <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
             </div>
+
 
             <div class="kanban-column">
                 <div class="column-header">Listo</div>
                 <div class="sortable">
-                    @forelse ($tablero->historias->where('estado', 'Listo') as $historia)
+                    @forelse ($tablero->historias->where('estado', 'Pendiente') as $historia)
                         <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
                             <div class="card">
                                 <div class="flex justify-between items-start mb-1">
@@ -235,14 +245,22 @@
                                         {{ $historia->nombre }}
                                     </div>
                                     <div class="card-options relative">
-                                        <button type="button" class="dropdown-toggle absolute right-0 top-0 bg-white border rounded shadow-sm h-6 w-6 text-xs flex items-center justify-center" data-bs-toggle="dropdown" aria-expanded="false">
-                                            ...
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="{{ route('formulario.edit', $historia->id) }}"><i class="bi bi-pencil mr-2"></i>Editar</a></li>
-                                            <li><button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}"><i class="bi bi-trash mr-2"></i>Eliminar</button></li>
-                                        </ul>
-                                        <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1" aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
+                                        <div class="card-options flex gap-2 justify-end">
+                                            <!-- Botón de editar -->
+                                            <a href="{{ route('formulario.edit', $historia->id) }}" class="text-blue-600 hover:text-blue-800" title="Editar">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+
+                                            <!-- Botón para abrir el modal de eliminación -->
+                                            <button type="button" class="text-red-600 hover:text-red-800" title="Eliminar"
+                                                    data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $historia->id }}">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </div>
+
+                                        <!-- Modal de confirmación para eliminar -->
+                                        <div class="modal fade" id="confirmDeleteModal-{{ $historia->id }}" tabindex="-1"
+                                             aria-labelledby="modalLabel-{{ $historia->id }}" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -254,7 +272,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="post">
+                                                        <form action="{{ route('formulario.destroy', $historia->id) }}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-danger">Eliminar</button>
@@ -263,6 +281,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                                 <div class="text-sm text-gray-600">
@@ -272,14 +291,14 @@
                             </div>
                         </a>
                     @empty
-                        <p class="text-gray-500 italic">No hay historias en Listo.</p>
+                        <p class="text-gray-500 italic">No hay historias en Backlog.</p>
                     @endforelse
                 </div>
                 <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
-
             </div>
 
-                @foreach ($tablero->columnas as $columna)
+
+        @foreach ($tablero->columnas as $columna)
                     <div class="kanban-column">
                         <div class="column-header">{{ $columna->nombre }}</div>
                         <div class="sortable">
