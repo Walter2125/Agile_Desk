@@ -33,3 +33,4 @@ class Tablero extends Model
     }
 
 
+}

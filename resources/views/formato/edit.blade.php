@@ -24,7 +24,7 @@
             <form action="{{ route('formulario.update', $historia->id) }}" method="POST">
                 @csrf
                 @method('PATCH')
-
+                <input type="hidden" name="columna_id" value="{{ $historia->columna_id }}"> <!-- Campo oculto para la columna -->
                 <div class="container-fluid contenedor-con-borde">
                 <li class="nav-item d-flex align-items-center justify-content-between ps-3" style="padding-top: 0.4rem; padding-bottom: 0.4rem;">
                                     <h1 class="fw-bold mb-0" style="font-size: 2rem;">✏️ Editar Historia</h1>

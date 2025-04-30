@@ -298,31 +298,18 @@
 
 
 
-                @foreach ($tablero->columnas ?? collect() as $columna)          
-                        <div class="kanban-column" id="columna-{{ $columna->id }}">
-                            <div class="column-header">{{ $columna->nombre }}</div>
+                @foreach ($tablero->columnas as $columna)
+                <div class="kanban-column" id="columna-{{ $columna->id }}">
+                    <div class="column-header">{{ $columna->nombre }}</div>
+                    <div class="sortable">
+                        @foreach ($columna->historias as $historia)
+                            <!-- Mostrar historias aquí -->
+                        @endforeach
+                    </div>
+                    <button class="create-button" onclick="window.location.href='{{ route('formulario.create', ['tablero' => $tablero->id, 'columna' => $columna->id]) }}'">+ Crear Historia</button>
+                </div>
+            @endforeach
 
-                            <!-- Mostrar las historias de esta columna -->
-                            <div class="sortable">
-                                @forelse ($columna->historias as $historia)
-                                    <a href="{{ route('formulario.show', $historia->id) }}" class="block no-underline">
-                                        <div class="card">
-                                            <div class="flex justify-between items-start mb-1">
-                                                <div class="font-bold text-lg text-black truncate " title="{{ $historia->nombre }}">
-                                                    {{ $historia->nombre }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                @empty
-                                    <p class="text-gray-500 italic">No hay historias en esta columna.</p>
-                                @endforelse
-                            </div>
-
-                            <!-- Botón de crear historia -->
-                            <button class="create-button" onclick="window.location.href='{{ route('formulario.create', $tablero->id) }}'">+ Crear Historia</button>
-                        </div>
-                    @endforeach
                 </div>
 
 
