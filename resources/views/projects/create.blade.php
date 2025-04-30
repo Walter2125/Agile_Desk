@@ -304,104 +304,19 @@
     $(document).ready(function() {
         let selectedUsers = {};
 
-        loadSavedData();
-        bindUserCheckboxes();
-
-        function bindUserCheckboxes() {
-            $('.user-checkbox').off('change').on('change', function() {
-                const userId = $(this).val();
-                selectedUsers[userId] = $(this).is(':checked');
-                updateSelectedUsersField();
-                saveToLocalStorage();
-            });
-
-            $('.user-checkbox').each(function() {
-                const userId = $(this).val();
-                if (selectedUsers[userId]) {
-                    $(this).prop('checked', true);
-                }
-            });
-        }
-
         function updateSelectedUsersField() {
             const selectedIds = Object.keys(selectedUsers).filter(id => selectedUsers[id]);
             $('#selected_users').val(selectedIds.join(','));
         }
 
-        function saveToLocalStorage() {
-            const formData = {
-                name: $('#name').val(),
-                fecha_inicio: $('#fecha_inicio').val(),
-                fecha_fin: $('#fecha_fin').val(),
-                selectedUsers: selectedUsers
-            };
-            localStorage.setItem('projectFormData', JSON.stringify(formData));
-        }
-
-        function loadSavedData() {
-            const saved = localStorage.getItem('projectFormData');
-            if (saved) {
-                const data = JSON.parse(saved);
-                $('#name').val(data.name);
-                $('#fecha_inicio').val(data.fecha_inicio);
-                $('#fecha_fin').val(data.fecha_fin);
-                selectedUsers = data.selectedUsers || {};
-                updateSelectedUsersField();
-            }
-        }
-
-        // Buscador en tiempo real
-        $('#user_search').on('input', function() {
-            loadUsers(1, $(this).val());
-        });
-
-        // Paginación
-        $(document).on('click', '.pagination a', function(e) {
-            e.preventDefault();
-            const page = $(this).attr('href').split('page=')[1];
-            loadUsers(page, $('#user_search').val());
-        });
-
-        function loadUsers(page, search = '') {
-            $.ajax({
-                url: '{{ route("users.list") }}?page=' + page + '&search=' + search,
-                type: 'GET',
-                success: function(response) {
-                    $('#users-container').html(response.html);
-                    $('#pagination-container').html(response.pagination);
-                    bindUserCheckboxes();
-                }
-            });
-        }
-
-        $('input[name="name"], input[name="fecha_inicio"], input[name="fecha_fin"]').on('change', function() {
-            saveToLocalStorage();
-        });
-
-        $('#projectForm').on('submit', function(e) {
-            e.preventDefault();
+        $('.user-checkbox').on('change', function() {
+            const userId = $(this).val();
+            selectedUsers[userId] = $(this).is(':checked');
             updateSelectedUsersField();
+        });
 
-            $('#submitBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
-
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: $(this).serialize(),
-                success: function(response) {
-                    localStorage.removeItem('projectFormData');
-                    window.location.href = response.redirect;
-                },
-                error: function(xhr) {
-                    $('#submitBtn').prop('disabled', false).html('Guardar Proyecto');
-                    const errors = xhr.responseJSON.errors;
-                    let messages = [];
-                    for (let field in errors) {
-                        messages.push(errors[field][0]);
-                    }
-                    alert('Error: ' + messages.join('\n'));
-                }
-            });
+        $('#projectForm').on('submit', function() {
+            updateSelectedUsersField();
         });
     });
     </script>

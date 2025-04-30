@@ -25,12 +25,7 @@ class Tablero extends Model
         return $this->hasMany(Formatohistoria::class, 'tablero_id');
     }
 
-    public function sprints()
-    {
-        return $this->hasMany(Sprint::class, 'tablero_id');
-    }
-
-    // Un tablero pertenece a un sprint
+    // Relación corregida: un tablero pertenece a un sprint
     public function sprint()
     {
         return $this->belongsTo(Sprint::class);
