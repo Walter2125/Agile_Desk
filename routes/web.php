@@ -66,8 +66,10 @@ Route::middleware('auth')->group(function () {
 
     // Rutas para formulario de historias
     //Route::get('/form',[FormatohistoriaControler::class,'index'])->name('form.index');
- //   Route::get('/create', [FormatohistoriaControler::class, 'create'])->name('formulario.create');
-    Route::post('/form/store', [FormatohistoriaControler::class, 'store'])->name('formulario.store');
+   // Route::get('/create', [FormatohistoriaControler::class, 'create'])->name('formulario.create');
+
+    Route::post('formulario/store/{tablero}/{columna}', [FormatohistoriaControler::class, 'store'])->name('formulario.store');
+
     Route::get('/form/{formulario}/edit',[FormatohistoriaControler::class,'edit'])->name('formulario.edit');
     Route::patch('/form/{id}/update', [FormatohistoriaControler::class, 'update'])->name('formulario.update');
     Route::delete('/form/{formulario}/destroy',[FormatohistoriaControler::class,'destroy'])->name('formulario.destroy');
@@ -92,14 +94,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/tareas/{id}/ver', [TareasController::class, 'show'])->name('tareas.show');
 
 
-    // Rutas para Sprints
-    //Route::get('sprints', [SprintController::class, 'index'])->name('sprints.index');
-    Route::get('sprints/create', [SprintController::class, 'create'])->name('sprints.create')->middleware('role:admin');
-    Route::post('sprints', [SprintController::class, 'store'])->name('sprints.store')->middleware('role:admin');;
-    Route::get('sprints/{sprint}/edit', [SprintController::class, 'edit'])->name('sprints.edit')->middleware('role:admin');;
-    Route::put('sprints/{sprint}', [SprintController::class, 'update'])->name('sprints.update')->middleware('role:admin');;
-    Route::delete('sprints/{sprint}', [SprintController::class, 'destroy'])->name('sprints.destroy')->middleware('role:admin');;
-    Route::get('tableros/{sprint}', [TableroController::class, 'show'])->name('tableros.show');
+
+    // Rutas para Sprints y sus tableros
+    Route::resource('tableros', TableroController::class);
+    Route::resource('sprints', SprintController::class);
+    Route::get('tableros/{tablero}', [TableroController::class, 'show'])->name('tableros.show');
+
 
     // Proyectos (solo mis proyectos)
     Route::get('projects', [ProjectController::class, 'myProjects'])->name('projects.my');
@@ -113,6 +113,10 @@ Route::middleware('auth')->group(function () {
     Route::post('columnas', [ColumnaController::class, 'store'])->name('columnas.store');
     Route::put('columnas/{columna}', [ColumnaController::class, 'update'])->name('columnas.update');
     Route::delete('columnas/{columna}', [ColumnaController::class, 'destroy'])->name('columnas.destroy');
+    Route::post('/tableros/{tablero}/columnas', [ColumnaController::class, 'store'])->name('columnas.store');
+    Route::put('/tableros/{tablero}/columnas/{columna}', [ColumnaController::class, 'update'])->name('columnas.update');
+    Route::delete('/tableros/{tablero}/columnas/{columna}', [ColumnaController::class, 'destroy'])->name('columnas.destroy');
+    Route::post('/columna/store', [ColumnaController::class, 'store'])->name('columna.store');
 
     // Calendario
     Route::controller(FullCalendarController::class)->prefix('fullcalendar')->group(function () {
@@ -125,8 +129,8 @@ Route::middleware('auth')->group(function () {
 
     // Columnas y estados (AJAX)
     Route::post('actualizar-estado', [HistoriaController::class, 'actualizarEstado'])->name('actualizar.estado');
-    Route::post('columnas', [ColumnasController::class, 'store'])->name('columnas.store');
     Route::post('actualizar-nombre-columna', [ColumnasController::class, 'actualizarNombre'])->name('columnas.updateName');
+
 
     // Notificaciones
     Route::get('notificaciones', [NotificacionesController::class, 'index'])->name('notificaciones.index');
@@ -154,8 +158,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/tableros/{tablero}', [TableroController::class, 'destroy'])->name('tableros.destroy');
 
 
+
     Route::delete('/projects/{project}',                   [ProjectController::class, 'destroy'])->name('projects.destroy');
 
+
+
+    Route::delete('/projects/{project}',                   [ProjectController::class, 'destroy'])->name('projects.destroy');
+    
     // **Rutas de administrador** (solo usuarios con usertype = 'admin')
   // Route::middleware('role:admin')->group(function () {
         // Home de admin
@@ -180,6 +189,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/miembros',    [UserController::class, 'index'])->name('admin.users.index');
         Route::get('/users/search',[UserController::class, 'search'])->name('users.search');
 
+
     Route::post('columnas', [ColumnaController::class, 'store'])->name('columnas.store');
     Route::post('/tableros/{tablero}/columnas', [ColumnaController::class, 'store'])->name('columnas.store');
     Route::post('/columna/store', [ColumnaController::class, 'store'])->name('columna.store');
@@ -189,11 +199,20 @@ Route::middleware('auth')->group(function () {
 
 });
 
+
+    });
+
+
     //Rutas de aarchivar historias
 Route::get('/archivo/seleccionar/{project}', [ArchivoHistoriaController::class, 'mostrarHistoriasDisponibles'])->name('archivo.seleccionar');
 Route::post('/archivo/archivar/{project}/{id}', [ArchivoHistoriaController::class, 'archivar'])->name('archivo.archivar');
 Route::get('/archivo/proyecto/{project}', [ArchivoHistoriaController::class, 'indexPorProyecto'])->name('archivo.index.proyecto');
 Route::post('/archivo/desarchivar/{project}/{id}', [ArchivoHistoriaController::class, 'desarchivar'])->name('archivo.desarchivar');
+    Route::get('/archivo/seleccionar', [ArchivoHistoriaController::class, 'mostrarHistoriasDisponibles'])->name('archivo.seleccionar');
+        Route::post('/archivo/archivar/{id}', [ArchivoHistoriaController::class, 'archivar'])->name('archivo.archivar');
+        Route::get('/archivo', [ArchivoHistoriaController::class, 'index'])->name('archivo.index');
+        Route::post('/archivo/desarchivar/{id}', [ArchivoHistoriaController::class, 'desarchivar'])->name('archivo.desarchivar');
+
     //Lista de historias por cada usuarios
     Route::get('/mis-historias', [FormatohistoriaControler::class, 'misHistorias'])->name('mis_historias');
 //});

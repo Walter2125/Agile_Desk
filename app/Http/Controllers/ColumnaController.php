@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class ColumnaController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request, $tablero)
     {
 
         $columnasExistentes = Columna::where('tablero_id', $request->tablero_id)->count();
@@ -17,14 +17,24 @@ class ColumnaController extends Controller
         }
 
         $request->validate([
+
             'tablero_id' => 'required|exists:tablero,id',
             'nombre'     => 'required|string|max:255',
             'orden'      => 'nullable|integer',
+
+            
+
         ]);
 
-        $columna = Columna::create($request->all());
+        $columna = Columna::create([
+            'nombre' => $request->nombre,
+            'tablero_id' => $tablero, // Asociar la columna al tablero
+        ]);
 
-        return response()->json(['mensaje' => 'Columna creada', 'columna' => $columna]);
+        return response()->json([
+            'mensaje' => 'Columna creada',
+            'columna' => $columna,
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -48,4 +58,3 @@ class ColumnaController extends Controller
         return response()->json(['mensaje' => 'Columna eliminada']);
     }
 }
-

@@ -11,6 +11,9 @@ use App\Models\ListaHistoria;
 use App\Models\Tablero;
 use App\Models\ArchivoHistoria;
 use Illuminate\Http\Request;
+use App\Models\Columna;
+
+
 use Illuminate\Support\Facades\Auth; // Para obtener el usuario autenticado
 
 class FormatohistoriaControler extends Controller
@@ -25,25 +28,23 @@ class FormatohistoriaControler extends Controller
     }
 
     public function misHistorias()
-    {
-        $historias = Formatohistoria::where('user_id', auth()->id())
-            ->select(['id', 'nombre', 'sprint', 'responsable', 'estado', 'created_at'])
-            ->get();
+{
+    $historias = Formatohistoria::where('user_id', auth()->id())
+    ->select(['id', 'nombre', 'sprint', 'responsable', 'estado', 'created_at'])
+    ->get();
 
-        return view('ListaHistorias', compact('historias'));
-    }
-
+    return view('ListaHistorias', compact('historias'));
+}
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Tablero $tablero)
+    public function create(Tablero $tablero, Columna $columna)
     {
-        return view('formato.create', compact('tablero'));
+        $sprint_id = request('sprint'); // Obtener el sprint_id de la URL
+        $sprints = $tablero->project->sprints; // Obtener los sprints del proyecto
+        return view('formato.create', compact('tablero', 'sprints', 'sprint_id'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request, Tablero $tablero)
     {
         $request->validate([
@@ -59,6 +60,7 @@ class FormatohistoriaControler extends Controller
             'responsable' => 'nullable|string|max:255',
             'prioridad' => 'required|in:Alta,Media,Baja',
             'descripcion' => 'nullable|string',
+            'sprint_id' => 'nullable|exists:sprints,id',
         ], [
             'nombre.required' => 'El nombre es obligatorio.',
             'nombre.unique' => 'El nombre ya existe en este tablero, intente con otro.',
@@ -73,12 +75,15 @@ class FormatohistoriaControler extends Controller
         $historia->responsable = $request->responsable;
         $historia->prioridad = $request->prioridad;
         $historia->descripcion = $request->descripcion;
-        $historia->user_id = auth()->id();
+        $historia->user_id = auth()->id(); // 
+        $historia->sprint_id = $request->sprint_id; // Agregar el sprint_id
         $historia->tablero_id = $tablero->id;
-        $historia->project_id = $tablero->project_id; // ← ESTA LÍNEA ES LA CLAVE
         $historia->save();
+        $historia->columna_id = $request->columna_id;
+        $historia->columna_id = $columna->id; //  
 
-        // Enviar notificación
+
+        // Enviar notificación al usuario autenticado
         Notificaciones::create([
             'title' => 'Nueva Historia',
             'message' => 'Has creado una nueva historia: ' . $historia->nombre,
@@ -89,16 +94,12 @@ class FormatohistoriaControler extends Controller
         // Registrar en el historial de cambios
         HistorialCambios::create([
             'fecha' => now(),
-            'usuario' => Auth::user()->name ?? 'Desconocido',
+            'usuario' => Auth::user()->name ?? 'Desconocido', // Usuario autenticado o "Desconocido"
             'accion' => 'Creación',
             'detalles' => 'Se creó una nueva historia: ' . $historia->nombre,
-            'sprint' => $historia->sprint,
-            'project_id' => $tablero->project_id, // <<--- AGREGAR ESTO
-
         ]);
 
-        return redirect()
-            ->route('tableros.show', $tablero->id)
+        return redirect()->route('tableros.show', $tablero->id)
             ->with([
                 'success' => 'Historia Creada correctamente',
                 'fromCreate' => true,
@@ -110,16 +111,16 @@ class FormatohistoriaControler extends Controller
      */
     public function show(Formatohistoria $historia)
     {
+        //
         return view('formato.show', compact('historia'));
     }
-
 
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
-    {
+
         // Obtener la historia por su ID
         $historia = Formatohistoria::findOrFail($id);
 
@@ -139,6 +140,20 @@ class FormatohistoriaControler extends Controller
             ->header('Pragma', 'no-cache')
             ->header('Expires', '0');
     }
+
+{
+    $historia = Formatohistoria::findOrFail($id);
+
+    if (session('fromEdit')) {
+        return redirect()->route('tableros.show', $historia->tablero_id)->with('warning', 'No puedes volver al formulario de edición.');
+    }
+
+    return response()
+        ->view('formato.edit', compact('historia'))
+        ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        ->header('Pragma', 'no-cache')
+        ->header('Expires', '0');
+}
 
 
     /**
@@ -202,7 +217,6 @@ class FormatohistoriaControler extends Controller
             'fromEdit' => true,
         ]);
     }
-
     /**
      * Remove the specified resource from storage.
      */

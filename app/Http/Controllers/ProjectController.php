@@ -53,18 +53,8 @@ class ProjectController extends Controller
             'user_id'      => auth()->id(),
         ]);
 
-        // Asignar usuarios (incluye al creador)
+        // Asignar usuarios
         $project->users()->sync(array_unique(array_merge([$project->user_id], $userIds)));
-
-        // Notificar usuarios asignados
-        foreach ($project->users as $usuario) {
-            Notificaciones::create([
-                'title'   => 'Nuevo Proyecto',
-                'message' => 'Se ha creado un nuevo proyecto: ' . $project->name,
-                'user_id' => $usuario->id,
-                'read'    => false,
-            ]);
-        }
 
         // Crear tablero
         $tablero = $project->tablero()->create([
@@ -72,7 +62,7 @@ class ProjectController extends Controller
         ]);
 
         // Crear columnas predeterminadas
-        $tablero->columna()->createMany([
+        $tablero->columnas()->createMany([
             ['nombre' => 'Por hacer'],
             ['nombre' => 'En progreso'],
             ['nombre' => 'Terminado'],
@@ -81,9 +71,7 @@ class ProjectController extends Controller
         return $tablero;
     });
 
-    return response()->json([
-        'redirect' => route('tableros.show', $tablero->id),
-    ]);
+    return redirect()->route('projects.my')->with('success', 'Proyecto creado exitosamente.');
     }
 
    
